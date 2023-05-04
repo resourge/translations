@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.1.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.0.2...@resourge/translations-v1.1.0) (2023-05-04)
+
+
+### Features
+
+* **project:** force new and same version ([b2ca080](https://github.com/resourge/translations/commit/b2ca08070e16ce73d03385c21fc9ae3eef15e1eb))
+
 # [@resourge/translations-v1.0.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.0.1...@resourge/translations-v1.0.2) (2023-05-04)
 
 
