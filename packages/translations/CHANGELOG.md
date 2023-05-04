@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.0.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.0.0...@resourge/translations-v1.0.1) (2023-05-04)
+
+
+### Bug Fixes
+
+* **package:** for a new version ([9b41da4](https://github.com/resourge/translations/commit/9b41da4de2999a03a23ba1480232c45775227c89))
+
 # @resourge/translations-v1.0.0 (2023-05-04)
 
 
