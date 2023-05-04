@@ -19,9 +19,7 @@ import {
 
 import { wrapAuthentication } from './utils/utils'
 
-export type SetupReactTranslationInstance<
-	Instance
-> = {
+export type SetupReactTranslationInstance<Instance> = {
 	instance: Instance
 	TranslationProvider: (props: PropsWithChildren) => JSX.Element
 	useTranslation: () => Instance
