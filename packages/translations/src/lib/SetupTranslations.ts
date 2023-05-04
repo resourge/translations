@@ -1,5 +1,6 @@
 /* eslint-disable n/no-callback-literal */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { type FormKey } from './types/FormKey'
 import type {
 	BaseTranslationsKeys,
 	BaseTranslationsType,
@@ -15,7 +16,7 @@ import type {
 	SetupTranslationsConfigTranslations,
 	TranslationPlugin
 } from './types/configTypes'
-import type { TFunction } from './types/types'
+import { type TFunctionReturn, type TFunctionValues } from './types/types'
 import { MapTranslations } from './utils/MapTranslations'
 import { separatePlugins } from './utils/utils'
 
@@ -127,15 +128,22 @@ export class SetupTranslationsInstance<
 		this.config = _config;
 	}
 
-	public t = (key: string, values?: Record<string, any>): TFunction<B> => {
+	public t = <
+		Key extends FormKey<
+			Trans extends undefined ? B : TranslationsKeys<Langs, Trans extends undefined ? B : Trans>
+		>
+	>(
+		key: Key,
+		values?: TFunctionValues<Langs, Trans extends undefined ? B : Trans, Key>
+	): TFunctionReturn<Langs, Trans extends undefined ? B : Trans, Key> => {
 		const translations = this.translationsMap.get(this.config.language) as Trans extends undefined ? BaseTranslationsKeys<B> : TranslationsKeys<Langs, Trans extends undefined ? Record<string, any> : Trans, undefined>;
 		const keyValue = translations[key];
 
 		if ( values && typeof keyValue === 'function' ) {
-			return (keyValue as (params: any) => string)(values) as unknown as TFunction<B>
+			return (keyValue as (params: any) => string)(values) as TFunctionReturn<Langs, Trans extends undefined ? B : Trans, Key>
 		}
 
-		return keyValue as unknown as TFunction<B>;
+		return keyValue as TFunctionReturn<Langs, Trans extends undefined ? B : Trans, Key>
 	}
 
 	private emit<K extends Exclude<EventType, 'all'>>(event: K, ...value: Parameters<EventsType<Langs, B, Trans>[K][number]>) {
@@ -183,7 +191,7 @@ export function SetupTranslations<
 	Trans extends TranslationsType<Langs> | undefined = undefined
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigTranslations<Langs, Trans>
-): Omit<SetupTranslationsInstance<Langs, B, Trans>, 't'>
+): SetupTranslationsInstance<Langs, B, Trans>
 export function SetupTranslations<
 	Langs extends string, 
 	B extends BaseTranslationsType,

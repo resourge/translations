@@ -10,7 +10,6 @@ import {
 	type SetupTranslationsConfigLoad,
 	type SetupTranslationsConfigTranslations
 } from './configTypes'
-import { type TFunction } from './types'
 
 export type {
 	SetupTranslationsConfigLoad,
@@ -21,7 +20,5 @@ export type {
 
 	BaseTranslationsType,
 	TranslationsType,
-	TranslationsKeys,
-	
-	TFunction
+	TranslationsKeys
 }
