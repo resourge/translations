@@ -1,0 +1,59 @@
+{
+  "name": "@resourge/translations",
+  "version": "0.0.0-development",
+  "type": "module",
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react-swc": "^3.0.0",
+    "jsdom": "^22.0.0",
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0",
+    "semantic-release": "^21.0.2"
+  },
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "resourge",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./viteTranslationPlugin": {
+      "import": "./dist/viteTranslationPlugin.js",
+      "require": "./dist/viteTranslationPlugin.cjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "viteTranslationPlugin": [
+        "./dist/viteTranslationPlugin.d.ts"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/resourge/translations.git",
+    "directory": "packages/translations"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "semantic-release": "semantic-release"
+  }
+}
