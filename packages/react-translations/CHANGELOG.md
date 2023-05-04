@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.5.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.4.0...@resourge/react-translations-v1.5.0) (2023-05-04)
+
+
+### Features
+
+* **project:** new version ([055ed68](https://github.com/resourge/translations/commit/055ed681c1fc173e8b9d18c9dd85033811583668))
+
 # [@resourge/react-translations-v1.1.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.0.0...@resourge/react-translations-v1.1.0) (2023-05-04)
 
 
