@@ -41,7 +41,16 @@ type GetValueFromCustom<
 	Langs extends string,
 	O extends Record<string, any>, 
 	T extends Omit<O, '_custom'> = Omit<O, '_custom'>
-> = (params: GetParamsFromTemplateString<T[keyof T][Langs]> & { [K in O['_custom']['key']]: O['_custom']['type'] }) => T[keyof T][Langs]
+> = (
+	params: Omit<
+		GetParamsFromTemplateString<
+			T[keyof T][Langs]
+		>,
+		O['_custom']['key']
+	> & { 
+		[K in O['_custom']['key']]: O['_custom']['type'] 
+	}
+) => T[keyof T][Langs]
 
 export type TranslationsKeys<
 	Langs extends string,
