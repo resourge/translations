@@ -1,3 +1,16 @@
+# [@resourge/translations-v1.7.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.6.0...@resourge/translations-v1.7.0) (2023-05-08)
+
+
+### Bug Fixes
+
+* **maptranslations and trans:** fix not returning key when value doesnt exist ([e0078f6](https://github.com/resourge/translations/commit/e0078f697ad2227a73063c79d917d86d41f92c8e))
+* **translations:** fix type not work as expected ([6d2a0d6](https://github.com/resourge/translations/commit/6d2a0d682a5acde9ce7ab85d843a2885cfaa3847))
+
+
+### Features
+
+* **trans:** add Trans component to include html elements ([e42bab3](https://github.com/resourge/translations/commit/e42bab38fb1f4a4f781e6c3187b09137c065966d))
+
 # [@resourge/translations-v1.6.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.5.0...@resourge/translations-v1.6.0) (2023-05-08)
 
 
