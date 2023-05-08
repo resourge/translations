@@ -12,6 +12,7 @@ import type {
 	SetupTranslationsConfigTranslations,
 	TranslationPlugin
 } from './types/configTypes'
+import { type ConvertTransIntoKeyStructure } from './types/types'
 import { MapTranslations } from './utils/MapTranslations'
 import { separatePlugins } from './utils/utils'
 
@@ -47,8 +48,18 @@ export class SetupTranslationsInstance<
 		return this.config.langs
 	}
 
-	public get T(): Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans> {
+	/**
+	 * Translations object
+	 */
+	public T(): Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans> {
 		return this.translationsMap.get(this.config.language) as unknown as (Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans>)
+	}
+
+	/**
+	 * Translations Key in form of object
+	 */
+	public get K(): ConvertTransIntoKeyStructure<Langs, Trans> {
+		return this.translationsMap.keyStructure
 	}
 
 	public promise: Promise<SetupTranslationsInstance<Langs, Trans>> = Promise.resolve(this);

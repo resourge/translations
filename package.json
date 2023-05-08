@@ -10,7 +10,7 @@
     "lint:prod": "cross-env NODE_ENV=production npm run lint",
     "build:translations": "npm run build --prefix=./packages/translations",
     "build:react-translations": "npm run build --prefix=./packages/react-translations",
-    "build": "npm run build:translations && npm run build:react-translations",
+    "build": "npm run build --workspaces",
     "test": "npm run test --workspaces",
     "test:watch": "npm run test:watch --workspaces",
     "coverage": "npm run coverage --workspaces",

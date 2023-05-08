@@ -1,4 +1,6 @@
 /* eslint-disable no-useless-escape */
+import { SetupReactTranslation } from '@resourge/react-translations'
+import { SetupTranslations } from '@resourge/translations'
 import path from 'path';
 import { type ConfigLoaderSuccessResult } from 'tsconfig-paths';
 import ts, {
@@ -17,6 +19,8 @@ const {
 	ScriptTarget
 } = ts;
 
+const setupRegex = new RegExp(`(${SetupTranslations.name}|${SetupReactTranslation.name}|SetupVueTranslation)\(([\s\S]*?)\)`, 'g')
+
 export function viteTranslationPlugin(): PluginOption {
 	const loadConfig: LoadConfig = {
 		isJSON: false 
@@ -34,10 +38,9 @@ export function viteTranslationPlugin(): PluginOption {
 		apply: 'build',
 		transform: async function (content: string, id: string) {
 			if ( content.includes('__translationsMethod__') ) {
-				content = content.replace(/(__translationsMethod__.*createFromEntry\(langKey\, translations\)\;)/g, '__translationsMethod__: (langKey, translations) => () => translations(langKey)')
-				content = content.replace('createFromEntry', 'createEntry')
+				content = content.replace(/(__translationsMethod__.*createTranslationEntry\(langKey\, translations\)\;)/g, '__translationsMethod__: (langKey, translations) => () => translations(langKey)')
 			}
-			if ( /SetupTranslations\(([\s\S]*?)\)/g.test(content) ) {
+			if ( setupRegex.test(content) ) {
 				const config = await watchMain(
 					[id],
 					loadConfig,
@@ -92,6 +95,10 @@ export function viteTranslationPlugin(): PluginOption {
 							}),
 							'};'
 						].join('') + content
+					}
+
+					if ( content.includes('__translationsKeyStructure__') ) {
+						content = content.replace(/(__translationsKeyStructure__.*createTranslationKeyStructure\(langKey\, translations\)\;)/g, `__translationsKeyStructure__: (langKey, translations) => ${JSON.stringify(config.keyStructure)}`)
 					}
 
 					const result = ts.createSourceFile(

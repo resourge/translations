@@ -16,10 +16,17 @@ import type {
 	SetupTranslationsConfigTranslations,
 	TranslationObj
 } from '../types/configTypes'
-import { type ConvertTransIntoSimpleObj, type TFunctionReturn, type TFunctionValues } from '../types/types';
+import {
+	type ConvertTransIntoKeyStructure,
+	type ConvertTransIntoSimpleObj,
+	type TFunctionReturn,
+	type TFunctionValues
+} from '../types/types'
 
 import { createProxy } from './createProxy';
-import { createFromEntry, deepValue, isExpired } from './utils';
+import { createTranslationEntry } from './createTranslationEntry';
+import { createTranslationKeyStructure } from './createTranslationKeyStructure';
+import { deepValue, isExpired } from './utils';
 
 function flattenObject<B extends BaseTranslationsType>(structure: Narrow<B>, prefix: string = ''): Record<string, string> {
 	return Object.keys(structure)
@@ -61,8 +68,15 @@ export type LangMaps<
 const translationMethod = {
 	__translationsMethod__: <Langs extends string, T extends TranslationsType<Langs>>(
 		langKey: string, 
-		translations: Narrow<T> | ((lang: string) => Promise<Narrow<T>>)
-	) => createFromEntry(langKey, translations as Narrow<T>)
+		translations: T | ((lang: string) => Promise<T>)
+	) => createTranslationEntry(langKey, translations as Narrow<T>),
+	__translationsKeyStructure__: <
+		Langs extends string, 
+		T extends TranslationsType<Langs> | BaseTranslationsType
+	>(
+		langs: Langs[],
+		translations: T
+	) => createTranslationKeyStructure(langs, translations)
 }
 
 function createLanguages<
@@ -71,24 +85,27 @@ function createLanguages<
 >(
 	langs: Langs[],
 	translations: Narrow<T> | ((lang: string) => Promise<Narrow<T>>)
-): LangMaps<Langs, T> {
-	return langs
-	.reduce<
-		LangMaps<Langs, T>
-	>(
-		(obj: LangMaps<Langs, T>, langKey: string) => {
-			obj.set(
-				langKey as Langs, 
-				{
-					translations: translationMethod.__translationsMethod__(langKey, translations) as any,
-					lastTranslation: Date.now()
-				}
-			);
+) {
+	return {
+		keyStructure: translationMethod.__translationsKeyStructure__(langs, translations as T),
+		langMaps: langs
+		.reduce<
+			LangMaps<Langs, T>
+		>(
+			(obj: LangMaps<Langs, T>, langKey: string) => {
+				obj.set(
+					langKey as Langs, 
+					{
+						translations: translationMethod.__translationsMethod__(langKey, translations as T) as any,
+						lastTranslation: Date.now()
+					}
+				);
 
-			return obj
-		}, 
-		new Map()
-	);
+				return obj
+			}, 
+			new Map()
+		)
+	} as const;
 }
 
 export class MapTranslations<
@@ -99,6 +116,7 @@ export class MapTranslations<
 	public isLoad: boolean = false;
 
 	public structure: Trans & Record<string, string> = {} as Trans & Record<string, string>;
+	public keyStructure: ConvertTransIntoKeyStructure<Langs, Trans> = {} as ConvertTransIntoKeyStructure<Langs, Trans>;
 
 	public lastMissingKey: number = 0;
 
@@ -137,10 +155,13 @@ export class MapTranslations<
 		const _translationConfig = (config as unknown as SetupTranslationsConfigTranslations<Langs, Trans extends TranslationsType<Langs> ? Trans : TranslationsType<Langs>>);
 		const _loadConfig = (config as unknown as SetupTranslationsConfigLoad<Trans extends BaseTranslationsType ? Trans : BaseTranslationsType>);
 		if ( _translationConfig.translations ) {
-			this.langMaps = createLanguages(
+			const { keyStructure, langMaps } = createLanguages<Langs, Trans extends TranslationsType<Langs> ? Trans : TranslationsType<Langs>>(
 				config.langs as Langs[], 
 				_translationConfig.translations
-			) as unknown as LangMaps<Langs, Trans>;
+			);
+
+			this.keyStructure = keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans>
+			this.langMaps = langMaps as unknown as LangMaps<Langs, Trans>
 
 			this.t = (
 				key: any,
@@ -179,6 +200,11 @@ export class MapTranslations<
 				...(_loadConfig.load.structure as Trans),
 				...flattenObject(_loadConfig.load.structure)
 			}
+
+			this.keyStructure = createTranslationKeyStructure<Langs, Trans>(
+				config.langs as Langs[], 
+				_loadConfig.load.structure as unknown as Trans
+			);
 
 			const asyncRequest = async (language: string) => {
 				this.lastMissingKey = Date.now()

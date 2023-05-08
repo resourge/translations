@@ -18,9 +18,8 @@ const getNavigatorLanguage = (): string | undefined => {
 
 export const navigatorLanguageDetector = <
 	Langs extends string, 
-	B extends BaseTranslationsType,
-	Trans extends TranslationsType<Langs> | undefined = undefined
->(options?: { onLanguage: (language: string) => string }): TranslationPlugin<Langs, B, Trans> => {
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
+>(options?: { onLanguage: (language: string) => string }): TranslationPlugin<Langs, Trans> => {
 	return {
 		config(config) {
 			if ( !config.language ) {

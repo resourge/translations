@@ -49,18 +49,18 @@ type CreateObj<T extends [string, any, boolean]> = T[2] extends true
 	? { [Key in T[0]]?: T[1] } 
 	: { [Key in T[0]]: T[1] } 
 
-type SeparateKey<K> = K extends string 
+type GetValuesFromString<K> = K extends string 
 	? CreateObj<GetType<K>> : never
 	
 export type GetParamsFromTemplateString<K> = K extends string 
 	? (
 		K extends `${infer B}{{${infer E}}}${infer A}` 
 			? (
-				UnifyObj<SeparateKey<E> & GetParamsFromTemplateString<B> & GetParamsFromTemplateString<A>>
+				UnifyObj<GetValuesFromString<E> & GetParamsFromTemplateString<B> & GetParamsFromTemplateString<A>>
 			) : {}
 	) : {}
 
-type StringContainsInterpolation<K> = K extends string 
+type DoesStringContainsInterpolation<K> = K extends string 
 	? (
 		K extends `${infer _B}{{${infer _E}}}${infer _A}` ? true : false
 	)
@@ -68,7 +68,7 @@ type StringContainsInterpolation<K> = K extends string
 
 export type GetValueFromTemplateString<Value> = Value extends string 
 	? (
-		StringContainsInterpolation<Value> extends true ? ((params: GetParamsFromTemplateString<Value>) => Value) : Value
+		DoesStringContainsInterpolation<Value> extends true ? ((params: GetParamsFromTemplateString<Value>) => Value) : Value
 	) : Value
 
 type GetValueFromCustom<

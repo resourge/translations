@@ -4,7 +4,8 @@ import {
 	type BaseTranslationsType,
 	type Narrow,
 	type TranslationsKeys,
-	type TranslationsType
+	type TranslationsType,
+	createTranslationKeyStructure
 } from '@resourge/translations'
 import fs from 'fs';
 import path from 'path';
@@ -13,6 +14,7 @@ import type { CompilerOptions } from 'typescript'
 import ts from 'typescript';
 
 import { type SetupTranslationsConfigTranslations, type SetupTranslationsConfig, type SetupTranslationsConfigLoad } from '@resourge/translations/src/lib/types/configTypes';
+import { type ConvertTransIntoKeyStructure } from '@resourge/translations/src/lib/types/types';
 
 export type LoadConfig = {
 	/**
@@ -113,7 +115,9 @@ export function watchMain(
 	return new Promise<
 		SetupTranslationsConfig<string> & 
 		SetupTranslationsConfigTranslations<string, TranslationsType<string>> & 
-		SetupTranslationsConfigLoad<BaseTranslationsType>
+		SetupTranslationsConfigLoad<BaseTranslationsType> & {
+			keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
+		}
 	>((resolve, reject) => {
 		const { outDir, baseUrl } = options;
 		if ( tsConfig.resultType === 'failed' ) {
@@ -172,6 +176,7 @@ export function watchMain(
 
 					if ( config.translations ) {
 						const languages = createLanguages(config.langs, config.translations);
+						config.keyStructure = createTranslationKeyStructure(config.langs, config.translations);
 
 						await Promise.all(
 							Array.from(languages.entries())
