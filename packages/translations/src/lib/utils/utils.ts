@@ -67,7 +67,7 @@ export function separatePlugins<
 ) {
 	const plugins = config.plugins ?? [];
 	
-	const onLanguageChanges: Array<NonNullable<TranslationPlugin<Langs, Trans>['onLanguageChange']>> = [];
+	const onLanguageChanges: Array<NonNullable<TranslationPlugin['onLanguageChange']>> = [];
 	const configs: Array<OnTranslationConfig<Langs, Trans>> = [];
 	const onTranslationGets: Array<OnTranslationGet<Langs, Trans>> = [];
 	const onTranslationSets: Array<OnTranslationSet<Langs, Trans>> = [];

@@ -1,4 +1,3 @@
-import type { BaseTranslationsType, TranslationsType } from '../types/TranslationTypes';
 import type { TranslationPlugin } from '../types/configTypes';
 
 const getNavigatorLanguage = (): string | undefined => {
@@ -16,10 +15,7 @@ const getNavigatorLanguage = (): string | undefined => {
 	return undefined;
 }
 
-export const navigatorLanguageDetector = <
-	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
->(options?: { onLanguage: (language: string) => string }): TranslationPlugin<Langs, Trans> => {
+export const navigatorLanguageDetector = (options?: { onLanguage: (language: string) => string }): TranslationPlugin => {
 	return {
 		config(config) {
 			if ( !config.language ) {

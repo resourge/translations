@@ -31,14 +31,11 @@ export type OnTranslationSet<
 	config: TranslationObj<Langs, Trans>
 ) => void | Promise<void>
 
-export type TranslationPlugin<
-	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
-> = {
-	config?: OnTranslationConfig<Langs, Trans>
+export type TranslationPlugin = {
+	config?: OnTranslationConfig<string, TranslationsType<string> | BaseTranslationsType>
 	onLanguageChange?: (language: string) => void
-	onTranslationGet?: OnTranslationGet<Langs, Trans>
-	onTranslationSet?: OnTranslationSet<Langs, Trans>
+	onTranslationGet?: OnTranslationGet<string, TranslationsType<string> | BaseTranslationsType>
+	onTranslationSet?: OnTranslationSet<string, TranslationsType<string> | BaseTranslationsType>
 }
 
 export type SetupTranslationsConfigLoad<
@@ -60,7 +57,6 @@ export type SetupTranslationsConfigLoad<
 		 */
 		translationTimeout?: number
 	}
-	plugins?: Array<TranslationPlugin<string, B>>
 }
 
 export type SetupTranslationsConfigTranslations<
@@ -68,7 +64,6 @@ export type SetupTranslationsConfigTranslations<
 	Trans extends TranslationsType<Langs>
 > = {
 	translations: Narrow<Trans>
-	plugins?: Array<TranslationPlugin<Langs, Trans>>
 }
 
 export type SetupTranslationsConfig<
@@ -76,6 +71,7 @@ export type SetupTranslationsConfig<
 > = {
 	langs: Narrow<Langs[]>
 	defaultLanguage?: Langs
+	plugins?: TranslationPlugin[]
 }
 
 export type SetupConfig<

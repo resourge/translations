@@ -1,10 +1,7 @@
 import type { TranslationsType, BaseTranslationsType } from '../types/TranslationTypes';
 import type { TranslationObj, TranslationPlugin } from '../types/configTypes';
 
-export const languageLocalStorage = <
-	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
->(): TranslationPlugin<Langs, Trans> => {
+export const languageLocalStorage = (): TranslationPlugin => {
 	const languageKey = 'lng'
 
 	return globalThis.window ? {
@@ -13,12 +10,12 @@ export const languageLocalStorage = <
 
 			return config;
 		},
-		onTranslationSet(language: string, translations: TranslationObj<Langs, Trans>) {
+		onTranslationSet(language: string, translations: TranslationObj<string, TranslationsType<string> | BaseTranslationsType>) {
 			window.localStorage.setItem(`${languageKey}_${language}`, JSON.stringify(translations));
 		},
 		onTranslationGet(
 			language: string,  
-			localTranslations?: Trans
+			localTranslations?: TranslationsType<string> | BaseTranslationsType
 		) {
 			if ( !localTranslations ) {
 				const localTranslationsString = window.localStorage.getItem(`${languageKey}_${language}`);

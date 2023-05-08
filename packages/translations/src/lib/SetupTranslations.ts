@@ -38,7 +38,7 @@ export class SetupTranslationsInstance<
 	public config: SetupConfig<Langs, Trans>
 
 	private readonly translationsMap: MapTranslations<Langs, Trans>;
-	private readonly onLanguageChanges: Array<NonNullable<TranslationPlugin<Langs, Trans>['onLanguageChange']>> = [];
+	private readonly onLanguageChanges: Array<NonNullable<TranslationPlugin['onLanguageChange']>> = [];
 	
 	public get language() {
 		return this.config.language
@@ -51,7 +51,7 @@ export class SetupTranslationsInstance<
 	/**
 	 * Translations object
 	 */
-	public T(): Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans> {
+	public get T(): Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans> {
 		return this.translationsMap.get(this.config.language) as unknown as (Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans>)
 	}
 
