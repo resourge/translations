@@ -1,6 +1,4 @@
 /* eslint-disable no-useless-escape */
-import { SetupReactTranslation } from '@resourge/react-translations'
-import { SetupTranslations } from '@resourge/translations'
 import path from 'path';
 import { type ConfigLoaderSuccessResult } from 'tsconfig-paths';
 import ts, {
@@ -19,8 +17,8 @@ const {
 	ScriptTarget
 } = ts;
 
-const setupTranslationsName: string = SetupTranslations.name;
-const setupReactTranslationName: string = SetupReactTranslation.name;
+const setupTranslationsName: string = 'SetupTranslations';
+const setupReactTranslationName: string = 'SetupReactTranslation';
 
 const setupRegex = new RegExp(`(${setupTranslationsName}|${setupReactTranslationName}|SetupVueTranslation)\(([\s\S]*?)\)`, 'g')
 
