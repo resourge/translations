@@ -13,31 +13,31 @@ import {
 import { type SetupReactTranslationInstance } from './types/types'
 import { wrapPromise } from './utils/utils'
 
-export type SetupReactTranslationReturn<Instance> = {
+export type SetupReactTranslationsReturn<Instance> = {
 	TranslationInstance: Instance
 	useTranslation: () => Instance
 }
 
-export function SetupReactTranslation<
+export function SetupReactTranslations<
 	Langs extends string, 
 	Trans extends TranslationsType<Langs>
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigTranslations<Langs, Trans>
-): SetupReactTranslationReturn<SetupReactTranslationInstance<Langs, Trans>>
-export function SetupReactTranslation<
+): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>>
+export function SetupReactTranslations<
 	Langs extends string, 
 	Trans extends BaseTranslationsType
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigLoad<Trans>
-): SetupReactTranslationReturn<SetupReactTranslationInstance<Langs, Trans>>
-export function SetupReactTranslation<
+): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>>
+export function SetupReactTranslations<
 	Langs extends string, 
 	Trans extends TranslationsType<Langs> | BaseTranslationsType
 >(
 	config: SetupTranslationsConfig<Langs> & (
 		Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
 	)
-): SetupReactTranslationReturn<SetupReactTranslationInstance<Langs, Trans>> {
+): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>> {
 	const TranslationInstance = SetupTranslations<Langs, Trans>(
 		config as any
 	) as unknown as SetupReactTranslationInstance<

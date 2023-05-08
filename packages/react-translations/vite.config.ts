@@ -4,5 +4,12 @@ import { defineLibConfig } from '../../config/defineLibConfig';
 
 // https://vitejs.dev/config/
 export default defineLibConfig({
-	plugins: [react()]
+	plugins: [react()],
+	build: {
+		rollupOptions: {
+			external: [
+				'html-parse-stringify'
+			]
+		}
+	}
 })

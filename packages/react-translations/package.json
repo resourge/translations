@@ -52,5 +52,8 @@
 		"test:watch": "vitest",
 		"coverage": "vitest run --coverage",
 		"semantic-release": "semantic-release -e semantic-release-monorepo"
+	},
+	"dependencies": {
+		"html-parse-stringify": "^3.0.1"
 	}
 }

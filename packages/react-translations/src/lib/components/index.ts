@@ -1,3 +1,7 @@
+import Trans, { type TransProps } from './trans/Trans';
 import TranslationProvider, { type TranslationProviderProps } from './translationProvider/TranslationProvider';
 
-export { TranslationProvider, type TranslationProviderProps }
+export { 
+	Trans, type TransProps,
+	TranslationProvider, type TranslationProviderProps
+}

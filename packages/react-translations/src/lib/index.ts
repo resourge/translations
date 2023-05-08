@@ -6,9 +6,10 @@ import {
 	type BaseTranslationsType
 } from '@resourge/translations'
 
-import { type SetupReactTranslationReturn, SetupReactTranslation } from './SetupReactTranslation'
+import { type SetupReactTranslationsReturn, SetupReactTranslations } from './SetupReactTranslation'
 
 export * from './components'
+export * from './contexts'
 export * from './types'
 
 export { 
@@ -18,6 +19,6 @@ export {
 	plural,
 	type BaseTranslationsType,
 
-	type SetupReactTranslationReturn, 
-	SetupReactTranslation 
+	type SetupReactTranslationsReturn as SetupReactTranslationReturn, 
+	SetupReactTranslations
 }

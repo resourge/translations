@@ -300,6 +300,8 @@ export class MapTranslations<
 			)
 		) {
 			return async () => {
+				console.log('language', language)
+				console.log('this.langMaps', this.langMaps)
 				const translations = await this.langMaps.get('request')!(language) as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>;
 			
 				this.set(language, translations);
