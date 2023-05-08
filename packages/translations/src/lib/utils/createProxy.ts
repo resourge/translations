@@ -1,15 +1,15 @@
-import type { TranslationsKeys, TranslationsType } from '../types/TranslationTypes';
+import type { BaseTranslationsKeys, BaseTranslationsType } from '../types/TranslationTypes'
 
 import { createKeyFunction } from './utils';
 
-export const createProxy = <Langs extends string, T extends TranslationsType<Langs>>(
+export const createProxy = <T extends BaseTranslationsType>(
 	translations: Record<string, string>,
 	structure: Record<string, any>,
 
 	onMissingKeyRequest: () => void,
 
 	baseKey: string = ''
-): TranslationsKeys<Langs, T> => {
+): BaseTranslationsKeys<T> => {
 	return new Proxy<any>({}, {
 		get(_, _key: string) {
 			const key = `${baseKey ? `${baseKey}.` : ''}${_key}`;

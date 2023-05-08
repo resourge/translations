@@ -8,6 +8,7 @@ import type {
 	TranslationsType
 } from '../types/TranslationTypes'
 import type {
+	OnTranslationConfig,
 	OnTranslationGet,
 	OnTranslationSet,
 	SetupTranslationsConfig,
@@ -112,32 +113,33 @@ export function isExpired(lastTime: number, threshold: number) {
 
 export function separatePlugins<
 	Langs extends string, 
-	B extends BaseTranslationsType,
-	T extends TranslationsType<Langs> | undefined = undefined
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 >(
-	config: SetupTranslationsConfig<Langs> & (SetupTranslationsConfigTranslations<Langs, T> | SetupTranslationsConfigLoad<B>)
+	config: SetupTranslationsConfig<Langs> & (
+		Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
+	)
 ) {
 	const plugins = config.plugins ?? [];
 	
-	const onLanguageChanges: Array<NonNullable<TranslationPlugin<Langs, B, T>['onLanguageChange']>> = [];
-	const configs: Array<NonNullable<TranslationPlugin<Langs, B, T>['config']>> = [];
-	const onTranslationGets: Array<OnTranslationGet<Langs, T>> = [];
-	const onTranslationSets: Array<OnTranslationSet<Langs, T>> = [];
+	const onLanguageChanges: Array<NonNullable<TranslationPlugin<Langs, Trans>['onLanguageChange']>> = [];
+	const configs: Array<OnTranslationConfig<Langs, Trans>> = [];
+	const onTranslationGets: Array<OnTranslationGet<Langs, Trans>> = [];
+	const onTranslationSets: Array<OnTranslationSet<Langs, Trans>> = [];
 
 	plugins.forEach(({
 		config, onLanguageChange, onTranslationGet, onTranslationSet 
 	}) => {
 		if ( config ) {
-			configs.push(config as NonNullable<TranslationPlugin<Langs, B, T>['config']>);
+			configs.push(config as unknown as OnTranslationConfig<Langs, Trans>);
 		}
 		if ( onLanguageChange ) {
 			onLanguageChanges.push(onLanguageChange);
 		}
 		if ( onTranslationGet ) {
-			onTranslationGets.push(onTranslationGet as OnTranslationGet<Langs, T>);
+			onTranslationGets.push(onTranslationGet as unknown as OnTranslationGet<Langs, Trans>);
 		}
 		if ( onTranslationSet ) {
-			onTranslationSets.push(onTranslationSet as OnTranslationSet<Langs, T>);
+			onTranslationSets.push(onTranslationSet as OnTranslationSet<Langs, Trans>);
 		}
 	})
 
@@ -148,3 +150,5 @@ export function separatePlugins<
 		onTranslationSets
 	}
 }
+
+export const deepValue = (o: Record<string, any>, p: string) => p.split('.').reduce((a, v) => a[v], o);

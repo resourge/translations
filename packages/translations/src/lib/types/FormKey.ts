@@ -15,3 +15,9 @@ export type RecursiveKeyOf<TObj extends object, isFirstLevel extends boolean = t
 }[keyof TObj & (string | number)];
 
 export type FormKey<T extends Record<string, any>> = RecursiveKeyOf<T>
+
+export type OnlyNestedKeyOf<ObjectType extends object> = { 
+	[Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object 
+		? `${Key}.${OnlyNestedKeyOf<ObjectType[Key]>}`
+		: `${Key}`
+}[keyof ObjectType & (string | number)];

@@ -6,7 +6,10 @@ import {
 	type BaseTranslationsType
 } from '@resourge/translations'
 
-import { type SetupReactTranslationInstance, SetupReactTranslation } from './SetupReactTranslations'
+import { type SetupReactTranslationReturn, SetupReactTranslation } from './SetupReactTranslation'
+
+export * from './components'
+export * from './types'
 
 export { 
 	gender,
@@ -14,6 +17,7 @@ export {
 	navigatorLanguageDetector,
 	plural,
 	type BaseTranslationsType,
-	
-	type SetupReactTranslationInstance, SetupReactTranslation 
+
+	type SetupReactTranslationReturn, 
+	SetupReactTranslation 
 }

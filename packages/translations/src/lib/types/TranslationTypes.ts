@@ -9,14 +9,48 @@ type UnifyObj<T extends Record<string, any>> = {
 	[Key in keyof T]: T[Key]
 }
 
+type Primitive = bigint | boolean | null | number | string | symbol | undefined;
+
+type Separator = ' ';
+type Trim<T extends string, Acc extends string = ''> =
+(T extends `${infer Char}${infer Rest}`
+	? (Char extends Separator
+		? Trim<Rest, Acc>
+		: Trim<Rest, `${Acc}${Char}`>)
+	: (T extends ''
+		? Acc
+		: never)
+)
+
+type ConvertStringIntoType<T> = 
+	T extends 'string' 
+		? string 
+		: T extends 'number' 
+			? number 
+			: T extends 'bigint' 
+				? bigint 
+				: T extends 'boolean' 
+					? boolean 
+					: T extends 'null' 
+						? null 
+						: T extends 'symbol' 
+							? symbol 
+							: T extends 'undefined' 
+								? undefined 
+								: Primitive
+
+type Replace<S extends string, F extends string, T extends string> = S extends `${infer BS}${F}${infer AS}` ? `${BS}${T}${AS}` : S
+
+type GetType<K extends string> = K extends `${infer E}:${infer T}` 
+	? [Replace<E, '?', ''>, ConvertStringIntoType<Trim<T>>, E extends `${infer _T}?` ? true : false] 
+	: [Replace<K, '?', ''>, Primitive, K extends `${infer _T}?` ? true : false]
+
+type CreateObj<T extends [string, any, boolean]> = T[2] extends true 
+	? { [Key in T[0]]?: T[1] } 
+	: { [Key in T[0]]: T[1] } 
+
 type SeparateKey<K> = K extends string 
-	? (
-		K extends `${infer E}?` 
-			? { [Key in E]?: string } 
-			: (
-				{ [Key in K]: string }
-			)
-	) : never
+	? CreateObj<GetType<K>> : never
 	
 export type GetParamsFromTemplateString<K> = K extends string 
 	? (
@@ -86,8 +120,14 @@ type TranslationsWithoutLangs<T extends object, Langs extends string> = {
 export type TranslationsType<
 	Langs extends string
 > = {
-	[k: string]:
-	Record<Langs, string> | { [K in Langs]: string } | (
-		TranslationsWithoutLangs<TranslationsType<Langs> | (TranslationsType<Langs> & { _custom: { key: string, type: any } }), Langs>
+	[k: string]: Record<Langs, string> | (
+		TranslationsWithoutLangs<
+			TranslationsType<Langs> | (
+				TranslationsType<Langs> & { 
+					_custom: { key: string, type: any } 
+				}
+			), 
+			Langs
+		>
 	)
 }

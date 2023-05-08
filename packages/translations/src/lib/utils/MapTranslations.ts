@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { type OnlyNestedKeyOf } from '../types/FormKey';
 import type {
+	BaseTranslationsKeys,
 	BaseTranslationsType,
 	Narrow,
 	TranslationsKeys,
@@ -14,9 +16,10 @@ import type {
 	SetupTranslationsConfigTranslations,
 	TranslationObj
 } from '../types/configTypes'
+import { type ConvertTransIntoSimpleObj, type TFunctionReturn, type TFunctionValues } from '../types/types';
 
 import { createProxy } from './createProxy';
-import { createFromEntry, isExpired } from './utils';
+import { createFromEntry, deepValue, isExpired } from './utils';
 
 function flattenObject<B extends BaseTranslationsType>(structure: Narrow<B>, prefix: string = ''): Record<string, string> {
 	return Object.keys(structure)
@@ -36,15 +39,23 @@ function flattenObject<B extends BaseTranslationsType>(structure: Narrow<B>, pre
 	}, {});
 }
 
-export type LangMaps<
-	Langs extends string, 
-	T extends TranslationsType<Langs>
+export type LangMapTranslationObj<
+	Langs extends string,
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
+> = {
+	lastTranslation: number
+	translations: Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>
+}
+
+export type LangMaps< 
+	Langs extends string,
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > = Map<
 	Langs, 
-	TranslationObj<Langs, T>
+	LangMapTranslationObj<Langs, Trans>
 > & Map<
 	'request', 
-	((language: string) => Promise<TranslationsKeys<Langs, T>>)
+	((language: string) => Promise<BaseTranslationsKeys<Trans>>)
 >
 
 const translationMethod = {
@@ -82,42 +93,98 @@ function createLanguages<
 
 export class MapTranslations<
 	Langs extends string, 
-	B extends BaseTranslationsType,
-	T extends TranslationsType<Langs>
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > {
-	public langMaps: LangMaps<Langs, T> = new Map();
+	public langMaps: LangMaps<Langs, Trans> = new Map();
 	public isLoad: boolean = false;
 
-	public structure: B & Record<string, string> = {} as B & Record<string, string>;
+	public structure: Trans & Record<string, string> = {} as Trans & Record<string, string>;
 
 	public lastMissingKey: number = 0;
 
+	public t!: <Key extends OnlyNestedKeyOf<ConvertTransIntoSimpleObj<Langs, Trans>> | string>(
+		...args: string extends Key 
+			? [
+				key: string,
+				value?: Record<string, any>
+			]
+			: (
+				TFunctionValues<
+						Trans extends TranslationsType<Langs> 
+							? TranslationsKeys<Langs, Trans> 
+							: BaseTranslationsKeys<Trans>, 
+						Key
+					> extends undefined 
+					? [key: Narrow<Key>] 
+					: [
+						key: Narrow<Key>,
+						values: TFunctionValues<
+							Trans extends TranslationsType<Langs> 
+								? TranslationsKeys<Langs, Trans> 
+								: BaseTranslationsKeys<Trans>, 
+							Key
+						>
+					]
+			)
+	) => TFunctionReturn<Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>, Key>;
+
 	constructor(
-		public config: SetupConfig<Langs, B, T>,
-		public onTranslationGets: Array<OnTranslationGet<Langs, T>>,
-		public onTranslationSets: Array<OnTranslationSet<Langs, T>>,
+		public config: SetupConfig<Langs, Trans>,
+		public onTranslationGets: Array<OnTranslationGet<Langs, Trans>>,
+		public onTranslationSets: Array<OnTranslationSet<Langs, Trans>>,
 		onMissingKeyRequest: () => void
 	) {
-		if ( (config as SetupTranslationsConfigTranslations<Langs, T>).translations ) {
-			this.langMaps = createLanguages<Langs, T>(
+		const _translationConfig = (config as unknown as SetupTranslationsConfigTranslations<Langs, Trans extends TranslationsType<Langs> ? Trans : TranslationsType<Langs>>);
+		const _loadConfig = (config as unknown as SetupTranslationsConfigLoad<Trans extends BaseTranslationsType ? Trans : BaseTranslationsType>);
+		if ( _translationConfig.translations ) {
+			this.langMaps = createLanguages(
 				config.langs as Langs[], 
-				(config as SetupTranslationsConfigTranslations<Langs, T>).translations
-			);
+				_translationConfig.translations
+			) as unknown as LangMaps<Langs, Trans>;
+
+			this.t = (
+				key: any,
+				values?: Record<string, any>
+			) => {
+				const translations = this.get(this.config.language) as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans, undefined> : BaseTranslationsKeys<Trans, undefined>;
+
+				const keyValue = key.includes('.') ? deepValue(translations, key) : translations[key];
+
+				if ( values && typeof keyValue === 'function' ) {
+					return (keyValue as (params: any) => string)(values) as any
+				}
+
+				return keyValue as any
+			};
 		}
-		else if ( (config as SetupTranslationsConfigLoad<B>).load ) {
+		else if ( _loadConfig.load ) {
 			this.isLoad = true;
 
+			this.t = (
+				key: any,
+				values?: Record<string, any>
+			) => {
+				const translations = this.get(this.config.language) as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans, undefined> : BaseTranslationsKeys<Trans, undefined>;
+
+				const keyValue = translations[key];
+
+				if ( values && typeof keyValue === 'function' ) {
+					return (keyValue as (params: any) => string)(values) as any
+				}
+
+				return keyValue as any
+			};
+
 			this.structure = {
-				...((config as SetupTranslationsConfigLoad<B>).load.structure as B),
-				...flattenObject((config as SetupTranslationsConfigLoad<B>).load.structure)
+				...(_loadConfig.load.structure as Trans),
+				...flattenObject(_loadConfig.load.structure)
 			}
 
 			const asyncRequest = async (language: string) => {
-				const configLoad = (config as SetupTranslationsConfigLoad<B>);
 				this.lastMissingKey = Date.now()
-				const translations = await configLoad.load.request(language, new Date(this.lastMissingKey || Date.now()));
+				const translations = await _loadConfig.load.request(language, new Date(this.lastMissingKey || Date.now()));
 
-				const _translations: TranslationObj<Langs, T> = {
+				const _translations: TranslationObj<Langs, Trans> = {
 					translations,
 					lastTranslation: Date.now()
 				}
@@ -128,19 +195,19 @@ export class MapTranslations<
 
 				const flattenTranslations = flattenObject(translations);
 
-				return createProxy<Langs, T>(
+				return createProxy<Trans>(
 					flattenTranslations,
 					this.structure,
-					(configLoad.load.isGoingToRequestOnMissingKeys ?? true) 
+					(_loadConfig.load.isGoingToRequestOnMissingKeys ?? true) 
 						? () => {
-							if ( !isExpired(this.lastMissingKey, (configLoad.load.missingKeysThreshold ?? 3600000)) ) {
+							if ( !isExpired(this.lastMissingKey, (_loadConfig.load.missingKeysThreshold ?? 3600000)) ) {
 								return;
 							}
 							asyncRequest(language)
 							.then((translations) => {
 								this.set(
 									language, 
-									translations
+									translations as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>
 								)
 
 								onMissingKeyRequest();
@@ -152,25 +219,25 @@ export class MapTranslations<
 			this.langMaps.set('request', asyncRequest);
 
 			config.langs.forEach((lang) => {
-				let trans: TranslationObj<Langs, T> | undefined;
+				let trans: TranslationObj<Langs, Trans> | undefined;
 				this.onTranslationGets.forEach((onTranslationGet) => {
-					trans = onTranslationGet(lang as Langs, trans);
+					trans = onTranslationGet(lang as Langs, trans?.translations);
 				})
 
 				if ( trans ) {
-					const translations = createProxy<Langs, T>(
-						flattenObject(trans.translations as Narrow<B>),
+					const translations = createProxy<Trans>(
+						flattenObject(trans.translations as Narrow<Trans>),
 						this.structure,
-						((this.config as SetupTranslationsConfigLoad<B>).load.isGoingToRequestOnMissingKeys ?? true) 
+						((this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.isGoingToRequestOnMissingKeys ?? true) 
 							? () => {
-								if ( !isExpired(this.lastMissingKey, ((this.config as SetupTranslationsConfigLoad<B>).load.missingKeysThreshold ?? 3600000)) ) {
+								if ( !isExpired(this.lastMissingKey, ((this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.missingKeysThreshold ?? 3600000)) ) {
 									return;
 								}
 								asyncRequest(lang as Langs)
 								.then((translations) => {
 									this.set(
 										lang as Langs, 
-										translations
+										translations as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>
 									)
 
 									onMissingKeyRequest();
@@ -178,34 +245,36 @@ export class MapTranslations<
 							} : () => {}
 					)
 
-					this.langMaps.set(
-						lang as Langs, 
-						{
-							translations: translations as unknown as TranslationsKeys<Langs, T extends undefined ? TranslationsType<Langs> : T, undefined>,
-							lastTranslation: trans.lastTranslation
-						}
+					this.set(
+						lang as Langs,
+						translations as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>,
+						trans.lastTranslation
 					)
 				}
 			})
 		}
 	}
 
-	public get(language: Langs | string): TranslationsKeys<Langs, T> | (() => Promise<void>) {
+	public get(language: Langs | string): (
+		Trans extends TranslationsType<Langs> 
+			? TranslationsKeys<Langs, Trans> 
+			: BaseTranslationsKeys<Trans> 
+	) | (() => Promise<void>) {
 		const trans = this.langMaps.get(language as Langs);
 		if ( 
 			!trans || 
 			(
-				(this.config as SetupTranslationsConfigLoad<B>).load && 
-				(this.config as SetupTranslationsConfigLoad<B>).load.translationTimeout !== undefined && 
+				(this.config as unknown as SetupTranslationsConfigLoad<Trans>).load && 
+				(this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.translationTimeout !== undefined && 
 				trans && 
 				isExpired(
 					trans.lastTranslation, 
-					(this.config as SetupTranslationsConfigLoad<B>).load.translationTimeout!
+					(this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.translationTimeout!
 				)
 			)
 		) {
 			return async () => {
-				const translations = await this.langMaps.get('request')!(language);
+				const translations = await this.langMaps.get('request')!(language) as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>;
 			
 				this.set(language, translations);
 			}
@@ -216,19 +285,21 @@ export class MapTranslations<
 			}
 		}
 
-		return trans.translations as unknown as TranslationsKeys<Langs, T>
+		return trans.translations as unknown as (
+			Trans extends TranslationsType<Langs> 
+				? TranslationsKeys<Langs, Trans> 
+				: BaseTranslationsKeys<Trans> 
+		) | (() => Promise<void>)
 	}
 
 	public set(
 		language: Langs | string, 
-		translations: TranslationsKeys<
-			Langs, 
-			T
-		>
+		translations: Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>,
+		lastTranslation: number = Date.now()
 	) {
-		const _translations: TranslationObj<Langs, T> = {
-			translations: translations as any,
-			lastTranslation: Date.now()
+		const _translations: LangMapTranslationObj<Langs, Trans> = {
+			translations,
+			lastTranslation
 		}
 
 		return this.langMaps.set(

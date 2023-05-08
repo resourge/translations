@@ -1,6 +1,4 @@
-/* eslint-disable n/no-callback-literal */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { type FormKey } from './types/FormKey'
 import type {
 	BaseTranslationsKeys,
 	BaseTranslationsType,
@@ -8,44 +6,38 @@ import type {
 	TranslationsType
 } from './types/TranslationTypes'
 import type {
-	OnTranslationGet,
-	OnTranslationSet,
 	SetupConfig,
 	SetupTranslationsConfig,
 	SetupTranslationsConfigLoad,
 	SetupTranslationsConfigTranslations,
 	TranslationPlugin
 } from './types/configTypes'
-import { type TFunctionReturn, type TFunctionValues } from './types/types'
 import { MapTranslations } from './utils/MapTranslations'
 import { separatePlugins } from './utils/utils'
 
 export type EventsType<
-	Langs extends string, 
-	B extends BaseTranslationsType,
-	Trans extends TranslationsType<Langs> | undefined = undefined
+	Instance
 > = {
-	languageChange: Array<(this: SetupTranslationsInstance<Langs, B, Trans>, language: string) => void>
-	missingRequestKeys: Array<(this: SetupTranslationsInstance<Langs, B, Trans>, ) => void>
+	languageChange: Array<(this: Instance, language: string) => void>
+	missingRequestKeys: Array<(this: Instance) => void>
 }
 
-export type EventType = keyof EventsType<string, BaseTranslationsType, undefined>
+export type EventType = keyof EventsType<any>
 
 export class SetupTranslationsInstance<
 	Langs extends string, 
-	B extends BaseTranslationsType,
-	Trans extends TranslationsType<Langs> | undefined = undefined
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > {
-	private events: EventsType<Langs, B, Trans> = {
+	private events: EventsType<this> = {
 		languageChange: [],
 		missingRequestKeys: []
 	};
 
 	public isReady: boolean = false;
-	public config: SetupConfig<Langs, B, Trans>
+	public config: SetupConfig<Langs, Trans>
 
-	private readonly translationsMap: MapTranslations<Langs, B, Trans extends undefined ? TranslationsType<Langs> : Trans>;
-	private readonly onLanguageChanges: Array<NonNullable<TranslationPlugin<Langs, B, Trans>['onLanguageChange']>> = [];
+	private readonly translationsMap: MapTranslations<Langs, Trans>;
+	private readonly onLanguageChanges: Array<NonNullable<TranslationPlugin<Langs, Trans>['onLanguageChange']>> = [];
 	
 	public get language() {
 		return this.config.language
@@ -55,21 +47,25 @@ export class SetupTranslationsInstance<
 		return this.config.langs
 	}
 
-	public get T(): Trans extends undefined ? BaseTranslationsKeys<B> : TranslationsKeys<Langs, Trans extends undefined ? Record<string, any> : Trans, undefined> {
-		return this.translationsMap.get(this.config.language) as Trans extends undefined ? BaseTranslationsKeys<B> : TranslationsKeys<Langs, Trans extends undefined ? Record<string, any> : Trans, undefined>
+	public get T(): Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans> {
+		return this.translationsMap.get(this.config.language) as unknown as (Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans>)
 	}
 
-	public promise: Promise<SetupTranslationsInstance<Langs, B, Trans>> = Promise.resolve(this);
+	public promise: Promise<SetupTranslationsInstance<Langs, Trans>> = Promise.resolve(this);
 
-	constructor(config: SetupTranslationsConfig<Langs> & (SetupTranslationsConfigTranslations<Langs, Trans> | SetupTranslationsConfigLoad<B>)) {
+	constructor(
+		config: SetupTranslationsConfig<Langs> & (
+			Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
+		)
+	) {
 		const {
 			configs, onLanguageChanges, onTranslationGets, onTranslationSets
-		} = separatePlugins(config);
+		} = separatePlugins<Langs, Trans>(config);
 
 		this.onLanguageChanges = onLanguageChanges;
 
-		let _config: SetupConfig<Langs, B, Trans> = {
-			...config,
+		let _config: SetupConfig<Langs, Trans> = {
+			...config as any,
 			defaultLanguage: config.defaultLanguage ?? 'en' as Langs,
 			language: ''
 		};
@@ -93,10 +89,10 @@ export class SetupTranslationsInstance<
 		// #endregion Execute plugins config
 
 		// #region Maps translations to each language
-		this.translationsMap = new MapTranslations<Langs, B, Trans extends undefined ? TranslationsType<Langs> : Trans>(
-			_config as any,
-			onTranslationGets as Array<OnTranslationGet<Langs, Trans extends undefined ? TranslationsType<Langs> : Trans>>,
-			onTranslationSets as unknown as Array<OnTranslationSet<Langs, Trans extends undefined ? TranslationsType<Langs> : Trans>>,
+		this.translationsMap = new MapTranslations<Langs, Trans>(
+			_config,
+			onTranslationGets,
+			onTranslationSets,
 			() => {
 				this.emit('missingRequestKeys');
 			}
@@ -128,25 +124,11 @@ export class SetupTranslationsInstance<
 		this.config = _config;
 	}
 
-	public t = <
-		Key extends FormKey<
-			Trans extends undefined ? B : TranslationsKeys<Langs, Trans extends undefined ? B : Trans>
-		>
-	>(
-		key: Key,
-		values?: TFunctionValues<Langs, Trans extends undefined ? B : Trans, Key>
-	): TFunctionReturn<Langs, Trans extends undefined ? B : Trans, Key> => {
-		const translations = this.translationsMap.get(this.config.language) as Trans extends undefined ? BaseTranslationsKeys<B> : TranslationsKeys<Langs, Trans extends undefined ? Record<string, any> : Trans, undefined>;
-		const keyValue = translations[key];
-
-		if ( values && typeof keyValue === 'function' ) {
-			return (keyValue as (params: any) => string)(values) as TFunctionReturn<Langs, Trans extends undefined ? B : Trans, Key>
-		}
-
-		return keyValue as TFunctionReturn<Langs, Trans extends undefined ? B : Trans, Key>
+	public get t() {
+		return this.translationsMap.t;
 	}
 
-	private emit<K extends Exclude<EventType, 'all'>>(event: K, ...value: Parameters<EventsType<Langs, B, Trans>[K][number]>) {
+	private emit<K extends Exclude<EventType, 'all'>>(event: K, ...value: Parameters<EventsType<this>[K][number]>) {
 		this.events[event].forEach((cb) => {
 			const _cb = cb.bind(this);
 			
@@ -155,7 +137,7 @@ export class SetupTranslationsInstance<
 		})
 	}
 
-	public addEventListener = <E extends EventType>(type: E, cb: (EventsType<Langs, B, Trans>[E][number])): () => void => {
+	public addEventListener = <E extends EventType>(type: E, cb: (EventsType<this>[E][number])): () => void => {
 		this.events[type].push(cb as any);
 
 		return () => {
@@ -187,24 +169,23 @@ export class SetupTranslationsInstance<
 
 export function SetupTranslations<
 	Langs extends string, 
-	B extends BaseTranslationsType,
-	Trans extends TranslationsType<Langs> | undefined = undefined
+	Trans extends TranslationsType<Langs>
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigTranslations<Langs, Trans>
-): SetupTranslationsInstance<Langs, B, Trans>
+): SetupTranslationsInstance<Langs, Trans>
 export function SetupTranslations<
 	Langs extends string, 
-	B extends BaseTranslationsType,
-	Trans extends TranslationsType<Langs> | undefined = undefined
+	Trans extends BaseTranslationsType
 >(
-	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigLoad<B>
-): SetupTranslationsInstance<Langs, B, Trans>
+	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigLoad<Trans>
+): SetupTranslationsInstance<Langs, Trans>
 export function SetupTranslations<
 	Langs extends string, 
-	B extends BaseTranslationsType,
-	Trans extends TranslationsType<Langs> | undefined = undefined
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 >(
-	config: SetupTranslationsConfig<Langs> & (SetupTranslationsConfigTranslations<Langs, Trans> | SetupTranslationsConfigLoad<B>)
-): SetupTranslationsInstance<Langs, B, Trans> {
-	return new SetupTranslationsInstance<Langs, B, Trans>(config);
+	config: SetupTranslationsConfig<Langs> & (
+		Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
+	)
+): SetupTranslationsInstance<Langs, Trans> {
+	return new SetupTranslationsInstance<Langs, Trans>(config);
 }

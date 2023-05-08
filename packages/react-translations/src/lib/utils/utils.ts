@@ -1,14 +1,24 @@
-export type WrapAuthenticationReturn = {
-	promise: () => Promise<any>
-	read: () => any
+import { type BaseTranslationsType, type TranslationsType } from '@resourge/translations';
+
+import { type SetupReactTranslationInstance } from '../types/types';
+
+export type WrapPromiseReturn<
+	Langs extends string, 
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
+> = {
+	promise: Promise<SetupReactTranslationInstance<Langs, Trans>>
+	read: () => SetupReactTranslationInstance<Langs, Trans>
 }
 
-export const wrapAuthentication = (
-	promise: () => Promise<any>
-): WrapAuthenticationReturn => {
+export const wrapPromise = <
+	Langs extends string, 
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
+>(
+	promise: Promise<SetupReactTranslationInstance<Langs, Trans>>
+): WrapPromiseReturn<Langs, Trans> => {
 	let status = 'pending';
 	let result: any;
-	const suspend = promise().then(
+	const suspend = promise.then(
 		(res) => {
 			status = 'success';
 			result = res;

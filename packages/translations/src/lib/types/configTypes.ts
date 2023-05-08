@@ -1,29 +1,31 @@
-import type {
-	BaseTranslationsType,
-	Narrow,
-	TranslationsKeys,
-	TranslationsType
-} from './TranslationTypes'
+import type { BaseTranslationsType, Narrow, TranslationsType } from './TranslationTypes'
+
+// TranslationsKeys<Langs, Trans extends undefined ? TranslationsType<Langs> : Trans, undefined>
 
 export type TranslationObj<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | undefined
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > = {
 	lastTranslation: number
-	translations: TranslationsKeys<Langs, Trans extends undefined ? TranslationsType<Langs> : Trans, undefined>
+	translations: Trans
 }
+
+export type OnTranslationConfig<
+	Langs extends string, 
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
+> = (config: SetupConfig<Langs, Trans>) => SetupConfig<Langs, Trans>
 
 export type OnTranslationGet<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | undefined
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > = (
 	language: string,
-	localTranslations?: TranslationObj<Langs, Trans>
+	localTranslations?: Trans
 ) => undefined | TranslationObj<Langs, Trans>
 
 export type OnTranslationSet<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | undefined
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > = (
 	language: string, 
 	config: TranslationObj<Langs, Trans>
@@ -31,10 +33,9 @@ export type OnTranslationSet<
 
 export type TranslationPlugin<
 	Langs extends string, 
-	B extends BaseTranslationsType,
-	Trans extends TranslationsType<Langs> | undefined
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > = {
-	config?: (config: SetupConfig<Langs, B, Trans>) => SetupConfig<Langs, B, Trans>
+	config?: OnTranslationConfig<Langs, Trans>
 	onLanguageChange?: (language: string) => void
 	onTranslationGet?: OnTranslationGet<Langs, Trans>
 	onTranslationSet?: OnTranslationSet<Langs, Trans>
@@ -59,15 +60,15 @@ export type SetupTranslationsConfigLoad<
 		 */
 		translationTimeout?: number
 	}
-	plugins?: Array<TranslationPlugin<string, B, undefined>>
+	plugins?: Array<TranslationPlugin<string, B>>
 }
 
 export type SetupTranslationsConfigTranslations<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | undefined = undefined
+	Trans extends TranslationsType<Langs>
 > = {
 	translations: Narrow<Trans>
-	plugins?: Array<TranslationPlugin<Langs, BaseTranslationsType, Trans> | TranslationPlugin<string, BaseTranslationsType, undefined>>
+	plugins?: Array<TranslationPlugin<Langs, Trans>>
 }
 
 export type SetupTranslationsConfig<
@@ -79,8 +80,9 @@ export type SetupTranslationsConfig<
 
 export type SetupConfig<
 	Langs extends string,
-	B extends BaseTranslationsType,
-	Trans extends TranslationsType<Langs> | undefined
-> = SetupTranslationsConfig<Langs> & (SetupTranslationsConfigTranslations<Langs, Trans> | SetupTranslationsConfigLoad<B>) & {
+	Trans extends TranslationsType<Langs> | BaseTranslationsType
+> = SetupTranslationsConfig<Langs> & (
+	Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
+) & {
 	language: string
 }

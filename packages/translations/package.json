@@ -35,9 +35,6 @@
   },
   "typesVersions": {
     "*": {
-      ".": [
-        "./dist/index.d.ts"
-      ],
       "viteTranslationPlugin": [
         "./dist/viteTranslationPlugin.d.ts"
       ]
