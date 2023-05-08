@@ -19,7 +19,10 @@ const {
 	ScriptTarget
 } = ts;
 
-const setupRegex = new RegExp(`(${SetupTranslations.name}|${SetupReactTranslation.name}|SetupVueTranslation)\(([\s\S]*?)\)`, 'g')
+const setupTranslationsName: string = SetupTranslations.name;
+const setupReactTranslationName: string = SetupReactTranslation.name;
+
+const setupRegex = new RegExp(`(${setupTranslationsName}|${setupReactTranslationName}|SetupVueTranslation)\(([\s\S]*?)\)`, 'g')
 
 export function viteTranslationPlugin(): PluginOption {
 	const loadConfig: LoadConfig = {
