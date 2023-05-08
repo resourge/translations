@@ -171,11 +171,11 @@ export class MapTranslations<
 
 				const keyValue = key.includes('.') ? deepValue(translations, key) : translations[key];
 
-				if ( values && typeof keyValue === 'function' ) {
-					return (keyValue as (params: any) => string)(values) as any
-				}
+				const value = values && typeof keyValue === 'function' 
+					? ((keyValue as (params: any) => string)(values) as any)
+					: (keyValue as any)
 
-				return keyValue as any
+				return value || key
 			};
 		}
 		else if ( _loadConfig.load ) {
@@ -189,11 +189,11 @@ export class MapTranslations<
 
 				const keyValue = translations[key];
 
-				if ( values && typeof keyValue === 'function' ) {
-					return (keyValue as (params: any) => string)(values) as any
-				}
+				const value = values && typeof keyValue === 'function' 
+					? ((keyValue as (params: any) => string)(values) as any)
+					: (keyValue as any)
 
-				return keyValue as any
+				return value || key
 			};
 
 			this.structure = {

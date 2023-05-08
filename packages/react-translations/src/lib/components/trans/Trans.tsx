@@ -57,11 +57,14 @@ const Trans: FC<TransProps> = ({ message, components = {} }) => {
 		...convertComponentsIntoObjectComponents(components)
 	};
 
-	const ast = HTML.parse(`<>${message}</>`);
-
 	return (
 		<>
-			{ mapAst(ast, _components) }
+			{ 
+				mapAst(
+					HTML.parse(`<>${message}</>`), 
+					_components
+				) 
+			}
 		</>
 	);
 };
