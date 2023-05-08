@@ -1,3 +1,15 @@
+# [@resourge/react-translations-v1.6.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.5.1...@resourge/react-translations-v1.6.0) (2023-05-08)
+
+
+### Bug Fixes
+
+* **maptranslations and trans:** fix not returning key when value doesnt exist ([e0078f6](https://github.com/resourge/translations/commit/e0078f697ad2227a73063c79d917d86d41f92c8e))
+
+
+### Features
+
+* **trans:** add Trans component to include html elements ([e42bab3](https://github.com/resourge/translations/commit/e42bab38fb1f4a4f781e6c3187b09137c065966d))
+
 # [@resourge/react-translations-v1.5.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.5.0...@resourge/react-translations-v1.5.1) (2023-05-08)
 
 
