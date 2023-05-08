@@ -1,3 +1,17 @@
+# [@resourge/translations-v1.6.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.5.0...@resourge/translations-v1.6.0) (2023-05-08)
+
+
+### Bug Fixes
+
+* **translationtypes:** fix forcing custom values types to be string ([9551eba](https://github.com/resourge/translations/commit/9551ebaf5a54126a06d94987bfbd77c248a9fe39))
+* **types:** fix translation types ([843e576](https://github.com/resourge/translations/commit/843e57620f3464d97463f46f4d0cba0d4041985b))
+
+
+### Features
+
+* **setuptranslation:** add t for translation instances ([ac5bc60](https://github.com/resourge/translations/commit/ac5bc60d53da06524f72c4b30872b5911bc9966f))
+* **translations:** add key structure as an element of the translation instance ([f60a516](https://github.com/resourge/translations/commit/f60a51612b760b85c963580be9ed002139c08382))
+
 # [@resourge/translations-v1.5.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.4.0...@resourge/translations-v1.5.0) (2023-05-04)
 
 
