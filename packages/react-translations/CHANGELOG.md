@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.5.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.5.0...@resourge/react-translations-v1.5.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* **types:** fix translation types ([843e576](https://github.com/resourge/translations/commit/843e57620f3464d97463f46f4d0cba0d4041985b))
+
 # [@resourge/react-translations-v1.5.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.4.0...@resourge/react-translations-v1.5.0) (2023-05-04)
 
 
