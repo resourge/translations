@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.7.3](https://github.com/resourge/translations/compare/@resourge/translations-v1.7.2...@resourge/translations-v1.7.3) (2023-05-09)
+
+
+### Bug Fixes
+
+* **utils:** export utils to fix bug with viteTranslationPlugin ([7d0b8b7](https://github.com/resourge/translations/commit/7d0b8b72dc687775532c76996d3dadf5bd6833ab))
+
 # [@resourge/translations-v1.7.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.7.1...@resourge/translations-v1.7.2) (2023-05-09)
 
 
