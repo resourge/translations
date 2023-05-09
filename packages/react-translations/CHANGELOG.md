@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.6.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.6.0...@resourge/react-translations-v1.6.1) (2023-05-09)
+
+
+### Bug Fixes
+
+* **keystructure:** fix keystructure not working as expected ([10a07d5](https://github.com/resourge/translations/commit/10a07d52f9834679bdf9ede1fe633eb8d33e50c5))
+
 # [@resourge/react-translations-v1.6.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.5.1...@resourge/react-translations-v1.6.0) (2023-05-08)
 
 
