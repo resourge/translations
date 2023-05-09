@@ -141,7 +141,7 @@ export class MapTranslations<
 	) => TFunctionReturn<Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>, Key>
 
 	constructor(
-		public config: SetupConfig<Langs, Trans> & { keyStructure?: ConvertTransIntoKeyStructure<Langs, Trans> },
+		public config: SetupConfig<Langs, Trans>,
 		public onTranslationGets: Array<OnTranslationGet<Langs, Trans>>,
 		public onTranslationSets: Array<OnTranslationSet<Langs, Trans>>,
 		onMissingKeyRequest: () => void
@@ -149,7 +149,7 @@ export class MapTranslations<
 		const _translationConfig = (config as unknown as SetupTranslationsConfigTranslations<Langs, Trans extends TranslationsType<Langs> ? Trans : TranslationsType<Langs>>);
 		const _loadConfig = (config as unknown as SetupTranslationsConfigLoad<Trans extends BaseTranslationsType ? Trans : BaseTranslationsType>);
 		if ( _translationConfig.translations ) {
-			this.keyStructure = config.keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans> || translationMethod.__translationsKeyStructure__<Langs, Trans>(config.langs as Langs[], _translationConfig.translations as Trans)
+			this.keyStructure = (config as { keyStructure?: ConvertTransIntoKeyStructure<Langs, Trans> }).keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans> || translationMethod.__translationsKeyStructure__<Langs, Trans>(config.langs as Langs[], _translationConfig.translations as Trans)
 			this.langMaps = createLanguages<Langs, Trans extends TranslationsType<Langs> ? Trans : TranslationsType<Langs>>(
 				config.langs as Langs[], 
 				_translationConfig.translations

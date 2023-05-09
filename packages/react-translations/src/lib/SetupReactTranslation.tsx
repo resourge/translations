@@ -55,7 +55,7 @@ export function SetupReactTranslations<
 			const context = useContext(TranslationInstance.Context);
 
 			if ( !context ) {
-				throw new Error();
+				throw new Error('useTranslation can only be used in the context of a <TranslationProvider> component.');
 			}
 
 			return context.instance;
