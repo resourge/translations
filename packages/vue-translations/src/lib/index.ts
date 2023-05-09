@@ -3,7 +3,8 @@ import {
 	languageLocalStorage,
 	navigatorLanguageDetector,
 	plural,
-	type BaseTranslationsType
+	type BaseTranslationsType,
+	Utils
 } from '@resourge/translations'
 
 import { type SetupVueTranslationReturn, SetupVueTranslations } from './SetupVueTranslations'
@@ -18,5 +19,6 @@ export {
 	type BaseTranslationsType,
 
 	type SetupVueTranslationReturn, 
-	SetupVueTranslations
+	SetupVueTranslations,
+	Utils
 }
