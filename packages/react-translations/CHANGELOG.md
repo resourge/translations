@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.6.3](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.6.2...@resourge/react-translations-v1.6.3) (2023-05-09)
+
+
+### Bug Fixes
+
+* **utils:** export utils ([a869a2c](https://github.com/resourge/translations/commit/a869a2cccfcf8fa379cfddb6faeed771155d38b9))
+
 # [@resourge/react-translations-v1.6.2](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.6.1...@resourge/react-translations-v1.6.2) (2023-05-09)
 
 
