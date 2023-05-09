@@ -16,6 +16,7 @@
     "coverage": "npm run coverage --workspaces",
     "semantic-release:translations": "npm run semantic-release --prefix=./packages/translations",
     "semantic-release:react-translations": "npm run semantic-release --prefix=./packages/react-translations",
+	"semantic-release:vue-translations": "npm run semantic-release --prefix=./packages/vue-translations",
     "semantic-release": "npm run semantic-release:translations && npm run semantic-release:react-translations && npm run semantic-release:vue-translations"
   },
   "author": "resourge",
