@@ -77,7 +77,7 @@ export class SetupTranslationsInstance<
 
 		let _config: SetupConfig<Langs, Trans> = {
 			...config as any,
-			defaultLanguage: config.defaultLanguage ?? 'en' as Langs,
+			defaultLanguage: config.defaultLanguage ?? config.langs[0] ?? 'en' as Langs,
 			language: ''
 		};
 
