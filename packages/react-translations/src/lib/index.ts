@@ -3,7 +3,8 @@ import {
 	languageLocalStorage,
 	navigatorLanguageDetector,
 	plural,
-	type BaseTranslationsType
+	type BaseTranslationsType,
+	Utils
 } from '@resourge/translations'
 
 import { type SetupReactTranslationsReturn, SetupReactTranslations } from './SetupReactTranslations'
@@ -20,5 +21,6 @@ export {
 	type BaseTranslationsType,
 
 	type SetupReactTranslationsReturn, 
-	SetupReactTranslations
+	SetupReactTranslations,
+	Utils
 }
