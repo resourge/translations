@@ -1,6 +1,6 @@
 {
 	"name": "@resourge/vue-translations",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"type": "module",
 	"devDependencies": {
 		"jsdom": "^22.0.0",
