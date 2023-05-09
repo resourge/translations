@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.7.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.7.0...@resourge/translations-v1.7.1) (2023-05-09)
+
+
+### Bug Fixes
+
+* **setuptranslations:** fix keyStructure not working as intended ([26c0065](https://github.com/resourge/translations/commit/26c00656ef6c47398a09f9dcfb9cc30e92201d5b))
+
 # [@resourge/translations-v1.7.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.6.0...@resourge/translations-v1.7.0) (2023-05-08)
 
 
