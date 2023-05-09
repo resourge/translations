@@ -1,0 +1,52 @@
+{
+	"name": "@resourge/vue-translations",
+	"version": "0.0.0",
+	"type": "module",
+	"devDependencies": {
+		"jsdom": "^22.0.0",
+		"vue": "^3.2.47",
+		"vue-tsc": "^1.4.2"
+	},
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist"
+	],
+	"author": "resourge",
+	"license": "MIT",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./viteTranslationPlugin": {
+			"import": "./dist/viteTranslationPlugin.js",
+			"require": "./dist/viteTranslationPlugin.cjs"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"viteTranslationPlugin": [
+				"./dist/viteTranslationPlugin.d.ts"
+			]
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/resourge/translations.git",
+		"directory": "packages/vue-translations"
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "npm run build --prefix=../translations && vue-tsc && vite build",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"coverage": "vitest run --coverage",
+		"semantic-release": "semantic-release -e semantic-release-monorepo"
+	}
+}
