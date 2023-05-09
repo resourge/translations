@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.0.1](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.0.0...@resourge/vue-translations-v1.0.1) (2023-05-09)
+
+
+### Bug Fixes
+
+* **index.ts:** export Utils ([a63eb19](https://github.com/resourge/translations/commit/a63eb193e01d38df1874d3463fd98783df3b0a3f))
+
 # @resourge/vue-translations-v1.0.0 (2023-05-09)
 
 
