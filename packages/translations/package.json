@@ -1,6 +1,6 @@
 {
   "name": "@resourge/translations",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "type": "module",
   "devDependencies": {
     "@types/react": "^18.0.28",
