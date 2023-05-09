@@ -51,8 +51,8 @@ export class SetupTranslationsInstance<
 	/**
 	 * Translations object
 	 */
-	public get T(): Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans> {
-		return this.translationsMap.get(this.config.language) as unknown as (Trans extends BaseTranslationsType ? BaseTranslationsKeys<Trans> : TranslationsKeys<Langs, Trans>)
+	public get T(): Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans> {
+		return this.translationsMap.get(this.config.language) as unknown as (Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans> )
 	}
 
 	/**

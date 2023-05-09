@@ -75,7 +75,8 @@ export const defineLibConfig = (
 				external: [
 					'tsconfig-paths', 'typescript', 'path', 
 					'fs', 'vite', 'react',
-					'react/jsx-runtime'
+					'react/jsx-runtime',
+					'vue'
 				]
 			}
 		},

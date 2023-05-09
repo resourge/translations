@@ -29,7 +29,7 @@ module.exports = {
 	],
 	overrides: [
 		{
-			files: ['*.ts', '*.tsx', '*.js', '*.cjs'], // Your TypeScript files extension
+			files: ['*.ts', '*.tsx', '*.js', '*.cjs', '*.vue'], // Your TypeScript files extension
 			parserOptions: {
 				project: ['./tsconfig.base.json'] // Specify it only for TypeScript files
 			}
