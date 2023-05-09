@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.7.4](https://github.com/resourge/translations/compare/@resourge/translations-v1.7.3...@resourge/translations-v1.7.4) (2023-05-09)
+
+
+### Bug Fixes
+
+* **t:** fix t type ([7653ca5](https://github.com/resourge/translations/commit/7653ca5a9f796acf0fe30a46c6cbd402e9103b09))
+
 # [@resourge/translations-v1.7.3](https://github.com/resourge/translations/compare/@resourge/translations-v1.7.2...@resourge/translations-v1.7.3) (2023-05-09)
 
 
