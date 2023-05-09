@@ -12,6 +12,7 @@ import path from 'path';
 import { loadConfig, createMatchPath } from 'tsconfig-paths';
 import type { CompilerOptions } from 'typescript'
 import ts from 'typescript';
+import { fileURLToPath } from 'url';
 
 import { type SetupTranslationsConfigTranslations, type SetupTranslationsConfig, type SetupTranslationsConfigLoad } from '@resourge/translations/src/lib/types/configTypes';
 import { type ConvertTransIntoKeyStructure } from '@resourge/translations/src/lib/types/types';
@@ -187,10 +188,12 @@ export function watchMain(
 									await fs.promises.writeFile(filePath, JSON.stringify(translations));
 								}
 								else {
-									const filePath = path.join(localesFilePath, `${language}.ts`)
+									const filePath = path.join(localesFilePath, `${language}.ts`);
+
+									const packagePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), './index.js')
 
 									await fs.promises.writeFile(filePath, [
-										'import { Utils } from \'@resourge/react-translations\';',
+										`import { Utils } from '${packagePath}';`,
 										`export default ${stringify(translations)}`
 									].join(''));
 								}
