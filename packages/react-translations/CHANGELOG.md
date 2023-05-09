@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.6.2](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.6.1...@resourge/react-translations-v1.6.2) (2023-05-09)
+
+
+### Bug Fixes
+
+* **t:** fix t type ([7653ca5](https://github.com/resourge/translations/commit/7653ca5a9f796acf0fe30a46c6cbd402e9103b09))
+
 # [@resourge/react-translations-v1.6.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.6.0...@resourge/react-translations-v1.6.1) (2023-05-09)
 
 
