@@ -1,14 +1,20 @@
 /* eslint-disable no-useless-escape */
+import {
+	type BaseTranslationsType,
+	type SetupTranslationsConfig,
+	type SetupTranslationsConfigLoad,
+	type SetupTranslationsConfigTranslations,
+	type TranslationsType
+} from '@resourge/translations'
+import { existsSync, mkdirSync, rmSync } from 'fs'
 import path from 'path';
 import { type ConfigLoaderSuccessResult } from 'tsconfig-paths';
-import ts, {
-	type CallExpression,
-	type Identifier,
-	type ObjectLiteralExpressionBase,
-	type PropertyAssignment
-} from 'typescript'
+import ts from 'typescript'
 import { type PluginOption } from 'vite';
 
+import { type ConvertTransIntoKeyStructure } from '@resourge/translations/src/lib/types/types';
+
+import { find } from './utils/find';
 import { type LoadConfig, tsConfig, watchMain } from './utils/watchMain';
 
 const {
@@ -18,34 +24,96 @@ const {
 } = ts;
 
 const setupTranslationsName: string = 'SetupTranslations';
-const setupReactTranslationName: string = 'SetupReactTranslation';
+const setupReactTranslationsName: string = 'SetupReactTranslations';
+const setupVueTranslationsName: string = 'SetupVueTranslations';
 
-const setupRegex = new RegExp(`(${setupTranslationsName}|${setupReactTranslationName}|SetupVueTranslation)\(([\s\S]*?)\)`, 'g')
+const setupTranslations = [
+	setupTranslationsName,
+	setupReactTranslationsName,
+	setupVueTranslationsName
+]
+
+const setupRegex = new RegExp(`(${setupTranslationsName}|${setupReactTranslationsName}|${setupVueTranslationsName})\\(([\\s\\S]*?)\\)`, 'g')
+
+function addImportLanguages(
+	loadConfig: LoadConfig, 
+	config: SetupTranslationsConfig<string> & 
+	SetupTranslationsConfigTranslations<string, TranslationsType<string>> & 
+	SetupTranslationsConfigLoad<BaseTranslationsType> & {
+		keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
+	}, 
+	content: string, 
+	localesFilePath: string,
+	addWatchFile: (id: string) => void
+) {
+	if ( loadConfig.isJSON ) {
+		return [
+			...config.langs
+			.map((language: string) => {
+				const filePath = path.join(localesFilePath, `${language}.json`)
+
+				addWatchFile(filePath);
+
+				return `import ${language}Url from "${filePath.replace(/\\/g, '/')}?url";`;
+			}),
+			'const importLanguages = {',
+			...config.langs
+			.map((language: string) => {
+				return `${language}: () => fetch(${language}Url).then((result) => result.json()),`
+			}),
+			'};'
+		].join('') + content
+	}
+	else {
+		return [
+			'const importLanguages = {',
+			...config.langs
+			.map((language: string) => {
+				const filePath = path.join(localesFilePath, `${language}.ts`)
+
+				addWatchFile(filePath);
+
+				return `${language}: () => import('${filePath.replace(/\\/g, '/')}'),`
+			}),
+			'};'
+		].join('') + content
+	}
+}
 
 export function viteTranslationPlugin(): PluginOption {
 	const loadConfig: LoadConfig = {
 		isJSON: false 
 	};
-	const translationFilePath = './src/TRANSLATIONS.ts'
 	const projectPath = (tsConfig as ConfigLoaderSuccessResult).absoluteBaseUrl;
 
 	const cacheOutDir = path.resolve(projectPath, '.cache');
 
-	const newTranslationFile = path.join(cacheOutDir, translationFilePath.replace('.ts', '.js'))
-	const localesFilePath = path.resolve(cacheOutDir, 'locales')
+	const localesFilePath = path.resolve(cacheOutDir, 'locales');
 
 	return {
 		name: 'i18nLocalesLoad',
 		apply: 'build',
+		buildStart: () => {
+			if ( !existsSync(cacheOutDir) ) {
+				mkdirSync(cacheOutDir)
+			}
+		},
+		buildEnd: () => {
+			rmSync(cacheOutDir, {
+				recursive: true,
+				force: true 
+			})
+		},
 		transform: async function (content: string, id: string) {
 			if ( content.includes('__translationsMethod__') ) {
 				content = content.replace(/(__translationsMethod__.*createTranslationEntry\(langKey\, translations\)\;)/g, '__translationsMethod__: (langKey, translations) => () => translations(langKey)')
 			}
-			if ( setupRegex.test(content) ) {
+
+			if (!id.includes('node_modules') && setupRegex.test(content)) {
 				const config = await watchMain(
 					[id],
 					loadConfig,
-					newTranslationFile,
+					path.join(cacheOutDir, 'src', id.split('src')[1].replace('ts', 'js')),
 					localesFilePath,
 					{
 						noEmitOnError: false,
@@ -58,49 +126,19 @@ export function viteTranslationPlugin(): PluginOption {
 						rootDir: path.resolve(projectPath, './'),
 						types: ['vite/client'],
 						paths: (tsConfig as ConfigLoaderSuccessResult).paths,
-						allowSyntheticDefaultImports: true
+						allowSyntheticDefaultImports: true,
+						allowJs: true
 					}
 				);
 
-				// fs.rmdirSync(cacheOutDir, { recursive: true })
-
 				if ( config.translations ) {
-					if ( loadConfig.isJSON ) {
-						content = [
-							...config.langs
-							.map((language: string) => {
-								const filePath = path.join(localesFilePath, `${language}.json`)
-
-								this.addWatchFile(filePath);
-
-								return `import ${language}Url from "${filePath.replace(/\\/g, '/')}?url";`;
-							}),
-							'const importLanguages = {',
-							...config.langs
-							.map((language: string) => {
-								return `${language}: () => fetch(${language}Url).then((result) => result.json()),`
-							}),
-							'};'
-						].join('') + content
-					}
-					else {
-						content = [
-							'const importLanguages = {',
-							...config.langs
-							.map((language: string) => {
-								const filePath = path.join(localesFilePath, `${language}.ts`)
-
-								this.addWatchFile(filePath);
-
-								return `${language}: () => import('${filePath.replace(/\\/g, '/')}'),`
-							}),
-							'};'
-						].join('') + content
-					}
-
-					if ( content.includes('__translationsKeyStructure__') ) {
-						content = content.replace(/(__translationsKeyStructure__.*createTranslationKeyStructure\(langKey\, translations\)\;)/g, `__translationsKeyStructure__: (langKey, translations) => ${JSON.stringify(config.keyStructure)}`)
-					}
+					content = addImportLanguages(
+						loadConfig,
+						config,
+						content,
+						localesFilePath,
+						this.addWatchFile
+					);
 
 					const result = ts.createSourceFile(
 						id,
@@ -108,65 +146,17 @@ export function viteTranslationPlugin(): PluginOption {
 						ts.ScriptTarget.ES2015
 					);
 
-					const findByEscapedText = (result: Identifier, escapedText: string): any => {
-						if ( 
-							result && (
-								result.escapedText === escapedText || 
-								( 
-									(result as unknown as PropertyAssignment).name as Identifier
-								)?.escapedText === escapedText 
-							)
-						) {
-							return result;
-						}
-						
-						return ts.forEachChild(result, (n) => findByEscapedText(n as Identifier, escapedText))
-					}
+					const setupTranslation = await find(result, (value) => value && value.expression && setupTranslations.includes(value.expression.escapedText))
 
-					const getProperty = (argument?: ts.Expression): PropertyAssignment | undefined => {
-						if ( argument ) {
-							const property = (argument as ObjectLiteralExpressionBase<PropertyAssignment>).properties.find((property) => (property.name as Identifier)?.escapedText === 'translations')
-							if ( property ) {
-								return property
-							}
-						}
-					}
-
-					const getTranslationFromSetupTranslation = (result: ts.Node) => {
-						try {
-							const get = (node: ts.Node): any => {
-								if ( 
-									node.kind === ts.SyntaxKind.CallExpression &&
-									((node as CallExpression).expression as Identifier).escapedText === 'SetupTranslations'
-								) {
-									const argument = (node as CallExpression).arguments.find((argument) => argument.kind === ts.SyntaxKind.ObjectLiteralExpression);
-
-									if ( argument ) {
-										const property = (argument as ObjectLiteralExpressionBase<PropertyAssignment>).properties.find((property) => (property.name as Identifier)?.escapedText === 'translations')
-										if ( property ) {
-											return property
-										}
-									}
-									else {
-										const variable = (node as CallExpression).arguments[0] as Identifier;
-
-										return getProperty(findByEscapedText(result as Identifier, variable.escapedText as any)?.initializer)
-									}
-								}
-								return ts.forEachChild(node, (n) => get(n))
-							}
-
-							return get(result);
-						}
-						catch ( e ) {
-							return undefined;
-						}
-					}
-
-					const translationFromSetup = await getTranslationFromSetupTranslation(result);
-
+					const translationFromSetup = await find(setupTranslation, (value) => value && value.name && value.name.escapedText === 'translations') as ts.Node | null
+	
 					if ( translationFromSetup ) {
-						content = content.substring(0, translationFromSetup.pos) + `translations: async (language) => (await importLanguages[language]())${loadConfig.isJSON ? '' : '.default'}` + content.substring(translationFromSetup.end);
+						content = content.substring(
+							0, 
+							translationFromSetup.pos
+						) + 
+						`translations: async (language) => (await importLanguages[language]())${loadConfig.isJSON ? '' : '.default'}, keyStructure: ${JSON.stringify(config.keyStructure)}` + 
+						content.substring(translationFromSetup.end);
 					}
 				}
 			}

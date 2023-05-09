@@ -119,7 +119,7 @@ export function watchMain(
 			keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
 		}
 	>((resolve, reject) => {
-		const { outDir, baseUrl } = options;
+		const { outDir } = options;
 		if ( tsConfig.resultType === 'failed' ) {
 			reject(new Error());
 			return;
@@ -172,7 +172,7 @@ export function watchMain(
 					.toISOString()}`);
 					// TODO find config
 
-					const { config } = rest.TRANSLATION;
+					const { config } = (rest.TRANSLATION || rest.TranslationInstance);
 
 					if ( config.translations ) {
 						const languages = createLanguages(config.langs, config.translations);
@@ -188,10 +188,9 @@ export function watchMain(
 								}
 								else {
 									const filePath = path.join(localesFilePath, `${language}.ts`)
-									const filewPath = path.join(baseUrl ?? '', './src/lib/utils.js')
 
 									await fs.promises.writeFile(filePath, [
-										`import { Utils } from '${filewPath}';`,
+										'import { Utils } from \'@resourge/react-translations\';',
 										`export default ${stringify(translations)}`
 									].join(''));
 								}

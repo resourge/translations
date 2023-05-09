@@ -86,26 +86,23 @@ function createLanguages<
 	langs: Langs[],
 	translations: Narrow<T> | ((lang: string) => Promise<Narrow<T>>)
 ) {
-	return {
-		keyStructure: translationMethod.__translationsKeyStructure__(langs, translations as T),
-		langMaps: langs
-		.reduce<
-			LangMaps<Langs, T>
-		>(
-			(obj: LangMaps<Langs, T>, langKey: string) => {
-				obj.set(
-					langKey as Langs, 
-					{
-						translations: translationMethod.__translationsMethod__(langKey, translations as T) as any,
-						lastTranslation: Date.now()
-					}
-				);
+	return langs
+	.reduce<
+		LangMaps<Langs, T>
+	>(
+		(obj: LangMaps<Langs, T>, langKey: string) => {
+			obj.set(
+				langKey as Langs, 
+				{
+					translations: translationMethod.__translationsMethod__(langKey, translations as T) as any,
+					lastTranslation: Date.now()
+				}
+			);
 
-				return obj
-			}, 
-			new Map()
-		)
-	} as const;
+			return obj
+		}, 
+		new Map()
+	);
 }
 
 export class MapTranslations<
@@ -120,21 +117,18 @@ export class MapTranslations<
 
 	public lastMissingKey: number = 0;
 
-	public t!: <Key extends OnlyNestedKeyOf<ConvertTransIntoSimpleObj<Langs, Trans>> | string>(
-		...args: string extends Key 
-			? [
-				key: string,
-				value?: Record<string, any>
-			]
-			: (
-				TFunctionValues<
-						Trans extends TranslationsType<Langs> 
-							? TranslationsKeys<Langs, Trans> 
-							: BaseTranslationsKeys<Trans>, 
-						Key
-					> extends undefined 
-					? [key: Narrow<Key>] 
-					: [
+	public t!: <Key extends OnlyNestedKeyOf<
+		ConvertTransIntoSimpleObj<Langs, Trans>
+	>>(
+		...args: (
+			TFunctionValues<
+					Trans extends TranslationsType<Langs> 
+						? TranslationsKeys<Langs, Trans> 
+						: BaseTranslationsKeys<Trans>, 
+					Key
+				> extends undefined 
+				? [key: Narrow<Key>] 
+				: [
 						key: Narrow<Key>,
 						values: TFunctionValues<
 							Trans extends TranslationsType<Langs> 
@@ -142,12 +136,12 @@ export class MapTranslations<
 								: BaseTranslationsKeys<Trans>, 
 							Key
 						>
-					]
-			)
-	) => TFunctionReturn<Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>, Key>;
+				]
+		) | [key: string, values?: Record<string, any>]
+	) => TFunctionReturn<Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>, Key>
 
 	constructor(
-		public config: SetupConfig<Langs, Trans>,
+		public config: SetupConfig<Langs, Trans> & { keyStructure?: ConvertTransIntoKeyStructure<Langs, Trans> },
 		public onTranslationGets: Array<OnTranslationGet<Langs, Trans>>,
 		public onTranslationSets: Array<OnTranslationSet<Langs, Trans>>,
 		onMissingKeyRequest: () => void
@@ -155,13 +149,11 @@ export class MapTranslations<
 		const _translationConfig = (config as unknown as SetupTranslationsConfigTranslations<Langs, Trans extends TranslationsType<Langs> ? Trans : TranslationsType<Langs>>);
 		const _loadConfig = (config as unknown as SetupTranslationsConfigLoad<Trans extends BaseTranslationsType ? Trans : BaseTranslationsType>);
 		if ( _translationConfig.translations ) {
-			const { keyStructure, langMaps } = createLanguages<Langs, Trans extends TranslationsType<Langs> ? Trans : TranslationsType<Langs>>(
+			this.keyStructure = config.keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans> || translationMethod.__translationsKeyStructure__<Langs, Trans>(config.langs as Langs[], _translationConfig.translations as Trans)
+			this.langMaps = createLanguages<Langs, Trans extends TranslationsType<Langs> ? Trans : TranslationsType<Langs>>(
 				config.langs as Langs[], 
 				_translationConfig.translations
-			);
-
-			this.keyStructure = keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans>
-			this.langMaps = langMaps as unknown as LangMaps<Langs, Trans>
+			) as unknown as LangMaps<Langs, Trans>;
 
 			this.t = (
 				key: any,

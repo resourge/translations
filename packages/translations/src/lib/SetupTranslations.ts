@@ -101,7 +101,7 @@ export class SetupTranslationsInstance<
 
 		// #region Maps translations to each language
 		this.translationsMap = new MapTranslations<Langs, Trans>(
-			_config,
+			_config as any,
 			onTranslationGets,
 			onTranslationSets,
 			() => {
