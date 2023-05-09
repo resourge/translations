@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.8.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.7.4...@resourge/translations-v1.8.0) (2023-05-09)
+
+
+### Features
+
+* **setuptranslations:** defaults to first langs in case defaultLanguage is not set ([d2adc97](https://github.com/resourge/translations/commit/d2adc97e1b69be3f33291cf7573540daa0d7deb2))
+
 # [@resourge/translations-v1.7.4](https://github.com/resourge/translations/compare/@resourge/translations-v1.7.3...@resourge/translations-v1.7.4) (2023-05-09)
 
 
