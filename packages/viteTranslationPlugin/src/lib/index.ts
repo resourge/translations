@@ -84,7 +84,9 @@ export function viteTranslationPlugin(): PluginOption {
 	const loadConfig: LoadConfig = {
 		isJSON: false 
 	};
-	const projectPath = (tsConfig as ConfigLoaderSuccessResult).absoluteBaseUrl;
+	let projectPath = (tsConfig as ConfigLoaderSuccessResult).absoluteBaseUrl;
+
+	projectPath = projectPath.includes('src') ? projectPath.split('src')[0] : projectPath;
 
 	const cacheOutDir = path.resolve(projectPath, '.cache');
 
@@ -106,7 +108,7 @@ export function viteTranslationPlugin(): PluginOption {
 		},
 		transform: async function (content: string, id: string) {
 			if ( content.includes('__translationsMethod__') ) {
-				content = content.replace(/(__translationsMethod__.*createTranslationEntry\(langKey\, translations\)\;)/g, '__translationsMethod__: (langKey, translations) => () => translations(langKey)')
+				content = content.replace(/__translationsMethod__.*createTranslationEntry\(langKey\, translations\)/g, '__translationsMethod__: (langKey, translations) => () => translations(langKey)')
 			}
 
 			if (!id.includes('node_modules') && setupRegex.test(content)) {

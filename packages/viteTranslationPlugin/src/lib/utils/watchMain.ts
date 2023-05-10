@@ -190,7 +190,7 @@ export function watchMain(
 								else {
 									const filePath = path.join(localesFilePath, `${language}.ts`);
 
-									const packagePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), './index.js')
+									const packagePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), './index.js').replaceAll('\\', '/')
 
 									await fs.promises.writeFile(filePath, [
 										`import { Utils } from '${packagePath}';`,
