@@ -1,10 +1,10 @@
 import type { TranslationsType, BaseTranslationsType } from '../types/TranslationTypes';
 import type { TranslationObj, TranslationPlugin } from '../types/configTypes';
 
-export const languageLocalStorage = (): TranslationPlugin => {
+export const languageLocalStorage = globalThis.window ? (): TranslationPlugin => {
 	const languageKey = 'lng'
 
-	return globalThis.window ? {
+	return {
 		config(config) {
 			config.language = window.localStorage.getItem(languageKey) ?? config.language;
 
@@ -30,5 +30,5 @@ export const languageLocalStorage = (): TranslationPlugin => {
 		onLanguageChange(language: string) {
 			window.localStorage.setItem(languageKey, language)
 		}
-	} : {}
-}
+	}
+} : () => ({})

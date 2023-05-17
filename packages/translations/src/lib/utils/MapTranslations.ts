@@ -62,7 +62,7 @@ export type LangMaps<
 	LangMapTranslationObj<Langs, Trans>
 > & Map<
 	'request', 
-	((language: string) => Promise<BaseTranslationsKeys<Trans>>)
+	((language: string, date?: Date) => Promise<BaseTranslationsKeys<Trans>>)
 >
 
 const translationMethod = {
@@ -114,8 +114,6 @@ export class MapTranslations<
 
 	public structure: Trans & Record<string, string> = {} as Trans & Record<string, string>;
 	public keyStructure: ConvertTransIntoKeyStructure<Langs, Trans> = {} as ConvertTransIntoKeyStructure<Langs, Trans>;
-
-	public lastMissingKey: number = 0;
 
 	public t!: <Key extends OnlyNestedKeyOf<
 		ConvertTransIntoSimpleObj<Langs, Trans>
@@ -198,30 +196,20 @@ export class MapTranslations<
 				_loadConfig.load.structure as unknown as Trans
 			);
 
-			const asyncRequest = async (language: string) => {
-				this.lastMissingKey = Date.now()
-				const translations = await _loadConfig.load.request(language, new Date(this.lastMissingKey || Date.now()));
-
-				const _translations: TranslationObj<Langs, Trans> = {
-					translations,
-					lastTranslation: Date.now()
-				}
-
-				await Promise.all(
-					this.onTranslationSets.map((onTranslationSet) => Promise.resolve(onTranslationSet(language, _translations)))
-				)
-
-				const flattenTranslations = flattenObject(translations);
-
+			const createTranslationsProxy = (
+				flattenTranslations: Record<string, string>,
+				language: string,
+				lastTranslation: number
+			) => {
 				return createProxy<Trans>(
 					flattenTranslations,
 					this.structure,
 					(_loadConfig.load.isGoingToRequestOnMissingKeys ?? true) 
 						? () => {
-							if ( !isExpired(this.lastMissingKey, (_loadConfig.load.missingKeysThreshold ?? 3600000)) ) {
+							if ( !isExpired(lastTranslation, ((this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.missingKeysThreshold ?? 3600000)) ) {
 								return;
 							}
-							asyncRequest(language)
+							asyncRequest(language, new Date(lastTranslation))
 							.then((translations) => {
 								this.set(
 									language, 
@@ -234,6 +222,27 @@ export class MapTranslations<
 				)
 			}
 
+			const asyncRequest = async (language: string, date: Date = new Date()) => {
+				const translations = await _loadConfig.load.request(language, date);
+
+				const _translations: TranslationObj<Langs, Trans> = {
+					translations,
+					lastTranslation: Date.now()
+				}
+
+				await Promise.all(
+					this.onTranslationSets.map((onTranslationSet) => Promise.resolve(onTranslationSet(language, _translations)))
+				)
+
+				const flattenTranslations = flattenObject(translations);
+
+				return createTranslationsProxy(
+					flattenTranslations,
+					language,
+					_translations.lastTranslation
+				)
+			}
+
 			this.langMaps.set('request', asyncRequest);
 
 			config.langs.forEach((lang) => {
@@ -243,25 +252,11 @@ export class MapTranslations<
 				})
 
 				if ( trans ) {
-					const translations = createProxy<Trans>(
+					const translations = createTranslationsProxy(
 						flattenObject(trans.translations as Narrow<Trans>),
-						this.structure,
-						((this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.isGoingToRequestOnMissingKeys ?? true) 
-							? () => {
-								if ( !isExpired(this.lastMissingKey, ((this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.missingKeysThreshold ?? 3600000)) ) {
-									return;
-								}
-								asyncRequest(lang as Langs)
-								.then((translations) => {
-									this.set(
-										lang as Langs, 
-										translations as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>
-									)
-
-									onMissingKeyRequest();
-								});
-							} : () => {}
-					)
+						lang as Langs,
+						trans.lastTranslation
+					);
 
 					this.set(
 						lang as Langs,
@@ -292,7 +287,7 @@ export class MapTranslations<
 			)
 		) {
 			return async () => {
-				const translations = await this.langMaps.get('request')!(language) as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>;
+				const translations = await this.langMaps.get('request')!(language, trans ? new Date(trans.lastTranslation) : undefined) as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans>;
 			
 				this.set(language, translations);
 			}

@@ -69,6 +69,9 @@ export type SetupTranslationsConfigTranslations<
 export type SetupTranslationsConfig<
 	Langs extends string
 > = {
+	/**
+	 * Array of permitted languages. In case of empty array, all languages will be permitted
+	 */
 	langs: Narrow<Langs[]>
 	defaultLanguage?: Langs
 	plugins?: TranslationPlugin[]
@@ -77,8 +80,9 @@ export type SetupTranslationsConfig<
 export type SetupConfig<
 	Langs extends string,
 	Trans extends TranslationsType<Langs> | BaseTranslationsType
-> = SetupTranslationsConfig<Langs> & (
+> = Omit<SetupTranslationsConfig<Langs>, 'defaultLanguage'> & (
 	Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
 ) & {
+	defaultLanguage: Langs
 	language: string
 }

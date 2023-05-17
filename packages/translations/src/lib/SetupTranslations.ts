@@ -113,9 +113,10 @@ export class SetupTranslationsInstance<
 		this.isReady = !promises.length;
 
 		const setTranslationsReady = async () => {
-			_config.language = _config.language || _config.defaultLanguage!;
+			_config.language = _config.language || _config.defaultLanguage;
 
-			_config.language = (_config.langs as Langs[]).includes(_config.language as Langs) ? _config.language : _config.defaultLanguage!; 
+			_config.language = !_config.langs.length || (_config.langs as Langs[]).includes(_config.language as Langs) ? _config.language : _config.defaultLanguage; 
+			
 			this.isReady = false;
 
 			const langTranslations = this.translationsMap.get(_config.language)
@@ -164,6 +165,9 @@ export class SetupTranslationsInstance<
 	}
 
 	public changeLanguage = async (lang: Langs | string) => {
+		if ( this.config.langs.length && !this.config.langs.includes(lang as any) ) {
+			return await Promise.reject(`Language ${lang}, is not included in the list of languages: ${this.config.langs.join(', ')}`)
+		}
 		this.config.language = lang;
 
 		this.onLanguageChanges.forEach((onLanguageChange) => {
