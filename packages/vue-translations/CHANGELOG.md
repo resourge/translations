@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.0.2](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.0.1...@resourge/vue-translations-v1.0.2) (2023-05-17)
+
+
+### Bug Fixes
+
+* **vue-translations:** fix changeLanguage not working ([f4ec868](https://github.com/resourge/translations/commit/f4ec868af0e116a5838c22ae1b2aa8724d96000e))
+
 # [@resourge/vue-translations-v1.0.1](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.0.0...@resourge/vue-translations-v1.0.1) (2023-05-09)
 
 
