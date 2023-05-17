@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.8.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.8.0...@resourge/translations-v1.8.1) (2023-05-17)
+
+
+### Bug Fixes
+
+* **setuptranslation:** in case language doesn't match, fail changeLanguage ([93865e2](https://github.com/resourge/translations/commit/93865e2efbd1bbf112b94aa5873758fa5f6cb347))
+
 # [@resourge/translations-v1.8.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.7.4...@resourge/translations-v1.8.0) (2023-05-09)
 
 
