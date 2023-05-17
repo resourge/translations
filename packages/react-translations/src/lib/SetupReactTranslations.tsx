@@ -46,7 +46,6 @@ export function SetupReactTranslations<
 	>;
 
 	TranslationInstance.wrapPromise = wrapPromise<Langs, Trans>(TranslationInstance.promise)
-
 	TranslationInstance.Context = createContext<{ instance: SetupReactTranslationInstance<Langs, Trans> }>(null!);
 
 	return {
