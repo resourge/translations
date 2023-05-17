@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.7.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.6.3...@resourge/react-translations-v1.7.0) (2023-05-17)
+
+
+### Features
+
+* **setuptranslations:** update translations code ([6c72efa](https://github.com/resourge/translations/commit/6c72efaafe52b40728c8a86f747d7c9de5aec911))
+
 # [@resourge/react-translations-v1.6.3](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.6.2...@resourge/react-translations-v1.6.3) (2023-05-09)
 
 
