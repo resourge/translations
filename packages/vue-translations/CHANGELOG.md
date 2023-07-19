@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.0.3](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.0.2...@resourge/vue-translations-v1.0.3) (2023-07-19)
+
+
+### Bug Fixes
+
+* **vitetranslationplugin:** fix bug where paths were not correctly set ([bcdd27e](https://github.com/resourge/translations/commit/bcdd27e27f95ea296bf20da0bed55cff3e9873ef))
+
 # [@resourge/vue-translations-v1.0.2](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.0.1...@resourge/vue-translations-v1.0.2) (2023-05-17)
 
 
