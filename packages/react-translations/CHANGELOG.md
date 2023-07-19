@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.7.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.7.0...@resourge/react-translations-v1.7.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* **vitetranslationplugin:** fix bug where paths were not correctly set ([bcdd27e](https://github.com/resourge/translations/commit/bcdd27e27f95ea296bf20da0bed55cff3e9873ef))
+
 # [@resourge/react-translations-v1.7.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.6.3...@resourge/react-translations-v1.7.0) (2023-05-17)
 
 
