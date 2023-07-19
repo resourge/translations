@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.8.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.8.1...@resourge/translations-v1.8.2) (2023-07-19)
+
+
+### Bug Fixes
+
+* **vitetranslationplugin:** fix bug where paths were not correctly set ([bcdd27e](https://github.com/resourge/translations/commit/bcdd27e27f95ea296bf20da0bed55cff3e9873ef))
+
 # [@resourge/translations-v1.8.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.8.0...@resourge/translations-v1.8.1) (2023-05-17)
 
 
