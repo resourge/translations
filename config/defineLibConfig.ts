@@ -65,7 +65,7 @@ export const defineLibConfig = (
 				entry: entryLib,
 				name: 'index',
 				fileName: 'index',
-				formats: ['cjs', 'es']
+				formats: ['cjs', 'es', 'umd']
 			},
 			outDir: './dist',
 			rollupOptions: {

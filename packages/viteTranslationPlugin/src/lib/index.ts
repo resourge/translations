@@ -84,9 +84,7 @@ export function viteTranslationPlugin(): PluginOption {
 	const loadConfig: LoadConfig = {
 		isJSON: false 
 	};
-	let projectPath = (tsConfig as ConfigLoaderSuccessResult).absoluteBaseUrl;
-
-	projectPath = projectPath.includes('src') ? projectPath.split('src')[0] : projectPath;
+	const projectPath = (tsConfig as ConfigLoaderSuccessResult).absoluteBaseUrl;
 
 	const cacheOutDir = path.resolve(projectPath, '.cache');
 
@@ -112,10 +110,11 @@ export function viteTranslationPlugin(): PluginOption {
 			}
 
 			if (!id.includes('node_modules') && setupRegex.test(content)) {
+				const newId = id.split('src');
 				const config = await watchMain(
 					[id],
 					loadConfig,
-					path.join(cacheOutDir, 'src', id.split('src')[1].replace('ts', 'js')),
+					path.join(cacheOutDir, 'src', newId[newId.length - 1].replace('.ts', '.js')),
 					localesFilePath,
 					{
 						noEmitOnError: false,
