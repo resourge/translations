@@ -23,7 +23,7 @@ export const Utils = {
 		Utils.customMethods.set(key, cb);
 	},
 	replaceParams: (langValue: string, params: any) => {
-		return langValue.replace(/{{(.*)}}/g, (_: string, key: string) => {
+		return langValue.replace(/\{{([^{}]+)\}}/g, (_: string, key: string) => {
 			const value: string | undefined = params[key]
 			return value !== null && value !== undefined ? value : '';
 		})
