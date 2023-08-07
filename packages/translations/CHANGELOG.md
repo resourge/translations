@@ -1,3 +1,15 @@
+# [@resourge/translations-v1.9.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.8.2...@resourge/translations-v1.9.0) (2023-08-07)
+
+
+### Bug Fixes
+
+* **utils:** replaceParams not working in strings with more than 1 param ([192e7be](https://github.com/resourge/translations/commit/192e7bed2657116b754201d346e62e98011c6b9e))
+
+
+### Features
+
+* **htmllanguage:** add htmllanguage to automatically update html lang attribute ([5c264f9](https://github.com/resourge/translations/commit/5c264f9f3f18cc954a47e5b1664594f959c574de))
+
 # [@resourge/translations-v1.8.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.8.1...@resourge/translations-v1.8.2) (2023-07-19)
 
 
