@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.8.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.7.1...@resourge/react-translations-v1.8.0) (2023-08-07)
+
+
+### Features
+
+* **htmllanguage:** add to react and vue ([4c910fd](https://github.com/resourge/translations/commit/4c910fd5b957866d49d3c8a66d4eec75886c74c6))
+
 # [@resourge/react-translations-v1.7.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.7.0...@resourge/react-translations-v1.7.1) (2023-07-19)
 
 
