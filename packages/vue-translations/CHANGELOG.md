@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.1.0](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.0.3...@resourge/vue-translations-v1.1.0) (2023-08-07)
+
+
+### Features
+
+* **htmllanguage:** add to react and vue ([4c910fd](https://github.com/resourge/translations/commit/4c910fd5b957866d49d3c8a66d4eec75886c74c6))
+
 # [@resourge/vue-translations-v1.0.3](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.0.2...@resourge/vue-translations-v1.0.3) (2023-07-19)
 
 
