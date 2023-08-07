@@ -2,6 +2,7 @@ import {
 	gender,
 	languageLocalStorage,
 	navigatorLanguageDetector,
+	htmlLanguage,
 	plural,
 	type BaseTranslationsType,
 	Utils
@@ -15,6 +16,7 @@ export {
 	gender,
 	languageLocalStorage,
 	navigatorLanguageDetector,
+	htmlLanguage,
 	plural,
 	type BaseTranslationsType,
 
