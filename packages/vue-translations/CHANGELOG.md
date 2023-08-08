@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.1.1](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.0...@resourge/vue-translations-v1.1.1) (2023-08-08)
+
+
+### Bug Fixes
+
+* **translationtypes:** remove Narrow and replace it with AsConst to better match types ([8c3f36f](https://github.com/resourge/translations/commit/8c3f36f2f8c62d6edbfdd780ec98b9ce2a0a2bea))
+
 # [@resourge/vue-translations-v1.1.0](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.0.3...@resourge/vue-translations-v1.1.0) (2023-08-07)
 
 
