@@ -1,3 +1,11 @@
+# [@resourge/translations-v1.9.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.0...@resourge/translations-v1.9.1) (2023-08-08)
+
+
+### Bug Fixes
+
+* **translationtypes:** remove Narrow and replace it with AsConst to better match types ([8c3f36f](https://github.com/resourge/translations/commit/8c3f36f2f8c62d6edbfdd780ec98b9ce2a0a2bea))
+* **vitetranslationplugin:** fix type ([c17c439](https://github.com/resourge/translations/commit/c17c43993a183ac5191b63657ae803c621f0704b))
+
 # [@resourge/translations-v1.9.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.8.2...@resourge/translations-v1.9.0) (2023-08-07)
 
 
