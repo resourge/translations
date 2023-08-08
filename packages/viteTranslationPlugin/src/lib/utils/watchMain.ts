@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import {
 	type BaseTranslationsType,
-	type Narrow,
+	type AsConst,
 	type TranslationsKeys,
 	type TranslationsType,
 	createTranslationKeyStructure
@@ -27,7 +27,7 @@ export type LoadConfig = {
 
 const createEntry = <Langs extends string, T extends TranslationsType<Langs>>(
 	language: string,
-	translations: Narrow<T>
+	translations: AsConst<T>
 ): TranslationsKeys<Langs, T> => {
 	return Object.keys(translations)
 	.reduce((obj, key) => {
@@ -67,7 +67,7 @@ function createLanguages<
 	T extends TranslationsType<Langs>
 >(
 	langs: Langs[],
-	translations: Narrow<T>
+	translations: AsConst<T>
 ) {
 	return langs
 	.reduce<Map<string, TranslationsKeys<Langs, T, undefined> | (() => Promise<TranslationsKeys<Langs, T, undefined>>)>>(
