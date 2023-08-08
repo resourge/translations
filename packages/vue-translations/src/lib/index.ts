@@ -3,8 +3,8 @@ import {
 	languageLocalStorage,
 	navigatorLanguageDetector,
 	htmlLanguage,
-	plural,
 	type BaseTranslationsType,
+	plural,
 	Utils
 } from '@resourge/translations'
 

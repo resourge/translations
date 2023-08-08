@@ -1,7 +1,7 @@
 import {
 	type BaseTranslationsType,
 	type TranslationsType,
-	type Narrow,
+	type AsConst,
 	type TranslationsKeys
 } from './TranslationTypes'
 import {
@@ -16,7 +16,7 @@ export type {
 	SetupTranslationsConfigTranslations,
 	SetupTranslationsConfig,
 	SetupConfig,
-	Narrow,
+	AsConst,
 
 	BaseTranslationsType,
 	TranslationsType,

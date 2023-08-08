@@ -1,9 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
-export type Narrow<T> =
-  | (T extends infer U ? U : never)
-  | Extract<T, number | string | boolean | bigint | symbol | null | undefined | []>
-  | ([T] extends [[]] ? [] : { [K in keyof T]: Narrow<T[K]> })
+
+type ConstRecord <T> = {
+	[P in keyof T]:
+	T[P] extends string ?
+		string extends T[P] ? string : T[P] :
+		T[P] extends number ?
+			number extends T[P] ? number : T[P] :
+			T[P] extends boolean ?
+				boolean extends T[P] ? boolean : T[P] :
+				ConstRecord<T[P]>;
+}
+
+export type AsConst<T> = 
+T extends string ? T :
+	T extends number ? T :
+		T extends boolean ? T :
+			ConstRecord<T>
 
 type UnifyObj<T extends Record<string, any>> = {
 	[Key in keyof T]: T[Key]

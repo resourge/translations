@@ -4,7 +4,7 @@ import { type OnlyNestedKeyOf } from '../types/FormKey';
 import type {
 	BaseTranslationsKeys,
 	BaseTranslationsType,
-	Narrow,
+	AsConst,
 	TranslationsKeys,
 	TranslationsType
 } from '../types/TranslationTypes'
@@ -28,7 +28,7 @@ import { createTranslationEntry } from './createTranslationEntry';
 import { createTranslationKeyStructure } from './createTranslationKeyStructure';
 import { deepValue, isExpired } from './utils';
 
-function flattenObject<B extends BaseTranslationsType>(structure: Narrow<B>, prefix: string = ''): Record<string, string> {
+function flattenObject<B extends BaseTranslationsType>(structure: AsConst<B>, prefix: string = ''): Record<string, string> {
 	return Object.keys(structure)
 	.reduce<Record<string, string>>((acc, k) => {
 		const pre = prefix.length ? prefix + '.' : '';
@@ -69,7 +69,7 @@ const translationMethod = {
 	__translationsMethod__: <Langs extends string, T extends TranslationsType<Langs>>(
 		langKey: string, 
 		translations: T | ((lang: string) => Promise<T>)
-	) => createTranslationEntry(langKey, translations as Narrow<T>),
+	) => createTranslationEntry(langKey, translations as AsConst<T>),
 	__translationsKeyStructure__: <
 		Langs extends string, 
 		T extends TranslationsType<Langs> | BaseTranslationsType
@@ -84,7 +84,7 @@ function createLanguages<
 	T extends TranslationsType<Langs>
 >(
 	langs: Langs[],
-	translations: Narrow<T> | ((lang: string) => Promise<Narrow<T>>)
+	translations: AsConst<T> | ((lang: string) => Promise<AsConst<T>>)
 ) {
 	return langs
 	.reduce<
@@ -125,9 +125,9 @@ export class MapTranslations<
 						: BaseTranslationsKeys<Trans>, 
 					Key
 				> extends undefined 
-				? [key: Narrow<Key>] 
+				? [key: AsConst<Key>] 
 				: [
-						key: Narrow<Key>,
+						key: AsConst<Key>,
 						values: TFunctionValues<
 							Trans extends TranslationsType<Langs> 
 								? TranslationsKeys<Langs, Trans> 
@@ -253,7 +253,7 @@ export class MapTranslations<
 
 				if ( trans ) {
 					const translations = createTranslationsProxy(
-						flattenObject(trans.translations as Narrow<Trans>),
+						flattenObject(trans.translations as AsConst<Trans>),
 						lang as Langs,
 						trans.lastTranslation
 					);

@@ -1,4 +1,4 @@
-import type { BaseTranslationsType, Narrow, TranslationsType } from './TranslationTypes'
+import type { BaseTranslationsType, AsConst, TranslationsType } from './TranslationTypes'
 
 // TranslationsKeys<Langs, Trans extends undefined ? TranslationsType<Langs> : Trans, undefined>
 
@@ -43,7 +43,7 @@ export type SetupTranslationsConfigLoad<
 > = {
 	load: {
 		request: (language: string, lastRequest: Date) => any
-		structure: Narrow<B>
+		structure: AsConst<B>
 		/**
 		 * Request again on missingKey @default true
 		 */
@@ -63,7 +63,7 @@ export type SetupTranslationsConfigTranslations<
 	Langs extends string, 
 	Trans extends TranslationsType<Langs>
 > = {
-	translations: Narrow<Trans>
+	translations: AsConst<Trans>
 }
 
 export type SetupTranslationsConfig<
@@ -72,7 +72,7 @@ export type SetupTranslationsConfig<
 	/**
 	 * Array of permitted languages. In case of empty array, all languages will be permitted
 	 */
-	langs: Narrow<Langs[]>
+	langs: AsConst<Langs[]>
 	defaultLanguage?: Langs
 	plugins?: TranslationPlugin[]
 }
