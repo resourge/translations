@@ -1,7 +1,7 @@
 import {
 	type EventsType,
-	type EventType,
 	SetupTranslationsInstance,
+	type EventType,
 	SetupTranslations
 } from './SetupTranslations'
 

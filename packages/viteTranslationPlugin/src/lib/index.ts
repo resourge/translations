@@ -84,7 +84,8 @@ export function viteTranslationPlugin(): PluginOption {
 	const loadConfig: LoadConfig = {
 		isJSON: false 
 	};
-	const projectPath = (tsConfig as ConfigLoaderSuccessResult).absoluteBaseUrl;
+	
+	const projectPath = (tsConfig as ConfigLoaderSuccessResult).configFileAbsolutePath.replace('tsconfig.json', '');
 
 	const cacheOutDir = path.resolve(projectPath, '.cache');
 

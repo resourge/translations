@@ -2,8 +2,8 @@ import {
 	gender,
 	languageLocalStorage,
 	navigatorLanguageDetector,
-	htmlLanguage,
 	type BaseTranslationsType,
+	htmlLanguage,
 	plural,
 	Utils
 } from '@resourge/translations'

@@ -1,7 +1,7 @@
 import {
 	gender,
-	languageLocalStorage,
 	navigatorLanguageDetector,
+	languageLocalStorage,
 	htmlLanguage,
 	plural,
 	type BaseTranslationsType,
