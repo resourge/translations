@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.8.2](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.1...@resourge/react-translations-v1.8.2) (2023-08-10)
+
+
+### Bug Fixes
+
+* **trans:** fix trans removing text before tag ([a7a3f7b](https://github.com/resourge/translations/commit/a7a3f7ba0b51ecb9a11a8be3608a9400a1e87df0))
+
 # [@resourge/react-translations-v1.8.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.0...@resourge/react-translations-v1.8.1) (2023-08-08)
 
 
