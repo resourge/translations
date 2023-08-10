@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.9.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.1...@resourge/translations-v1.9.2) (2023-08-10)
+
+
+### Bug Fixes
+
+* **vitetranslationplugin:** not working when tsconfig baseUrl is not the root of the project ([ec3e82e](https://github.com/resourge/translations/commit/ec3e82e737328819014f80d548061e5fc73ceaa1))
+
 # [@resourge/translations-v1.9.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.0...@resourge/translations-v1.9.1) (2023-08-08)
 
 
