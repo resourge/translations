@@ -1,6 +1,13 @@
+import { Trans } from './lib'
+
 function App() {
 	return (
-		<div />
+		<Trans
+			components={{
+				p: <p />
+			}}
+			message={'Uma experiência que <p>aumenta a aquisição</p> de doentes e filiação hospitalar'}
+		/>
 	)
 }
 

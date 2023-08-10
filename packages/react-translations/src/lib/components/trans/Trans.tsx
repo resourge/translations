@@ -17,6 +17,9 @@ function mapAst(ast: HTMLAstNode[], components: Record<string, ReactElement>) {
 			return node.content
 		}
 		if ( node.type === 'tag' ) {
+			if ( node.name === 'firstComponent' ) {
+				return mapAst(node.children, components)
+			}
 			const component = components[node.name]
 
 			if ( component ) {
@@ -54,14 +57,15 @@ const Trans: FC<TransProps> = ({ message, components = {} }) => {
 
 	const _components: Record<string, ReactElement> = {
 		...defaultComponents,
-		...convertComponentsIntoObjectComponents(components)
+		...convertComponentsIntoObjectComponents(components),
+		firstComponent: <div />
 	};
 
 	return (
 		<>
 			{ 
 				mapAst(
-					HTML.parse(`<>${message}</>`), 
+					HTML.parse(`<firstComponent>${message}</firstComponent>`), 
 					_components
 				) 
 			}
