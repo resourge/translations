@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.8.3](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.2...@resourge/react-translations-v1.8.3) (2023-08-10)
+
+
+### Bug Fixes
+
+* **vitetranslationplugin:** not working when tsconfig baseUrl is not the root of the project ([ec3e82e](https://github.com/resourge/translations/commit/ec3e82e737328819014f80d548061e5fc73ceaa1))
+
 # [@resourge/react-translations-v1.8.2](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.1...@resourge/react-translations-v1.8.2) (2023-08-10)
 
 
