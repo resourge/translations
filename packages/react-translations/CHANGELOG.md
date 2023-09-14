@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.8.5](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.4...@resourge/react-translations-v1.8.5) (2023-09-14)
+
+
+### Bug Fixes
+
+* **translations:** fix plural not working in production ([8e102e8](https://github.com/resourge/translations/commit/8e102e8d18a24ff399ee5093dc2b9080428cbba4))
+
 # [@resourge/react-translations-v1.8.4](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.3...@resourge/react-translations-v1.8.4) (2023-09-14)
 
 
