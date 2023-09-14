@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.1.3](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.2...@resourge/vue-translations-v1.1.3) (2023-09-14)
+
+
+### Bug Fixes
+
+* **vitetranslationplugin:** not working for plural ([a67663f](https://github.com/resourge/translations/commit/a67663fa518bfc8a037a0a6fa8c0a54ff797b42f))
+
 # [@resourge/vue-translations-v1.1.2](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.1...@resourge/vue-translations-v1.1.2) (2023-08-10)
 
 
