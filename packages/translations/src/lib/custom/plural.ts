@@ -41,6 +41,6 @@ Utils.addCustomMethods<TranslationsTypePlural<string>>('plural', (value) => {
 
 		langValue = langValue ?? value.other;
 
-		return Utils.replaceParams(langValue, params)
+		return typeof langValue === 'function' ? (langValue as (params: any) => string)(params) : langValue
 	}
 })

@@ -15,8 +15,8 @@ export * from './components'
 export { 
 	gender,
 	languageLocalStorage,
-	htmlLanguage,
 	navigatorLanguageDetector,
+	htmlLanguage,
 	plural,
 	type BaseTranslationsType,
 
