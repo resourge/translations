@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.9.3](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.2...@resourge/translations-v1.9.3) (2023-09-14)
+
+
+### Bug Fixes
+
+* **vitetranslationplugin:** not working for plural ([a67663f](https://github.com/resourge/translations/commit/a67663fa518bfc8a037a0a6fa8c0a54ff797b42f))
+
 # [@resourge/translations-v1.9.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.1...@resourge/translations-v1.9.2) (2023-08-10)
 
 
