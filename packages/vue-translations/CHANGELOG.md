@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.1.4](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.3...@resourge/vue-translations-v1.1.4) (2023-09-14)
+
+
+### Bug Fixes
+
+* **translations:** fix plural not working in production ([8e102e8](https://github.com/resourge/translations/commit/8e102e8d18a24ff399ee5093dc2b9080428cbba4))
+
 # [@resourge/vue-translations-v1.1.3](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.2...@resourge/vue-translations-v1.1.3) (2023-09-14)
 
 
