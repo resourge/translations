@@ -6,8 +6,8 @@ import {
 } from './SetupTranslations'
 
 export * from './custom'
-export * from './plugins'
 export * from './types'
+export * from './plugins'
 export { createTranslationKeyStructure } from './utils/createTranslationKeyStructure'
 export { Utils } from './utils/utils'
 

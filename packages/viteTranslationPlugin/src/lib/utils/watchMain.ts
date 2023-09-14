@@ -51,7 +51,7 @@ const createEntry = <Langs extends string, T extends TranslationsType<Langs>>(
 			const { _custom, ...rest } = value;
 			(obj as any)[key] = {
 				type: 'function',
-				test: `Utils.getCustomMethods('${_custom.name as string}', ${JSON.stringify(createEntry(language, rest))})`
+				test: `Utils.getCustomMethods('${_custom.name as string}', ${stringify(createEntry(language, rest))})`
 			}
 		}
 		else if ( value ) {
