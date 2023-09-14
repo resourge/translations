@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.9.4](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.3...@resourge/translations-v1.9.4) (2023-09-14)
+
+
+### Bug Fixes
+
+* **translations:** fix plural not working in production ([8e102e8](https://github.com/resourge/translations/commit/8e102e8d18a24ff399ee5093dc2b9080428cbba4))
+
 # [@resourge/translations-v1.9.3](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.2...@resourge/translations-v1.9.3) (2023-09-14)
 
 
