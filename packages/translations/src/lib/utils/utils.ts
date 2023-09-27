@@ -97,4 +97,6 @@ export function separatePlugins<
 	}
 }
 
-export const deepValue = (o: Record<string, any>, p: string) => p.split('.').reduce((a, v) => a[v], o);
+export const deepValue = (o: Record<string, any>, p: string) => p
+.split('.')
+.reduce((a, v) => a === undefined ? undefined : a[v], o);

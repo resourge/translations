@@ -11,8 +11,8 @@ import {
 import { type SetupReactTranslationsReturn, SetupReactTranslations } from './SetupReactTranslations'
 
 export * from './types'
-export * from './components'
 export * from './contexts'
+export * from './components'
 
 export { 
 	gender,

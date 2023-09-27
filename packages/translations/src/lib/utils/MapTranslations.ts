@@ -157,15 +157,22 @@ export class MapTranslations<
 				key: any,
 				values?: Record<string, any>
 			) => {
-				const translations = this.get(this.config.language) as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans, undefined> : BaseTranslationsKeys<Trans, undefined>;
+				try {
+					const translations = this.get(this.config.language) as Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans, undefined> : BaseTranslationsKeys<Trans, undefined>;
 
-				const keyValue = key.includes('.') ? deepValue(translations, key) : translations[key];
+					const keyValue = key.includes('.') 
+						? deepValue(translations, key) 
+						: translations[key];
 
-				const value = values && typeof keyValue === 'function' 
-					? ((keyValue as (params: any) => string)(values) as any)
-					: (keyValue as any)
+					const value = values && typeof keyValue === 'function' 
+						? ((keyValue as (params: any) => string)(values) as any)
+						: (keyValue as any)
 
-				return value || key
+					return value || key
+				}
+				catch {
+					return key
+				}
 			};
 		}
 		else if ( _loadConfig.load ) {
