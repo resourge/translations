@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.1.5](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.4...@resourge/vue-translations-v1.1.5) (2023-09-27)
+
+
+### Bug Fixes
+
+* **maptranslations:** fix t not returning key when it fails to find the value ([338f13f](https://github.com/resourge/translations/commit/338f13f0274ee29e6b25bdb0ed55f59e0efa3751))
+
 # [@resourge/vue-translations-v1.1.4](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.3...@resourge/vue-translations-v1.1.4) (2023-09-14)
 
 
