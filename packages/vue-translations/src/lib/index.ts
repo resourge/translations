@@ -11,7 +11,6 @@ import {
 import { type SetupVueTranslationReturn, SetupVueTranslations } from './SetupVueTranslations'
 
 export * from './components'
-
 export { 
 	gender,
 	navigatorLanguageDetector,

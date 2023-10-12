@@ -170,15 +170,15 @@ export class SetupTranslationsInstance<
 		}
 		this.config.language = lang;
 
-		this.onLanguageChanges.forEach((onLanguageChange) => {
-			onLanguageChange(lang)
-		})
-
 		const langTranslations = this.translationsMap.get(this.config.language);
 
 		if ( typeof langTranslations === 'function' ) {
 			await langTranslations()
 		}
+
+		this.onLanguageChanges.forEach((onLanguageChange) => {
+			onLanguageChange(lang)
+		})
 
 		this.emit('languageChange', this.config.language);
 	}
