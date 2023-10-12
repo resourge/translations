@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.8.7](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.6...@resourge/react-translations-v1.8.7) (2023-10-12)
+
+
+### Bug Fixes
+
+* **setuptranslation:** fix onLanguageChange triggering before fetching new translations ([363b8ff](https://github.com/resourge/translations/commit/363b8ff09366a18a2ea2e71e53027a82801f07df))
+
 # [@resourge/react-translations-v1.8.6](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.5...@resourge/react-translations-v1.8.6) (2023-09-27)
 
 
