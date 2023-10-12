@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.9.6](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.5...@resourge/translations-v1.9.6) (2023-10-12)
+
+
+### Bug Fixes
+
+* **setuptranslation:** fix onLanguageChange triggering before fetching new translations ([363b8ff](https://github.com/resourge/translations/commit/363b8ff09366a18a2ea2e71e53027a82801f07df))
+
 # [@resourge/translations-v1.9.5](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.4...@resourge/translations-v1.9.5) (2023-09-27)
 
 
