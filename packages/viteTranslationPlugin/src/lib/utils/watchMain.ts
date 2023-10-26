@@ -108,7 +108,7 @@ export const tsConfig = loadConfig();
 
 export function watchMain(
 	fileNames: string[],
-	loadConfig: LoadConfig,
+	_loadConfig: LoadConfig,
 	newTranslationFile: string, 
 	localesFilePath: string,
 	options: CompilerOptions
@@ -182,21 +182,21 @@ export function watchMain(
 						await Promise.all(
 							Array.from(languages.entries())
 							.map(async ([language, translations]) => {
-								if ( loadConfig.isJSON ) {
+								/* if ( loadConfig.isJSON ) {
 									const filePath = path.join(localesFilePath, `${language}.json`)
 
 									await fs.promises.writeFile(filePath, JSON.stringify(translations));
 								}
-								else {
-									const filePath = path.join(localesFilePath, `${language}.ts`);
+								else { */
+								const filePath = path.join(localesFilePath, `${language}.ts`);
 
-									const packagePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), './index.js').replaceAll('\\', '/')
+								const packagePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), './index.js').replaceAll('\\', '/')
 
-									await fs.promises.writeFile(filePath, [
-										`import { Utils } from '${packagePath}';`,
-										`export default ${stringify(translations)}`
-									].join(''));
-								}
+								await fs.promises.writeFile(filePath, [
+									`import { Utils } from '${packagePath}';`,
+									`export default ${stringify(translations)}`
+								].join(''));
+								// }
 							})
 						);
 					}

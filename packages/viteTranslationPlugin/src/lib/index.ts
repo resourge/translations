@@ -36,7 +36,7 @@ const setupTranslations = [
 const setupRegex = new RegExp(`(${setupTranslationsName}|${setupReactTranslationsName}|${setupVueTranslationsName})\\(([\\s\\S]*?)\\)`, 'g')
 
 function addImportLanguages(
-	loadConfig: LoadConfig, 
+	_loadConfig: LoadConfig, 
 	config: SetupTranslationsConfig<string> & 
 	SetupTranslationsConfigTranslations<string, TranslationsType<string>> & 
 	SetupTranslationsConfigLoad<BaseTranslationsType> & {
@@ -46,7 +46,7 @@ function addImportLanguages(
 	localesFilePath: string,
 	addWatchFile: (id: string) => void
 ) {
-	if ( loadConfig.isJSON ) {
+	/* if ( loadConfig.isJSON ) {
 		return [
 			...config.langs
 			.map((language: string) => {
@@ -64,20 +64,20 @@ function addImportLanguages(
 			'};'
 		].join('') + content
 	}
-	else {
-		return [
-			'const importLanguages = {',
-			...config.langs
-			.map((language: string) => {
-				const filePath = path.join(localesFilePath, `${language}.ts`)
+	else { */
+	return [
+		'const importLanguages = {',
+		...config.langs
+		.map((language: string) => {
+			const filePath = path.join(localesFilePath, `${language}.ts`)
 
-				addWatchFile(filePath);
+			addWatchFile(filePath);
 
-				return `${language}: () => import('${filePath.replace(/\\/g, '/')}'),`
-			}),
-			'};'
-		].join('') + content
-	}
+			return `'${language}': () => import('${filePath.replace(/\\/g, '/')}'),`
+		}),
+		'};'
+	].join('') + content
+	// }
 }
 
 export function viteTranslationPlugin(): PluginOption {
