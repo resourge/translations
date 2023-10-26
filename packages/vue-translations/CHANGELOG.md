@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.1.7](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.6...@resourge/vue-translations-v1.1.7) (2023-10-26)
+
+
+### Bug Fixes
+
+* **vitetranslationsplugin:** fix build translations when language had hyphen ([736217d](https://github.com/resourge/translations/commit/736217d0882aee28b4e0377fc7c9a79a16f39195))
+
 # [@resourge/vue-translations-v1.1.6](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.5...@resourge/vue-translations-v1.1.6) (2023-10-12)
 
 
