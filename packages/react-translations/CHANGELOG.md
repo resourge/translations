@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.8.8](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.7...@resourge/react-translations-v1.8.8) (2023-10-26)
+
+
+### Bug Fixes
+
+* **vitetranslationsplugin:** fix build translations when language had hyphen ([736217d](https://github.com/resourge/translations/commit/736217d0882aee28b4e0377fc7c9a79a16f39195))
+
 # [@resourge/react-translations-v1.8.7](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.6...@resourge/react-translations-v1.8.7) (2023-10-12)
 
 
