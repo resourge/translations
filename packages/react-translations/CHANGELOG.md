@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.8.9](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.8...@resourge/react-translations-v1.8.9) (2023-11-10)
+
+
+### Performance Improvements
+
+* **translationstypes:** remove and improve some types causing performance in visual studio code ([530f137](https://github.com/resourge/translations/commit/530f137e6f65d7a3dc93b9b26ec3e004a8505ae8))
+
 # [@resourge/react-translations-v1.8.8](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.7...@resourge/react-translations-v1.8.8) (2023-10-26)
 
 
