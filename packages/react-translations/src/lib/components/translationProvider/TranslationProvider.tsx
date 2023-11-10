@@ -1,27 +1,19 @@
 import React, { type ReactNode, useEffect, useState } from 'react';
 
-import { type BaseTranslationsType, type TranslationsType } from '@resourge/translations';
-
 import { ComponentsContext, convertComponentsIntoObjectComponents, type ComponentsContextType } from '../../contexts/ComponentsContext';
 import { type SetupReactTranslationInstance } from '../../types/types';
 
-export type TranslationProviderProps<
-	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
-> = {
+export type TranslationProviderProps = {
 	children: ReactNode
 	TranslationInstance: SetupReactTranslationInstance<
-		Langs,
-		Trans
+		any,
+		any
 	>
 } & Partial<ComponentsContextType>
 
-function TranslationProvider<
-	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
->({
+function TranslationProvider({
 	TranslationInstance, children, components = {}
-}: TranslationProviderProps<Langs, Trans>) {
+}: TranslationProviderProps) {
 	const _instance = TranslationInstance.wrapPromise.read();
 			
 	const [value, setValue] = useState({

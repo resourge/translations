@@ -72,7 +72,7 @@ function createLanguages<
 	return langs
 	.reduce<Map<string, TranslationsKeys<Langs, T, undefined> | (() => Promise<TranslationsKeys<Langs, T, undefined>>)>>(
 		(obj: Map<string, any>, langKey: string) => {
-			obj.set(langKey, createEntry(langKey, translations))
+			obj.set(langKey, createEntry(langKey, translations as any))
 			return obj
 		}, 
 	new Map()

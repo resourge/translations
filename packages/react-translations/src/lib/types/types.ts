@@ -9,8 +9,8 @@ export type SetupReactTranslationInstance<
 	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > = Omit<SetupTranslationsInstance<Langs, Trans>, 'promise'> & {
 	Context: Context<{
-		instance: SetupReactTranslationInstance<Langs, Trans>
+		instance: any // SetupReactTranslationInstance<Langs, Trans>
 	}>
-	promise: Promise<SetupReactTranslationInstance<Langs, Trans>>
-	wrapPromise: WrapPromiseReturn<Langs, Trans>
+	promise: Promise<any>
+	wrapPromise: WrapPromiseReturn
 }

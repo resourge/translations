@@ -3,13 +3,10 @@ import {  BaseTranslationsType, TranslationsType } from '@resourge/translations'
 import { onMounted, onUnmounted, provide, reactive, toRefs } from 'vue'
 import { SetupVueTranslationInstance } from '../../SetupVueTranslations.js';
 
-export type TranslationProviderProps<
-	Langs extends string = string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType = TranslationsType<Langs> | BaseTranslationsType
-> = {
+export type TranslationProviderProps = {
     TranslationInstance: SetupVueTranslationInstance<
-		Langs, 
-		Trans
+		any, 
+		any
 	> | any
 }
 

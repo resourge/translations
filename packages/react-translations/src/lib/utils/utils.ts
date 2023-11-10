@@ -1,21 +1,11 @@
-import { type BaseTranslationsType, type TranslationsType } from '@resourge/translations';
-
-import { type SetupReactTranslationInstance } from '../types/types';
-
-export type WrapPromiseReturn<
-	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
-> = {
-	promise: Promise<SetupReactTranslationInstance<Langs, Trans>>
-	read: () => SetupReactTranslationInstance<Langs, Trans>
+export type WrapPromiseReturn = {
+	promise: Promise<any /* SetupReactTranslationInstance<Langs, Trans> */>
+	read: () => any /* SetupReactTranslationInstance<Langs, Trans> */
 }
 
-export const wrapPromise = <
-	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
->(
-	promise: Promise<SetupReactTranslationInstance<Langs, Trans>>
-): WrapPromiseReturn<Langs, Trans> => {
+export const wrapPromise = <T>(
+	promise: Promise<T>
+): WrapPromiseReturn => {
 	let status = 'pending';
 	let result: any;
 	const suspend = promise.then(

@@ -52,7 +52,7 @@ export class SetupTranslationsInstance<
 	 * Translations object
 	 */
 	public get T(): Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans> {
-		return this.translationsMap.get(this.config.language) as unknown as (Trans extends TranslationsType<Langs> ? TranslationsKeys<Langs, Trans> : BaseTranslationsKeys<Trans> )
+		return this.translationsMap.get(this.config.language) as any
 	}
 
 	/**
