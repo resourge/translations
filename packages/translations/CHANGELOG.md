@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.9.9](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.8...@resourge/translations-v1.9.9) (2023-12-04)
+
+
+### Bug Fixes
+
+* **translationtypes:** fix TranslationsType not working as intended with plugins ([277ea9a](https://github.com/resourge/translations/commit/277ea9a6c40fdaeaf8a13229ca836ad225f3425d))
+
 # [@resourge/translations-v1.9.8](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.7...@resourge/translations-v1.9.8) (2023-11-10)
 
 
