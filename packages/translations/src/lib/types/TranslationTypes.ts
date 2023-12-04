@@ -124,8 +124,7 @@ export type BaseTranslationsType = {
 	[K: string]: BaseTranslationsType | string
 }
 
-type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-	11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...Array<0>]
+type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ...Array<0>]
 
 type TranslationValue<Langs extends string> = Record<Langs, string>;
 
@@ -135,14 +134,14 @@ type TranslationsWithoutLangs<T extends object, Langs extends string> = {
 	[K in Langs]?: never;
 };
 
-export type TranslationsType<Langs extends string, D extends number = 15> = 
+export type TranslationsType<Langs extends string, D extends number = 11> = 
 [D] extends [never] 
 	? never 
 	: {
 		[key: string]: TranslationValue<Langs>
 		| (
-			TranslationsWithoutLangs<TranslationsType<Langs, Prev[D]>, Langs> & {
-				_custom?: { key: string, type: any }
-			}
+			TranslationsWithoutLangs<TranslationsType<Langs, Prev[D]> | {
+				_custom?: { key: string, name: any, type: any }
+			}, Langs> 
 		)
 	};
