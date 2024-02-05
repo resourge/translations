@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.2.1](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.0...@resourge/vue-translations-v1.2.1) (2024-02-05)
+
+
+### Bug Fixes
+
+* **setuptranslation and setupvuetranslations:** add const to Trans in setuptranslation ([0c07bcd](https://github.com/resourge/translations/commit/0c07bcd7bbc7e104000c7216f854faa24a5900f1))
+
 # [@resourge/vue-translations-v1.2.0](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.8...@resourge/vue-translations-v1.2.0) (2024-02-05)
 
 
