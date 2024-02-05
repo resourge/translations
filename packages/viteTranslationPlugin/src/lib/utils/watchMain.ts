@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import {
 	type BaseTranslationsType,
-	type AsConst,
 	type TranslationsKeys,
 	type TranslationsType,
 	createTranslationKeyStructure
@@ -25,9 +24,9 @@ export type LoadConfig = {
 	isJSON: boolean
 }
 
-const createEntry = <Langs extends string, T extends TranslationsType<Langs>>(
+const createEntry = <Langs extends string, const T extends TranslationsType<Langs>>(
 	language: string,
-	translations: AsConst<T>
+	translations: T
 ): TranslationsKeys<Langs, T> => {
 	return Object.keys(translations)
 	.reduce((obj, key) => {
@@ -64,10 +63,10 @@ const createEntry = <Langs extends string, T extends TranslationsType<Langs>>(
 
 function createLanguages<
 	Langs extends string, 
-	T extends TranslationsType<Langs>
+	const T extends TranslationsType<Langs>
 >(
 	langs: Langs[],
-	translations: AsConst<T>
+	translations: T
 ) {
 	return langs
 	.reduce<Map<string, TranslationsKeys<Langs, T, undefined> | (() => Promise<TranslationsKeys<Langs, T, undefined>>)>>(

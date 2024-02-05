@@ -1,47 +1,50 @@
 {
-  "name": "@resourge/translations",
-  "version": "1.9.9",
-  "type": "module",
-  "private": false,
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "dist"
-  ],
-  "author": "resourge",
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./viteTranslationPlugin": {
-      "import": "./dist/viteTranslationPlugin.js",
-      "require": "./dist/viteTranslationPlugin.cjs"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "viteTranslationPlugin": [
-        "./dist/viteTranslationPlugin.d.ts"
-      ]
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/resourge/translations.git",
-    "directory": "packages/translations"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "coverage": "vitest run --coverage",
-    "semantic-release": "semantic-release -e semantic-release-monorepo"
-  }
+	"name": "@resourge/translations",
+	"version": "1.9.9",
+	"type": "module",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist"
+	],
+	"author": "resourge",
+	"license": "MIT",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./viteTranslationPlugin": {
+			"import": "./dist/viteTranslationPlugin.js",
+			"require": "./dist/viteTranslationPlugin.cjs"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"viteTranslationPlugin": [
+				"./dist/viteTranslationPlugin.d.ts"
+			]
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/resourge/translations.git",
+		"directory": "packages/translations"
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"coverage": "vitest run --coverage",
+		"semantic-release": "semantic-release -e semantic-release-monorepo"
+	},
+	"peerDependencies": {
+		"typescript": ">= 5.3.3"
+	}
 }

@@ -1,9 +1,4 @@
-import {
-	type BaseTranslationsType,
-	type TranslationsType,
-	type AsConst,
-	type TranslationsKeys
-} from './TranslationTypes'
+import { type BaseTranslationsType, type TranslationsType, type TranslationsKeys } from './TranslationTypes'
 import {
 	type SetupConfig,
 	type SetupTranslationsConfig,
@@ -16,7 +11,6 @@ export type {
 	SetupTranslationsConfigTranslations,
 	SetupTranslationsConfig,
 	SetupConfig,
-	AsConst,
 
 	BaseTranslationsType,
 	TranslationsType,

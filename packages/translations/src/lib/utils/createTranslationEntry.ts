@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-reduce-type-parameter */
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { type CustomType } from '../custom';
-import { type AsConst, type TranslationsKeys } from '../types';
+import { type TranslationsKeys } from '../types';
 
 import { Utils, createKeyFunction } from './utils';
 
@@ -9,9 +9,9 @@ const createCustomFunction = <T extends CustomType>(value: T) => {
 	return Utils.getCustomMethods(value._custom.name, value)
 }
 
-export const createTranslationEntry = <Langs extends string, T extends Record<any, any>>(
+export const createTranslationEntry = <Langs extends string, const T extends Record<any, any>>(
 	language: string,
-	translations: AsConst<T>
+	translations: T
 ): TranslationsKeys<Langs, T> => {
 	return Object.keys(translations)
 	.reduce<TranslationsKeys<Langs, T>>((obj, key) => {

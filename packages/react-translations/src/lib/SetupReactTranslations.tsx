@@ -20,19 +20,19 @@ export type SetupReactTranslationsReturn<Instance> = {
 
 export function SetupReactTranslations<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs>
+	const Trans extends TranslationsType<Langs>
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigTranslations<Langs, Trans>
 ): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>>
 export function SetupReactTranslations<
 	Langs extends string, 
-	Trans extends BaseTranslationsType
+	const Trans extends BaseTranslationsType
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigLoad<Trans>
 ): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>>
 export function SetupReactTranslations<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
+	const Trans extends TranslationsType<Langs> | BaseTranslationsType
 >(
 	config: SetupTranslationsConfig<Langs> & (
 		Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>

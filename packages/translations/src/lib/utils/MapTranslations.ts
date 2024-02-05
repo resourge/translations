@@ -3,7 +3,6 @@
 import type {
 	BaseTranslationsKeys,
 	BaseTranslationsType,
-	AsConst,
 	TranslationsKeys,
 	TranslationsType
 } from '../types/TranslationTypes'
@@ -22,7 +21,7 @@ import { createTranslationEntry } from './createTranslationEntry';
 import { createTranslationKeyStructure } from './createTranslationKeyStructure';
 import { deepValue, isExpired } from './utils';
 
-function flattenObject<B extends BaseTranslationsType>(structure: AsConst<B>, prefix: string = ''): Record<string, string> {
+function flattenObject<const B extends BaseTranslationsType>(structure: B, prefix: string = ''): Record<string, string> {
 	return Object.keys(structure)
 	.reduce<Record<string, string>>((acc, k) => {
 		const pre = prefix.length ? prefix + '.' : '';
@@ -72,10 +71,10 @@ const translationMethod = {
 
 function createLanguages<
 	Langs extends string, 
-	T extends Record<string, any>
+	const T extends Record<string, any>
 >(
 	langs: Langs[],
-	translations: AsConst<T> | ((lang: string) => Promise<AsConst<T>>)
+	translations: T | ((lang: string) => Promise<T>)
 ) {
 	return langs
 	.reduce<
@@ -117,9 +116,9 @@ export class MapTranslations<
 		const _translationConfig = (config as unknown as SetupTranslationsConfigTranslations<Langs, Record<string, any>>);
 		const _loadConfig = (config as unknown as SetupTranslationsConfigLoad<Trans extends BaseTranslationsType ? Trans : BaseTranslationsType>);
 		if ( _translationConfig.translations ) {
-			this.keyStructure = (config as { keyStructure?: ConvertTransIntoKeyStructure<Langs, Trans> }).keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans> || translationMethod.__translationsKeyStructure__<Langs, Trans>(config.langs as Langs[], _translationConfig.translations as any)
+			this.keyStructure = (config as { keyStructure?: ConvertTransIntoKeyStructure<Langs, Trans> }).keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans> || translationMethod.__translationsKeyStructure__<Langs, Trans>(config.langs, _translationConfig.translations as any)
 			this.langMaps = createLanguages<Langs, Record<string, any>>(
-				config.langs as Langs[], 
+				config.langs, 
 				_translationConfig.translations
 			) as unknown as any;
 
@@ -169,7 +168,7 @@ export class MapTranslations<
 			}
 
 			this.keyStructure = createTranslationKeyStructure<Langs, Trans>(
-				config.langs as Langs[], 
+				config.langs, 
 				_loadConfig.load.structure as unknown as Trans
 			);
 
@@ -225,18 +224,18 @@ export class MapTranslations<
 			config.langs.forEach((lang) => {
 				let trans: TranslationObj<Langs, Trans> | undefined;
 				this.onTranslationGets.forEach((onTranslationGet) => {
-					trans = onTranslationGet(lang as Langs, trans?.translations);
+					trans = onTranslationGet(lang, trans?.translations);
 				})
 
 				if ( trans ) {
 					const translations = createTranslationsProxy(
-						flattenObject(trans.translations as AsConst<Trans>),
-						lang as Langs,
+						flattenObject(trans.translations),
+						lang,
 						trans.lastTranslation
 					);
 
 					this.set(
-						lang as Langs,
+						lang,
 						translations as any,
 						trans.lastTranslation
 					)

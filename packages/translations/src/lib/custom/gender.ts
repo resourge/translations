@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import type { AsConst } from '../types/TranslationTypes'
 import { Utils } from '../utils/utils'
 
 import type { CustomType } from './customMethods'
@@ -11,8 +10,8 @@ export type TranslationsTypeGender<
 	male: Record<Langs, string>
 }
 
-export const gender = <Langs extends string, Trans extends TranslationsTypeGender<Langs>>(
-	langs: AsConst<Trans>
+export const gender = <Langs extends string, const Trans extends TranslationsTypeGender<Langs>>(
+	langs: Trans
 ): Trans & CustomType<'gender', 'gender', keyof Trans> => {
 	return {
 		_custom: {

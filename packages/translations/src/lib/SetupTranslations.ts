@@ -115,7 +115,7 @@ export class SetupTranslationsInstance<
 		const setTranslationsReady = async () => {
 			_config.language = _config.language || _config.defaultLanguage;
 
-			_config.language = !_config.langs.length || (_config.langs as Langs[]).includes(_config.language as Langs) ? _config.language : _config.defaultLanguage; 
+			_config.language = !_config.langs.length || (_config.langs ).includes(_config.language as Langs) ? _config.language : _config.defaultLanguage; 
 			
 			this.isReady = false;
 

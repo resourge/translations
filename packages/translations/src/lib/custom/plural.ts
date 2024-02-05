@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import type { AsConst } from '../types/TranslationTypes'
 import { Utils } from '../utils/utils'
 
 import type { CustomType } from './customMethods'
@@ -13,8 +12,8 @@ export type TranslationsTypePlural<
 	zero?: Record<Langs, string>
 }
 
-export const plural = <Langs extends string, T extends TranslationsTypePlural<Langs>>(
-	langs: AsConst<T>
+export const plural = <Langs extends string, const T extends TranslationsTypePlural<Langs>>(
+	langs: T
 ): T & CustomType<'plural', 'count', number> => {
 	return {
 		_custom: {

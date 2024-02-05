@@ -47,5 +47,8 @@
 		"test:watch": "vitest",
 		"coverage": "vitest run --coverage",
 		"semantic-release": "semantic-release -e semantic-release-monorepo"
+	},
+	"peerDependencies": {
+		"typescript": ">= 5.3.3"
 	}
 }
