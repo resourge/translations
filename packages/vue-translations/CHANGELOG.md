@@ -1,3 +1,15 @@
+# [@resourge/vue-translations-v1.2.0](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.8...@resourge/vue-translations-v1.2.0) (2024-02-05)
+
+
+### Bug Fixes
+
+* **vue:** update vue packages ([5b5fd8c](https://github.com/resourge/translations/commit/5b5fd8c91b6b458cf757daf0f3aa1e687f9cc878))
+
+
+### Features
+
+* **typescript:** update to latest version of typescript to fix performance issues ([3692392](https://github.com/resourge/translations/commit/36923924033a588b7c537100a7ed0958f720bf32))
+
 # [@resourge/vue-translations-v1.1.8](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.1.7...@resourge/vue-translations-v1.1.8) (2023-11-10)
 
 
