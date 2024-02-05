@@ -3,8 +3,8 @@
 	"version": "1.1.8",
 	"type": "module",
 	"devDependencies": {
-		"vue": "^3.2.47",
-		"vue-tsc": "^1.4.2"
+		"vue": "^3.4.15",
+		"vue-tsc": "^1.8.27"
 	},
 	"private": false,
 	"publishConfig": {
