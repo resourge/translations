@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.9...@resourge/translations-v1.10.0) (2024-02-05)
+
+
+### Features
+
+* **typescript:** update to latest version of typescript to fix performance issues ([3692392](https://github.com/resourge/translations/commit/36923924033a588b7c537100a7ed0958f720bf32))
+
 # [@resourge/translations-v1.9.9](https://github.com/resourge/translations/compare/@resourge/translations-v1.9.8...@resourge/translations-v1.9.9) (2023-12-04)
 
 
