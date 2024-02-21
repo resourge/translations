@@ -18,9 +18,10 @@ export {
 	languageLocalStorage,
 	htmlLanguage,
 	plural,
+	SetupVueTranslations,
+	Utils,
+
 	type BaseTranslationsType,
 
-	type SetupVueTranslationReturn, 
-	SetupVueTranslations,
-	Utils
+	type SetupVueTranslationReturn
 }

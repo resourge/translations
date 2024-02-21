@@ -20,9 +20,10 @@ export {
 	navigatorLanguageDetector,
 	htmlLanguage,
 	plural,
+	SetupReactTranslations,
+	Utils,
+
 	type BaseTranslationsType,
 
-	type SetupReactTranslationsReturn, 
-	SetupReactTranslations,
-	Utils
+	type SetupReactTranslationsReturn 
 }

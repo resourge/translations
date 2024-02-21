@@ -24,7 +24,7 @@ export const navigatorLanguageDetector = (options?: { onLanguage: (language: str
 				if ( _language ) {
 					const language = options?.onLanguage ? options?.onLanguage(_language) : _language;
 
-					config.language = language ?? config.defaultLanguage;
+					config.language = config.langs.includes(language) ? language : config.defaultLanguage;
 				}
 			}
 
