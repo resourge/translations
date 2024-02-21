@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.9.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.0...@resourge/react-translations-v1.9.1) (2024-02-21)
+
+
+### Bug Fixes
+
+* **navigatorlanguagedetector:** if language doesnt match langs use defaultLanguage ([384ec49](https://github.com/resourge/translations/commit/384ec495f5ccc6f8218ba619c1244710de1edeed))
+
 # [@resourge/react-translations-v1.9.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.8.9...@resourge/react-translations-v1.9.0) (2024-02-05)
 
 
