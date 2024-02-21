@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.1...@resourge/translations-v1.10.2) (2024-02-21)
+
+
+### Bug Fixes
+
+* **navigatorlanguagedetector:** if language doesnt match langs use defaultLanguage ([384ec49](https://github.com/resourge/translations/commit/384ec495f5ccc6f8218ba619c1244710de1edeed))
+
 # [@resourge/translations-v1.10.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.0...@resourge/translations-v1.10.1) (2024-02-05)
 
 
