@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.3](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.2...@resourge/translations-v1.10.3) (2024-04-16)
+
+
+### Bug Fixes
+
+* **translations:** fix custom translations functions and there types ([0d566e6](https://github.com/resourge/translations/commit/0d566e61c12587ddd66d924df016e13e9ee228d0))
+
 # [@resourge/translations-v1.10.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.1...@resourge/translations-v1.10.2) (2024-02-21)
 
 
