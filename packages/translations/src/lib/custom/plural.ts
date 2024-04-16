@@ -1,32 +1,18 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { Utils } from '../utils/utils'
 
-import type { CustomType } from './customMethods'
-
-export type TranslationsTypePlural<
-	Langs extends string
-> = {
-	one: Record<Langs, string>
-	other: Record<Langs, string>
-	two?: Record<Langs, string>
-	zero?: Record<Langs, string>
-}
-
-export const plural = <Langs extends string, const T extends TranslationsTypePlural<Langs>>(
-	langs: T
-): T & CustomType<'plural', 'count', number> => {
-	return {
-		_custom: {
-			name: 'plural',
-			key: 'count',
-			type: 0
-		},
-		...langs as object
-	} as T & CustomType<'plural', 'count', number>
-}
-
-Utils.addCustomMethods<TranslationsTypePlural<string>>('plural', (value) => {
-	return function ({ count, ...params }: { count: number }) {
+export const plural = Utils.addCustomMethods<
+	'count',
+	{
+		one: string
+		other: string
+		two?: string
+		zero?: string
+	},
+	number
+>(
+	'count', 
+	(value, params) => {
+		const count = params.count;
 		let langValue;
 		if ( count === 0 ) {
 			langValue = value.zero;
@@ -38,8 +24,6 @@ Utils.addCustomMethods<TranslationsTypePlural<string>>('plural', (value) => {
 			langValue = value.two;
 		}
 
-		langValue = langValue ?? value.other;
-
-		return typeof langValue === 'function' ? (langValue as (params: any) => string)(params) : langValue
+		return langValue ?? value.other;
 	}
-})
+)

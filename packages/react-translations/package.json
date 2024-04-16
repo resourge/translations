@@ -7,6 +7,7 @@
 		"@types/react-dom": "^18.0.11",
 		"react": ">=17.0.0",
 		"react-dom": ">=17.0.0",
+		"type-fest": "^4.15.0",
 		"typescript": "5.3.3"
 	},
 	"private": false,
@@ -52,7 +53,8 @@
 		"semantic-release": "semantic-release -e semantic-release-monorepo"
 	},
 	"dependencies": {
-		"html-parse-stringify": "^3.0.1"
+		"html-parse-stringify": "^3.0.1",
+		"type-fest": ">= 4.15.0"
 	},
 	"peerDependencies": {
 		"typescript": ">= 5.3.3"

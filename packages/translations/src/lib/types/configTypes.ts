@@ -81,7 +81,9 @@ export type SetupConfig<
 	Langs extends string,
 	Trans extends TranslationsType<Langs> | BaseTranslationsType
 > = Omit<SetupTranslationsConfig<Langs>, 'defaultLanguage'> & (
-	Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
+	Trans extends TranslationsType<Langs> 
+		? SetupTranslationsConfigTranslations<Langs, Trans> 
+		: SetupTranslationsConfigLoad<Trans>
 ) & {
 	defaultLanguage: Langs
 	language: string

@@ -12,8 +12,29 @@ export type ConvertTransIntoKeyStructure<
 		? (
 			keyof Trans[K] extends Langs 
 				? CreateKeyPath<K, BaseKey>
-				: '_custom' extends keyof Trans[K] 
-					? CreateKeyPath<K, BaseKey> 
-					: ConvertTransIntoKeyStructure<Langs, Trans[K], CreateKeyPath<K, BaseKey>> 
+				: ConvertTransIntoKeyStructure<Langs, Trans[K], CreateKeyPath<K, BaseKey>> 
 		) : CreateKeyPath<K, BaseKey>
 }
+
+type StringToUnion<T extends string> = T extends `${infer E},${infer R}`
+	? E | StringToUnion<R>
+	: T
+
+export type ConvertStringIntoType<T> = 
+	T extends 'string' 
+		? T 
+		: T extends 'number' 
+			? number 
+			: T extends 'bigint' 
+				? bigint 
+				: T extends 'boolean' 
+					? boolean 
+					: T extends 'null' 
+						? null 
+						: T extends 'symbol' 
+							? symbol 
+							: T extends 'undefined' 
+								? undefined 
+								: T extends string
+									? StringToUnion<T>
+									: T

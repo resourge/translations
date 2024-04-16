@@ -13,7 +13,7 @@ import type {
 	TranslationPlugin
 } from './types/configTypes'
 import { type ConvertTransIntoKeyStructure } from './types/types'
-import { MapTranslations } from './utils/MapTranslations'
+import { MapTranslations, type TFunction } from './utils/MapTranslations'
 import { separatePlugins } from './utils/utils'
 
 export type EventsType<
@@ -138,7 +138,7 @@ export class SetupTranslationsInstance<
 		this.config = _config;
 	}
 
-	public get t() {
+	public get t(): TFunction<Langs, Trans> {
 		return this.translationsMap.t;
 	}
 
@@ -189,7 +189,7 @@ export function SetupTranslations<
 	const Trans extends TranslationsType<Langs>
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigTranslations<Langs, Trans>
-): SetupTranslationsInstance<Langs, Trans>
+): SetupTranslationsInstance<Langs, Trans> 
 export function SetupTranslations<
 	Langs extends string, 
 	const Trans extends BaseTranslationsType
@@ -204,5 +204,5 @@ export function SetupTranslations<
 		Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
 	)
 ): SetupTranslationsInstance<Langs, Trans> {
-	return new SetupTranslationsInstance<Langs, Trans>(config);
+	return new SetupTranslationsInstance<Langs, Trans>(config as any);
 }

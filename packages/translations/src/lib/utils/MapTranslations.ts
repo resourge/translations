@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { type LiteralUnion, type Paths } from 'type-fest';
+
 import type {
 	BaseTranslationsKeys,
 	BaseTranslationsType,
@@ -95,6 +97,31 @@ function createLanguages<
 	);
 }
 
+type OmitDeep<T, K extends string | number | symbol> = T extends object
+	? {
+		[P in keyof T as P extends K ? never : P]: T[P] extends Array<infer U>
+			? OmitArray<U, K>
+			: OmitDeep<T[P], K>;
+	}
+	: T;
+
+type OmitArray<T, K extends string | number | symbol> = Array<OmitDeep<T, K>>;
+
+type TransKeys<Langs extends string, Trans extends Record<string, any>> = LiteralUnion<
+	Paths<
+		OmitDeep<
+			Trans, 
+			Langs
+		>
+	>, 
+	string
+>
+
+export type TFunction<
+	Langs extends string, 
+	Trans extends Record<string, any>
+> = (key: TransKeys<Langs, Trans>, values?: Record<string, any>) => string
+
 export class MapTranslations<
 	Langs extends string, 
 	Trans extends Record<string, any>
@@ -105,7 +132,7 @@ export class MapTranslations<
 	public structure: Trans & Record<string, string> = {} as Trans & Record<string, string>;
 	public keyStructure: ConvertTransIntoKeyStructure<Langs, Trans> = {} as ConvertTransIntoKeyStructure<Langs, Trans>;
 
-	public t!: (key: string, values?: Record<string, any>) => string
+	public t!: TFunction<Langs, Trans>
 
 	constructor(
 		public config: SetupConfig<Langs, Trans>,
@@ -123,14 +150,14 @@ export class MapTranslations<
 			) as unknown as any;
 
 			this.t = (
-				key: string,
+				key: TransKeys<Langs, Trans>,
 				values?: Record<string, any>
 			) => {
 				try {
 					const translations = this.get(this.config.language) as any;
 
-					const keyValue = key.includes('.') 
-						? deepValue(translations, key) 
+					const keyValue = (key as string).includes('.') 
+						? deepValue(translations, (key as string)) 
 						: translations[key];
 
 					const value = values && typeof keyValue === 'function' 
@@ -148,12 +175,12 @@ export class MapTranslations<
 			this.isLoad = true;
 
 			this.t = (
-				key: string,
+				key: TransKeys<Langs, Trans>,
 				values?: Record<string, any>
 			) => {
 				const translations = this.get(this.config.language) as Record<string, any>;
 
-				const keyValue = translations[key];
+				const keyValue = translations[key as string];
 
 				const value = values && typeof keyValue === 'function' 
 					? ((keyValue as (params: any) => string)(values) as any)

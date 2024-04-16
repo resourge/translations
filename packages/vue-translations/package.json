@@ -48,6 +48,9 @@
 		"coverage": "vitest run --coverage",
 		"semantic-release": "semantic-release -e semantic-release-monorepo"
 	},
+	"dependencies": {
+		"type-fest": ">= 4.15.0"
+	},
 	"peerDependencies": {
 		"typescript": ">= 5.3.3"
 	}

@@ -1,13 +1,12 @@
-import { type CustomType } from './customMethods';
-import { gender, type TranslationsTypeGender } from './gender';
-import { plural, type TranslationsTypePlural } from './plural';
+import { type CustomType } from '../types/customMethods';
+
+import { gender } from './gender';
+import { plural } from './plural';
 
 export { 
 	gender, 
-	type TranslationsTypeGender,
 
 	plural,
-	type TranslationsTypePlural,
 
 	type CustomType
 }

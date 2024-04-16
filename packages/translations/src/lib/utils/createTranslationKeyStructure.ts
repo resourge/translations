@@ -11,7 +11,7 @@ export const createTranslationKeyStructure = <
 	langs: Langs[],
 	translations: T,
 	baseKey: string = ''
-) => {
+): ConvertTransIntoKeyStructure<Langs, T> => {
 	const language = langs[0];
 
 	return Object.keys(translations)

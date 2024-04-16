@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-reduce-type-parameter */
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import type { BaseTranslationsType, TranslationsType } from '../types/TranslationTypes'
+
+import type { BaseTranslationsType, TranslationsType } from '../types/TranslationTypes';
 import type {
 	OnTranslationConfig,
 	OnTranslationGet,
@@ -9,18 +10,59 @@ import type {
 	SetupTranslationsConfigLoad,
 	SetupTranslationsConfigTranslations,
 	TranslationPlugin
-} from '../types/configTypes'
+} from '../types/configTypes';
+import { type CustomType } from '../types/customMethods';
+import { type ConvertStringIntoType } from '../types/types';
 
-type RemoveLang<
-	T extends Record<string, Record<string, string>>
-> = {
-	[K in keyof T]: T[K][keyof T[K]]
-}
+type UnionToIntersection<U> = (
+	U extends never ? never : (arg: U) => never
+) extends (arg: infer I) => void
+	? I
+	: never;
 
-export const Utils = {
+type UnionToTuple<T> = UnionToIntersection<
+  T extends never ? never : (t: T) => T
+> extends (_: never) => infer W
+	? [...UnionToTuple<Exclude<T, W>>, W]
+	: [];
+
+type TupleToString<T extends any[]> = T extends [infer First, ...infer Rest]
+	? `${First extends string ? First : ''}${Rest extends [] ? '' : ','}${TupleToString<Rest>}`
+	: '';
+
+const DefaultUtils = {
 	customMethods: new Map(),
-	addCustomMethods<T extends Record<string, Record<string, string>>>(key: string, cb: (value: RemoveLang<T>) => (params: any) => string) {
-		Utils.customMethods.set(key, cb);
+	addCustomMethods<
+		Key extends string,
+		T extends Record<string, string>,
+		Type = TupleToString<UnionToTuple<keyof T>>
+	>(
+		key: Key, 
+		cb: (value: T, params: Record<Key, ConvertStringIntoType<Type>>) => string
+	) {
+		DefaultUtils.customMethods.set(key, (value: T) => {
+			return function (params: Record<Key, ConvertStringIntoType<Type>>) {
+				const langValue = cb(value, params);
+
+				return DefaultUtils.replaceParams(langValue, params)
+			}
+		});
+
+		// T1 makes sure autocomplete works
+		return <
+			Langs extends string,
+			T1 extends Record<string, Record<Langs, string>>
+		>(trans: T1) => ({
+			_custom: {
+				name: key,
+				key
+			},
+			...trans
+		}) as unknown as CustomType<
+			Key,
+			Type,
+			keyof T1[keyof T1] extends string ? keyof T1[keyof T1] : Langs
+		>
 	},
 	replaceParams: (langValue: string, params: any) => {
 		return langValue.replace(/\{{([^{}]+)\}}/g, (_: string, key: string) => {
@@ -29,7 +71,7 @@ export const Utils = {
 		})
 	},
 	getCustomMethods(name: string, value: any) {
-		const method = Utils.customMethods.get(name);
+		const method = DefaultUtils.customMethods.get(name);
 		if ( method ) {
 			return method(value)
 		}
@@ -37,6 +79,25 @@ export const Utils = {
 
 		return () => defaultKey
 	}
+} 
+export const Utils = DefaultUtils as {
+	addCustomMethods: <
+		Key extends string, 
+		T extends Record<string, string>, 
+		Type = TupleToString<UnionToTuple<keyof T>>
+	>(
+		key: Key, 
+		cb: (value: T, params: Record<Key, ConvertStringIntoType<Type>>) => string
+	) => <
+		Langs extends string, 
+		T1 extends Record<string, Record<Langs, string>>
+	>(trans: T1) => CustomType<
+		Key,
+		Type,
+		keyof T1[keyof T1] extends string ? keyof T1[keyof T1] : Langs
+	>
+	getCustomMethods: (name: string, value: any) => any
+	replaceParams: (langValue: string, params: any) => string
 }
 
 /**
@@ -62,7 +123,9 @@ export function separatePlugins<
 	Trans extends TranslationsType<Langs> | BaseTranslationsType
 >(
 	config: SetupTranslationsConfig<Langs> & (
-		Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
+		Trans extends TranslationsType<Langs> 
+			? SetupTranslationsConfigTranslations<Langs, Trans> 
+			: SetupTranslationsConfigLoad<Trans>
 	)
 ) {
 	const plugins = config.plugins ?? [];

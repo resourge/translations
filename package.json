@@ -57,6 +57,7 @@
 		"patch-package": "^7.0.0",
 		"semantic-release": "^21.0.2",
 		"semantic-release-monorepo": "7.0.5",
+		"type-fest": "^4.15.0",
 		"typescript": "^5.3.3",
 		"vite": "4.3.2",
 		"vite-plugin-dts": "^2.3.0",
