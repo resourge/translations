@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import deepmerge from '@fastify/deepmerge'
 import appRoot from 'app-root-path'
 import { readFileSync, readdirSync } from 'fs'

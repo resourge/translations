@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="vitest" />
 
 type TagNode = {
 	attrs: Record<string, string>

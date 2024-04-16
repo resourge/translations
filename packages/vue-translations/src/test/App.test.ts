@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest'
 import { ref } from 'vue'
 
 function useCounter() {
