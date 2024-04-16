@@ -9,7 +9,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [API Reference](#api-reference)
-- [Custom Plugins](#custom-plugins)
+- [Plugins](#plugins)
 - [Custom Translations](#custom-translations)
 - [Vite integration](#vitetranslationplugin)
 - [Documentation](#documentation)
@@ -128,33 +128,120 @@ Methods
 - `changeLanguage(lang: string): Promise<void>`: Changes the current language.
 - `addEventListener(event: EventType, callback: Function): () => void`: Adds an event listener.
 
-# Custom Plugins
+# Plugins
 
-`SetupTranslations` allows you to add custom plugins for handling language changes, translation gets, translation sets and config modifications.
+`SetupTranslations` allows you to add plugins or custom plugins for handling language changes, translation gets, translation sets and config modifications.
 
-## Example 
+## htmlLanguage
+
+`htmlLanguage` plugin is a simple plugin designed to handle setting the HTML `lang` attribute based on the current language. It ensures that the `lang` attribute of the HTML element reflects the selected language, providing accessibility benefits and aiding in language-specific styling.
+
+`htmlLanguage` plugin will automatically:
+
+- Set the `lang` attribute of the `<html>` element to the selected language.
+- Update the `lang` attribute whenever the language changes.
+
+### Usage
 
 ```typescript
-const languageChangePlugin: TranslationPlugin = {
-  onLanguageChange: (language) => {
-    console.log(`Language changed to: ${language}`);
-  },
-};
+import { htmlLanguage } from '@resourge/translations';
 
-const translationGetPlugin: TranslationPlugin = {
-  onTranslationGet: (keys) => {
-    console.log(`Translations requested for keys: ${keys.join(', ')}`);
-  },
-};
-
-const translationsInstance = SetupTranslations({
-  langs: ['en', 'fr', 'es'],
+const translationsConfig = SetupTranslations({
+  langs: ['en', 'fr'],
   defaultLanguage: 'en',
-  plugins: [languageChangePlugin, translationGetPlugin],
-  // Other configuration options...
+  translations: {
+    en: {
+      greeting: 'Hello!'
+    },
+    fr: {
+      greeting: 'Bonjour!'
+    }
+  },
+  plugins: [htmlLanguage()]
 });
 ```
-## Example for custom plugin
+
+#### Additional Notes
+
+- Make sure the `htmlLanguage` plugin is added to your translation setup using `SetupTranslations`.
+- The `lang` attribute of the HTML element is essential for screen readers and other accessibility tools.
+- The plugin provides a convenient way to ensure the correct language is reflected in the HTML for improved accessibility and language-specific styling.
+
+## languageLocalStorage
+
+`languageLocalStorage` plugin is designed to store and retrieve translations in the browser's local storage. This allows for persistent language selection across sessions, enhancing the user experience by remembering the chosen language.
+
+`languageLocalStorage` plugin will automatically:
+
+- Retrieve the selected language from local storage and set it as the default language.
+- Store translations in local storage when they are set.
+- Retrieve translations from local storage if available, falling back to the provided translations.
+
+### Usage
+
+```typescript
+import { languageLocalStorage } from '@resourge/translations';
+
+const translationsConfig = SetupTranslations({
+  langs: ['en', 'fr'],
+  defaultLanguage: 'en',
+  translations: {
+    en: {
+      greeting: 'Hello!'
+    },
+    fr: {
+      greeting: 'Bonjour!'
+    }
+  },
+  plugins: [languageLocalStorage()]
+});
+```
+
+#### Additional Notes
+
+- The `languageLocalStorage` plugin provides a way to store translations in the browser's local storage.
+- It ensures that the selected language is persisted across sessions, improving user experience.
+- Make sure the `languageLocalStorage` plugin is added to your translation setup using `SetupTranslations`.
+
+## navigatorLanguageDetector
+
+`navigatorLanguageDetector` plugin is designed to detect the user's preferred language based on their browser settings. It utilizes the `navigator` object to retrieve the language information.
+
+`navigatorLanguageDetector` plugin will automatically:
+
+- Detect the user's preferred language based on their browser settings.
+- Apply the detected language if it matches any of the configured languages.
+- Fall back to the default language if the detected language is not supported.
+
+### Usage
+
+```typescript
+import { navigatorLanguageDetector } from '@resourge/translations';
+
+const translationsConfig = SetupTranslations({
+  langs: ['en', 'fr'],
+  defaultLanguage: 'en',
+  translations: {
+    en: {
+      greeting: 'Hello!'
+    },
+    fr: {
+      greeting: 'Bonjour!'
+    }
+  },
+  plugins: [navigatorLanguageDetector()]
+});
+```
+
+#### Additional Notes
+
+- The `navigatorLanguageDetector` plugin automatically detects the user's preferred language based on their browser settings.
+- It allows for custom modification of the detected language before applying it to the translation setup.
+- Ensure that the `navigatorLanguageDetector` plugin is added to your translation setup using `SetupTranslations`.
+
+## Custom Plugins
+
+`navigatorLanguageDetector`, `htmlLanguage`, `languageLocalStorage` plugins are just examples of a translation plugin. You can create your own custom plugins to extend the functionality of your translation setup. 
 
 ```typescript
 const customPlugin: TranslationPlugin = {
