@@ -11,6 +11,7 @@
 - [API Reference](#aPI_Reference)
 - [Custom Plugins](#custom_Plugins)
 - [Custom Translations](#custom_Translations)
+- [Vite integration](#viteTranslationPlugin)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
@@ -324,6 +325,11 @@ translationsInstance.T.trans_message({
 	timeOfDay: 'morning' // afternoon || evening || night
 })
 ```
+
+# viteTranslationPlugin
+
+`viteTranslationPlugin`, is designed to enhance Vite applications by optimizing translation loading for production. It provides seamless integration for custom translations and ensures efficient handling of translation files. [More documentation](../viteTranslationPlugin/README.md)
+
 ## Documentation
 
 For comprehensive documentation and usage examples, visit the [Translation documentation](https://resourge.vercel.app/docs/translations/intro).
