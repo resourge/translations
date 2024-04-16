@@ -349,7 +349,7 @@ Contributions to `@resourge/translations` are welcome! To contribute, please fol
 
 ## License
 
-Fetch is licensed under the [MIT License](LICENSE).
+`@resourge/translations` is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
