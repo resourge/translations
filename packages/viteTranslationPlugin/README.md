@@ -7,7 +7,7 @@
 ## Table of Contents
 
 - [Usage](#usage)
-- [Production-Optimized Translations](#production_Optimized_Translations)
+- [Production-Optimized Translations](#production-optimized-translations)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -25,7 +25,7 @@ export default {
   ]
 };
 ```
-# Production-Optimized Translations
+# Production Optimized Translations
 
 When you build your Vite application for production (`npm run build` or `yarn build`), the `viteTranslationPlugin` will automatically split translations into separate files for each language. This ensures that the translations will only be loaded when needed, optimizing performance and reducing load times.
 
