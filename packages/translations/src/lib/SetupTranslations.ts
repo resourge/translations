@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { type LiteralUnion } from 'type-fest'
+
 import type {
 	BaseTranslationsKeys,
 	BaseTranslationsType,
@@ -164,7 +166,7 @@ export class SetupTranslationsInstance<
 		}
 	}
 
-	public changeLanguage = async (lang: Langs | string) => {
+	public changeLanguage = async (lang: LiteralUnion<Langs, string>) => {
 		if ( this.config.langs.length && !this.config.langs.includes(lang as any) ) {
 			return await Promise.reject(`Language ${lang}, is not included in the list of languages: ${this.config.langs.join(', ')}`)
 		}
