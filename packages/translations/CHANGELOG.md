@@ -1,3 +1,11 @@
+# [@resourge/translations-v1.10.4](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.3...@resourge/translations-v1.10.4) (2024-06-11)
+
+
+### Bug Fixes
+
+* **setuptranslations:** improve changeLanguage parameter type to have autocomplete ([cd61767](https://github.com/resourge/translations/commit/cd61767da83710940c0adafba4f84769187c7c12))
+* **vite:** change from import to import-sync ([ecfdbb0](https://github.com/resourge/translations/commit/ecfdbb053e1f92cd3b252a824d943a10abadb705))
+
 # [@resourge/translations-v1.10.3](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.2...@resourge/translations-v1.10.3) (2024-04-16)
 
 
