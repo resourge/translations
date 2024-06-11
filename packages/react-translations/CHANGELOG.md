@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.9.3](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.2...@resourge/react-translations-v1.9.3) (2024-06-11)
+
+
+### Bug Fixes
+
+* **vite:** change from import to import-sync ([ecfdbb0](https://github.com/resourge/translations/commit/ecfdbb053e1f92cd3b252a824d943a10abadb705))
+
 # [@resourge/react-translations-v1.9.2](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.1...@resourge/react-translations-v1.9.2) (2024-04-16)
 
 
