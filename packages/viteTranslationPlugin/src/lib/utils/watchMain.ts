@@ -7,6 +7,7 @@ import {
 	createTranslationKeyStructure
 } from '@resourge/translations'
 import fs from 'fs';
+import importSync from 'import-sync';
 import path from 'path';
 import { loadConfig, createMatchPath } from 'tsconfig-paths';
 import type { CompilerOptions } from 'typescript'
@@ -168,7 +169,7 @@ export function watchMain(
 						})
 					}
 
-					const { default: Translations, ...rest } = await import(`file://${newTranslationFile}?date=${new Date()
+					const { default: Translations, ...rest } = await importSync(`file://${newTranslationFile}?date=${new Date()
 					.toISOString()}`);
 					// TODO find config
 
