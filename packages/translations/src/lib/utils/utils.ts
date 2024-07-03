@@ -32,7 +32,7 @@ type TupleToString<T extends any[]> = T extends [infer First, ...infer Rest]
 
 const DefaultUtils = {
 	customMethods: new Map(),
-	addCustomMethods<
+	add<
 		Key extends string,
 		T extends Record<string, string>,
 		Type = TupleToString<UnionToTuple<keyof T>>
@@ -70,7 +70,7 @@ const DefaultUtils = {
 			return value !== null && value !== undefined ? value : '';
 		})
 	},
-	getCustomMethods(name: string, value: any) {
+	get(name: string, value: any) {
 		const method = DefaultUtils.customMethods.get(name);
 		if ( method ) {
 			return method(value)
@@ -80,8 +80,8 @@ const DefaultUtils = {
 		return () => defaultKey
 	}
 } 
-export const Utils = DefaultUtils as {
-	addCustomMethods: <
+export const CustomMethods = DefaultUtils as {
+	add: <
 		Key extends string, 
 		T extends Record<string, string>, 
 		Type = TupleToString<UnionToTuple<keyof T>>
@@ -96,7 +96,7 @@ export const Utils = DefaultUtils as {
 		Type,
 		keyof T1[keyof T1] extends string ? keyof T1[keyof T1] : Langs
 	>
-	getCustomMethods: (name: string, value: any) => any
+	get: (name: string, value: any) => any
 	replaceParams: (langValue: string, params: any) => string
 }
 
@@ -106,7 +106,7 @@ export const Utils = DefaultUtils as {
 export const createKeyFunction = (langValue: string) => {
 	if ( /\{\{.*\}\}/g.test(langValue) ) {
 		return function (params: any) {
-			return Utils.replaceParams(langValue, params)
+			return CustomMethods.replaceParams(langValue, params)
 		}
 	}
 	return langValue;

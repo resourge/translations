@@ -6,6 +6,7 @@ import {
 	type TranslationsType,
 	createTranslationKeyStructure
 } from '@resourge/translations'
+import finder from 'find-package-json';
 import fs from 'fs';
 import importSync from 'import-sync';
 import path from 'path';
@@ -16,6 +17,8 @@ import { fileURLToPath } from 'url';
 
 import { type SetupTranslationsConfigTranslations, type SetupTranslationsConfig, type SetupTranslationsConfigLoad } from '@resourge/translations/src/lib/types/configTypes';
 import { type ConvertTransIntoKeyStructure } from '@resourge/translations/src/lib/types/types';
+
+const f = finder(path.dirname(fileURLToPath(import.meta.url)));
 
 export type LoadConfig = {
 	/**
@@ -40,7 +43,7 @@ const createEntry = <Langs extends string, const T extends TranslationsType<Lang
 			if ( /\{\{.*\}\}/g.test(langValue) ) {
 				(obj as any)[key] = {
 					type: 'function',
-					test: `(params) => Utils.replaceParams('${langValue}', params)`
+					test: `(params) => CustomMethods.replaceParams('${langValue}', params)`
 				}
 			}
 			else {
@@ -51,7 +54,7 @@ const createEntry = <Langs extends string, const T extends TranslationsType<Lang
 			const { _custom, ...rest } = value;
 			(obj as any)[key] = {
 				type: 'function',
-				test: `Utils.getCustomMethods('${_custom.name as string}', ${stringify(createEntry(language, rest))})`
+				test: `CustomMethods.get('${_custom.name as string}', ${stringify(createEntry(language, rest))})`
 			}
 		}
 		else if ( value ) {
@@ -90,7 +93,7 @@ function stringify(obj: Record<string, any>) {
 			objString += value.type === 'function' ? (value.test as string) : `${stringify(value)}`;
 		} 
 		else if (typeof value === 'string') {
-			objString += `"${value}"`;
+			objString += JSON.stringify(value);
 		} 
 		else if (typeof value === 'number') {
 			objString += `${value}`;
@@ -179,6 +182,10 @@ export function watchMain(
 						const languages = createLanguages(config.langs, config.translations);
 						config.keyStructure = createTranslationKeyStructure(config.langs, config.translations);
 
+						const packageJson = f.next().value;
+
+						const packagePath = packageJson?.name ?? '';
+
 						await Promise.all(
 							Array.from(languages.entries())
 							.map(async ([language, translations]) => {
@@ -190,10 +197,8 @@ export function watchMain(
 								else { */
 								const filePath = path.join(localesFilePath, `${language}.ts`);
 
-								const packagePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), './index.js').replaceAll('\\', '/')
-
 								await fs.promises.writeFile(filePath, [
-									`import { Utils } from '${packagePath}';`,
+									`import { CustomMethods } from '${packagePath as string}';`,
 									`export default ${stringify(translations)}`
 								].join(''));
 								// }

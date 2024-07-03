@@ -1,6 +1,6 @@
-import { Utils } from '../utils/utils'
+import { CustomMethods } from '../utils/utils'
 
-export const plural = Utils.addCustomMethods<
+export const plural = CustomMethods.add<
 	'count',
 	{
 		one: string

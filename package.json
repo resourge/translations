@@ -34,6 +34,7 @@
 		"@testing-library/jest-dom": "^6.4.2",
 		"@testing-library/react": "^15.0.2",
 		"@testing-library/user-event": "^14.5.2",
+		"@types/find-package-json": "^1.2.6",
 		"@types/node": "^20.12.7",
 		"@vitejs/plugin-react-swc": "^3.6.0",
 		"@vitejs/plugin-vue": "^5.0.4",
@@ -77,6 +78,7 @@
 		}
 	},
 	"dependencies": {
+		"find-package-json": "^1.2.0",
 		"import-sync": "^2.2.2"
 	}
 }

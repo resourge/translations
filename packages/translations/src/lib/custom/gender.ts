@@ -1,6 +1,6 @@
-import { Utils } from '../utils/utils'
+import { CustomMethods } from '../utils/utils'
 
-export const gender = Utils.addCustomMethods<
+export const gender = CustomMethods.add<
 	'gender',
 	{
 		female: string

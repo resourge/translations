@@ -5,7 +5,7 @@ import {
 	htmlLanguage,
 	plural,
 	type BaseTranslationsType,
-	Utils
+	CustomMethods
 } from '@resourge/translations'
 
 import { type SetupReactTranslationsReturn, SetupReactTranslations } from './SetupReactTranslations'
@@ -21,7 +21,7 @@ export {
 	htmlLanguage,
 	plural,
 	SetupReactTranslations,
-	Utils,
+	CustomMethods,
 
 	type BaseTranslationsType,
 

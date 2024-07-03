@@ -16,6 +16,10 @@
 		"react": ">=17.0.0",
 		"react-dom": ">=17.0.0"
 	},
+	"dependencies": {
+		"find-package-json": "^1.2.0",
+		"import-sync": "^2.2.2"
+	},
 	"peerDependencies": {
 		"typescript": ">= 5.3.3"
 	}

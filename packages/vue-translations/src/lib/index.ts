@@ -5,7 +5,7 @@ import {
 	type BaseTranslationsType,
 	htmlLanguage,
 	plural,
-	Utils
+	CustomMethods
 } from '@resourge/translations'
 
 import { type SetupVueTranslationReturn, SetupVueTranslations } from './SetupVueTranslations'
@@ -19,7 +19,7 @@ export {
 	languageLocalStorage,
 	plural,
 	SetupVueTranslations,
-	Utils,
+	CustomMethods,
 
 	type BaseTranslationsType,
 

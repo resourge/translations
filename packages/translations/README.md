@@ -359,9 +359,9 @@ Let's say you want to create a custom translation type for greetings based on th
 Define the custom translation type timeOfDayGreetings:
 
 ```typescript
-import { Utils } from '@resourge/translations';
+import { CustomMethods } from '@resourge/translations';
 
-export const timeOfDayGreetings = Utils.addCustomMethods<
+export const timeOfDayGreetings = CustomMethods.add<
   'timeOfDay',
   {
     morning: string,

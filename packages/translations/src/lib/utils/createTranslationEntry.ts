@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { type TranslationsKeys } from '../types';
 
-import { Utils, createKeyFunction } from './utils';
+import { CustomMethods, createKeyFunction } from './utils';
 
 const createCustomFunction = <T extends { _custom: { key: string } }>(value: T) => {
-	return Utils.getCustomMethods(value._custom.key, value)
+	return CustomMethods.get(value._custom.key, value)
 }
 
 export const createTranslationEntry = <Langs extends string, const T extends Record<any, any>>(

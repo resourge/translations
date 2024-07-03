@@ -9,7 +9,7 @@ export * from './types'
 export * from './custom'
 export * from './plugins'
 export { createTranslationKeyStructure } from './utils/createTranslationKeyStructure'
-export { Utils } from './utils/utils'
+export { CustomMethods } from './utils/utils'
 
 export {
 	type EventsType, type EventType, 
