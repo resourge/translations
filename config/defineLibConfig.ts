@@ -52,55 +52,73 @@ const deepMerge = deepmerge();
 
 export const defineLibConfig = (
 	config: UserConfigExport,
-	afterBuild?: (() => void | Promise<void>)
-): UserConfigExport => defineConfig((originalConfig) => deepMerge(
-	typeof config === 'function' ? config(originalConfig) : config,
-	{
-		test: {
-			globals: true,
-			environment: 'jsdom',
-			setupFiles: './src/setupTests.ts'
-		},
-		build: {
-			minify: false,
-			lib: {
-				entry: entryLib,
-				name: 'index',
-				fileName: 'index',
-				formats: ['cjs', 'es', 'umd']
+	afterBuild?: ((fileName: string) => void | Promise<void>)
+): UserConfigExport => {
+	const generatedFiles = new Set<string>();
+	return defineConfig((originalConfig) => deepMerge(
+		typeof config === 'function' ? config(originalConfig) : config,
+		{
+			test: {
+				globals: true,
+				environment: 'jsdom',
+				setupFiles: './src/setupTests.ts'
 			},
-			outDir: './dist',
-			rollupOptions: {
-				output: {
-					dir: './dist'
+			build: {
+				minify: false,
+				lib: {
+					entry: entryLib,
+					name: 'index',
+					fileName: 'index',
+					formats: ['cjs', 'es', 'umd']
 				},
-				external: [
-					'tsconfig-paths', 'typescript', 'path', 
-					'fs', 'vite', 'react', 'url',
-					'react/jsx-runtime',
-					'vue'
-				]
-			}
-		},
-		resolve: {
-			preserveSymlinks: true,
-			alias: originalConfig.mode === 'development' ? packages.reduce((obj, { name, path }) => {
-				obj[name] = resolve(path, `../${entryLib}`)
-				return obj;
-			}, {}) : {}
-		},
-		plugins: [
-			viteTsconfigPaths(),
-			dts({
-				insertTypesEntry: true,
-				rollupTypes: true,
-				bundledPackages: packagesNames,
-				compilerOptions: {
-					preserveSymlinks: true,
-					paths: {}
-				},
-				afterBuild
-			})
-		]
-	}
-));
+				outDir: './dist',
+				rollupOptions: {
+					output: {
+						dir: './dist'
+					},
+					external: [
+						'tsconfig-paths', 'typescript', 'path', 
+						'fs', 'vite', 'react', 'url',
+						'react/jsx-runtime',
+						'vue'
+					]
+				}
+			},
+			resolve: {
+				preserveSymlinks: true,
+				alias: originalConfig.mode === 'development' ? packages.reduce((obj, { name, path }) => {
+					obj[name] = resolve(path, `../${entryLib}`)
+					return obj;
+				}, {}) : {}
+			},
+			plugins: [
+				viteTsconfigPaths(),
+				dts({
+					insertTypesEntry: true,
+					rollupTypes: true,
+					bundledPackages: packagesNames,
+					compilerOptions: {
+						preserveSymlinks: true,
+						paths: {}
+					}
+				}),
+				afterBuild ? {
+					name: 'test',
+					apply: 'build',
+					generateBundle(_, bundle, __) {
+						Object.keys(bundle)
+						.forEach((key) => {
+							generatedFiles.add(key)
+						})
+					},
+					closeBundle() {
+						generatedFiles
+						.forEach((key) => {
+							afterBuild(key)
+						})
+					}
+				} : undefined
+			]
+		}
+	))
+};
