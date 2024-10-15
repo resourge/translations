@@ -105,7 +105,7 @@ export const defineLibConfig = (
 				afterBuild ? {
 					name: 'test',
 					apply: 'build',
-					generateBundle(_, bundle, __) {
+					generateBundle(_options, bundle, _isWriteFile) {
 						Object.keys(bundle)
 						.forEach((key) => {
 							generatedFiles.add(key)
