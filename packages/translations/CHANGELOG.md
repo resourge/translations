@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.6](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.5...@resourge/translations-v1.10.6) (2024-10-15)
+
+
+### Bug Fixes
+
+* **package:** fix imports on package.json ([b57acc0](https://github.com/resourge/translations/commit/b57acc01f3ef5780007c0432550616754982ca4b))
+
 # [@resourge/translations-v1.10.5](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.4...@resourge/translations-v1.10.5) (2024-10-15)
 
 
