@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.5](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.4...@resourge/translations-v1.10.5) (2024-10-15)
+
+
+### Bug Fixes
+
+* **vite:** fix vite sometimes not stringifying the string correctly ([afb387f](https://github.com/resourge/translations/commit/afb387fa0f01e886be9a2fa693cdd257d7adf054))
+
 # [@resourge/translations-v1.10.4](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.3...@resourge/translations-v1.10.4) (2024-06-11)
 
 
