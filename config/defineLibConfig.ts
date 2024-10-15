@@ -80,7 +80,7 @@ export const defineLibConfig = (
 						'tsconfig-paths', 'typescript', 'path', 
 						'fs', 'vite', 'react', 'url',
 						'react/jsx-runtime',
-						'vue'
+						'vue', 'find-package-json', 'import-sync'
 					]
 				}
 			},

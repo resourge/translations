@@ -53,7 +53,9 @@
 		"semantic-release": "semantic-release -e semantic-release-monorepo"
 	},
 	"dependencies": {
+		"find-package-json": "^1.2.0",
 		"html-parse-stringify": "^3.0.1",
+		"import-sync": "^2.2.2",
 		"type-fest": ">= 4.15.0"
 	},
 	"peerDependencies": {
