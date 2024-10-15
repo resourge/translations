@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.9.4](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.3...@resourge/react-translations-v1.9.4) (2024-10-15)
+
+
+### Bug Fixes
+
+* **vite:** fix vite sometimes not stringifying the string correctly ([afb387f](https://github.com/resourge/translations/commit/afb387fa0f01e886be9a2fa693cdd257d7adf054))
+
 # [@resourge/react-translations-v1.9.3](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.2...@resourge/react-translations-v1.9.3) (2024-06-11)
 
 
