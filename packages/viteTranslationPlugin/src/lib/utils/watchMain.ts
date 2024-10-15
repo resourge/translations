@@ -198,7 +198,7 @@ export function watchMain(
 								const filePath = path.join(localesFilePath, `${language}.ts`);
 
 								await fs.promises.writeFile(filePath, [
-									`import { CustomMethods } from '${packagePath as string}';`,
+									`import { CustomMethods } from '${packagePath}';`,
 									`export default ${stringify(translations)}`
 								].join(''));
 								// }
