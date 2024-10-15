@@ -1,3 +1,12 @@
+# [@resourge/vue-translations-v1.2.4](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.3...@resourge/vue-translations-v1.2.4) (2024-10-15)
+
+
+### Bug Fixes
+
+* **package-lock:** fix lock ([3be41e4](https://github.com/resourge/translations/commit/3be41e4e75714234d3afa36660a0de246211158e))
+* **vite:** change from import to import-sync ([ecfdbb0](https://github.com/resourge/translations/commit/ecfdbb053e1f92cd3b252a824d943a10abadb705))
+* **vite:** fix vite sometimes not stringifying the string correctly ([afb387f](https://github.com/resourge/translations/commit/afb387fa0f01e886be9a2fa693cdd257d7adf054))
+
 # [@resourge/vue-translations-v1.2.3](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.2...@resourge/vue-translations-v1.2.3) (2024-04-16)
 
 
