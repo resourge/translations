@@ -233,14 +233,17 @@ export class MapTranslations<
 					lastTranslation: Date.now()
 				}
 
-				await Promise.all(
-					this.onTranslationSets.map((onTranslationSet) => Promise.resolve(onTranslationSet(language, _translations)))
-				)
-
-				const flattenTranslations = flattenObject(translations);
+				if ( this.onTranslationSets.length ) {
+					await Promise.all(
+						this.onTranslationSets
+						.map((onTranslationSet) => Promise.resolve(
+							onTranslationSet(language, _translations)
+						))
+					);
+				}
 
 				return createTranslationsProxy(
-					flattenTranslations,
+					flattenObject(translations),
 					language,
 					_translations.lastTranslation
 				)
@@ -250,9 +253,11 @@ export class MapTranslations<
 
 			config.langs.forEach((lang) => {
 				let trans: TranslationObj<Langs, Trans> | undefined;
-				this.onTranslationGets.forEach((onTranslationGet) => {
+
+				this.onTranslationGets
+				.forEach((onTranslationGet) => {
 					trans = onTranslationGet(lang, trans?.translations);
-				})
+				});
 
 				if ( trans ) {
 					const translations = createTranslationsProxy(
@@ -263,7 +268,7 @@ export class MapTranslations<
 
 					this.set(
 						lang,
-						translations as any,
+						translations,
 						trans.lastTranslation
 					)
 				}

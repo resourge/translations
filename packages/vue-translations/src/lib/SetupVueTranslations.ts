@@ -69,7 +69,8 @@ export function SetupVueTranslations<
 					SetupVueTranslationInstance<Langs, Trans>,
 					'languages' |
 					'language' |
-					'T'
+					'T' | 
+					't'
 				>
 			>(TranslationInstance.TranslationsSymbol);
 
@@ -80,7 +81,8 @@ export function SetupVueTranslations<
 			const { 
 				languages,
 				language,
-				T
+				T,
+				t
 			} = context
 
 			return Object.setPrototypeOf(
@@ -88,7 +90,8 @@ export function SetupVueTranslations<
 					...TranslationInstance,
 					languages: wrapProxy(languages),
 					T: wrapProxy(T),
-					language
+					language,
+					t
 				},
 				SetupTranslationsInstance.prototype
 			);

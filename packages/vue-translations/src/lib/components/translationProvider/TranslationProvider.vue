@@ -17,7 +17,19 @@ await props.TranslationInstance.promise;
 const state = reactive({
 	languages: props.TranslationInstance.languages,
 	language: props.TranslationInstance.language,
-	T: props.TranslationInstance.T
+	T: props.TranslationInstance.T,
+	t: (
+		key: TransKeys<Langs, Trans>,
+		values?: Record<string, any>
+	) => {
+		const keyValue = state.T[key as string];
+
+		const value = values && typeof keyValue === 'function' 
+			? ((keyValue as (params: any) => string)(values) as any)
+			: keyValue
+
+		return value || key
+	}
 })
 
 let missingRequestKeysRemove = () => {}

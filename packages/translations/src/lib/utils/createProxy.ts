@@ -12,6 +12,9 @@ export const createProxy = <T extends BaseTranslationsType>(
 ): BaseTranslationsKeys<T> => {
 	return new Proxy<any>({}, {
 		get(_, _key: string) {
+			if ( _key.includes('.') ) {
+				return translations[_key] ?? _key;
+			}
 			const key = `${baseKey ? `${baseKey}.` : ''}${_key}`;
 			const structureValue = structure[_key];
 			const translation = translations[key];
