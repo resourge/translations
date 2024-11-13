@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.7](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.6...@resourge/translations-v1.10.7) (2024-11-13)
+
+
+### Bug Fixes
+
+* **vue translations:** fix vue translations t not woorking as intended ([79b901c](https://github.com/resourge/translations/commit/79b901c58501ff0c25204960bc22c997bb039609))
+
 # [@resourge/translations-v1.10.6](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.5...@resourge/translations-v1.10.6) (2024-10-15)
 
 
