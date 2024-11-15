@@ -13,7 +13,6 @@ import { type SetupReactTranslationsReturn, SetupReactTranslations } from './Set
 export * from './components'
 export * from './contexts'
 export * from './types'
-
 export { 
 	gender,
 	languageLocalStorage,

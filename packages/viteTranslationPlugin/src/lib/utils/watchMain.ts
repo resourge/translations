@@ -182,6 +182,8 @@ export function watchMain(
 						close();
 
 						resolve(undefined);
+
+						return;
 					}
 					
 					const { config } = _translation;
