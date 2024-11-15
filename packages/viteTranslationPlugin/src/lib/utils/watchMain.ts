@@ -109,6 +109,12 @@ function stringify(obj: Record<string, any>) {
 
 export const tsConfig = loadConfig();
 
+export type WatchMainReturnType = SetupTranslationsConfig<string> & 
+SetupTranslationsConfigTranslations<string, TranslationsType<string>> & 
+SetupTranslationsConfigLoad<BaseTranslationsType> & {
+	keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
+}
+
 export function watchMain(
 	fileNames: string[],
 	_loadConfig: LoadConfig,
@@ -116,13 +122,7 @@ export function watchMain(
 	localesFilePath: string,
 	options: CompilerOptions
 ) {
-	return new Promise<
-		SetupTranslationsConfig<string> & 
-		SetupTranslationsConfigTranslations<string, TranslationsType<string>> & 
-		SetupTranslationsConfigLoad<BaseTranslationsType> & {
-			keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
-		}
-	>((resolve, reject) => {
+	return new Promise<WatchMainReturnType | undefined>((resolve, reject) => {
 		const { outDir } = options;
 		if ( tsConfig.resultType === 'failed' ) {
 			reject(new Error());
@@ -176,7 +176,15 @@ export function watchMain(
 					.toISOString()}`);
 					// TODO find config
 
-					const { config } = (rest.TRANSLATION || rest.TranslationInstance);
+					const _translation = (rest.TRANSLATION || rest.TranslationInstance);
+
+					if ( !_translation ) {
+						close();
+
+						resolve(undefined);
+					}
+					
+					const { config } = _translation;
 
 					if ( config.translations ) {
 						const languages = createLanguages(config.langs, config.translations);

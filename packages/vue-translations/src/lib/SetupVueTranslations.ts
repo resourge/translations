@@ -25,7 +25,6 @@ export type SetupVueTranslationReturn<Instance> = {
 }
 
 let id = 0;
-
 function wrapProxy(state: Record<string, any>) {
 	return new Proxy(state, {
 		get: (_target, key) => {

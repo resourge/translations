@@ -133,7 +133,7 @@ export function viteTranslationPlugin(): PluginOption {
 					}
 				);
 
-				if ( config.translations ) {
+				if ( config?.translations ) {
 					content = addImportLanguages(
 						loadConfig,
 						config,
