@@ -1,3 +1,12 @@
+# [@resourge/vue-translations-v1.2.6](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.5...@resourge/vue-translations-v1.2.6) (2024-11-15)
+
+
+### Bug Fixes
+
+* **type:** fix types on vue ([29a12ba](https://github.com/resourge/translations/commit/29a12ba2f3b4487902b2682064e101fbd579b643))
+* **vite:** fix vitePlugin not working when using translations and load at the same time ([4e3f96c](https://github.com/resourge/translations/commit/4e3f96c95f06b82a0f3e22c77bca20152086ef35))
+* **vue translations:** fix vue translations t not woorking as intended ([79b901c](https://github.com/resourge/translations/commit/79b901c58501ff0c25204960bc22c997bb039609))
+
 # [@resourge/vue-translations-v1.2.5](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.4...@resourge/vue-translations-v1.2.5) (2024-10-15)
 
 
