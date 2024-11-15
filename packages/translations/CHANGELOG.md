@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.9](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.8...@resourge/translations-v1.10.9) (2024-11-15)
+
+
+### Bug Fixes
+
+* **vite:** fix missing return ([db9fd69](https://github.com/resourge/translations/commit/db9fd690f5f70af92d8a529b634c49ec447e12d8))
+
 # [@resourge/translations-v1.10.8](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.7...@resourge/translations-v1.10.8) (2024-11-15)
 
 

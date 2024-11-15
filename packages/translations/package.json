@@ -1,6 +1,6 @@
 {
 	"name": "@resourge/translations",
-	"version": "1.10.8",
+	"version": "1.10.9",
 	"type": "module",
 	"private": false,
 	"publishConfig": {
