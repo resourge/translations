@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.2.7](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.6...@resourge/vue-translations-v1.2.7) (2024-11-15)
+
+
+### Bug Fixes
+
+* **vite:** fix missing return ([db9fd69](https://github.com/resourge/translations/commit/db9fd690f5f70af92d8a529b634c49ec447e12d8))
+
 # [@resourge/vue-translations-v1.2.6](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.5...@resourge/vue-translations-v1.2.6) (2024-11-15)
 
 
