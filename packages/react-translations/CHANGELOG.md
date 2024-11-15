@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.9.7](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.6...@resourge/react-translations-v1.9.7) (2024-11-15)
+
+
+### Bug Fixes
+
+* **vite:** fix missing return ([db9fd69](https://github.com/resourge/translations/commit/db9fd690f5f70af92d8a529b634c49ec447e12d8))
+
 # [@resourge/react-translations-v1.9.6](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.5...@resourge/react-translations-v1.9.6) (2024-11-15)
 
 
