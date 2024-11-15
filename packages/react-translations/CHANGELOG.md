@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.9.6](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.5...@resourge/react-translations-v1.9.6) (2024-11-15)
+
+
+### Bug Fixes
+
+* **vite:** fix vitePlugin not working when using translations and load at the same time ([4e3f96c](https://github.com/resourge/translations/commit/4e3f96c95f06b82a0f3e22c77bca20152086ef35))
+
 # [@resourge/react-translations-v1.9.5](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.4...@resourge/react-translations-v1.9.5) (2024-10-15)
 
 
