@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {  BaseTranslationsType, TranslationsType } from '@resourge/translations';
+import { BaseTranslationsType, TranslationsType } from '@resourge/translations';
 import { onMounted, onUnmounted, provide, reactive, toRefs } from 'vue'
 import { SetupVueTranslationInstance } from '../../SetupVueTranslations.js';
 
@@ -19,7 +19,7 @@ const state = reactive({
 	language: props.TranslationInstance.language,
 	T: props.TranslationInstance.T,
 	t: (
-		key: TransKeys<Langs, Trans>,
+		key: string,
 		values?: Record<string, any>
 	) => {
 		const keyValue = state.T[key as string];
