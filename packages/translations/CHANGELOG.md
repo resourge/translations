@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.8](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.7...@resourge/translations-v1.10.8) (2024-11-15)
+
+
+### Bug Fixes
+
+* **vite:** fix vitePlugin not working when using translations and load at the same time ([4e3f96c](https://github.com/resourge/translations/commit/4e3f96c95f06b82a0f3e22c77bca20152086ef35))
+
 # [@resourge/translations-v1.10.7](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.6...@resourge/translations-v1.10.7) (2024-11-13)
 
 
