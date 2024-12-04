@@ -80,17 +80,29 @@ export function SetupVueTranslations<
 			const { 
 				languages,
 				language,
-				T,
-				t
+				T
 			} = context
+
+			const newT = wrapProxy(T);
 
 			return Object.setPrototypeOf(
 				{
 					...TranslationInstance,
 					languages: wrapProxy(languages),
-					T: wrapProxy(T),
+					T: newT,
 					language,
-					t
+					t: (
+						key: string,
+						values?: Record<string, any>
+					) => {
+						const keyValue = newT[key];
+
+						const value = values && typeof keyValue === 'function' 
+							? ((keyValue as (params: any) => string)(values) as any)
+							: keyValue
+
+						return value || key
+					}
 				},
 				SetupTranslationsInstance.prototype
 			);

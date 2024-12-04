@@ -4,7 +4,7 @@
 	"type": "module",
 	"devDependencies": {
 		"vue": "^3.4.15",
-		"vue-tsc": "^1.8.27"
+		"vue-tsc": "^2.1.10"
 	},
 	"private": false,
 	"publishConfig": {
@@ -51,7 +51,8 @@
 	"dependencies": {
 		"find-package-json": "^1.2.0",
 		"import-sync": "^2.2.2",
-		"type-fest": ">= 4.15.0"
+		"type-fest": ">= 4.15.0",
+		"vite-plugin-dts": "4.3.0"
 	},
 	"peerDependencies": {
 		"typescript": ">= 5.3.3"
