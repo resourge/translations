@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.2.8](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.7...@resourge/vue-translations-v1.2.8) (2024-12-04)
+
+
+### Bug Fixes
+
+* **setupvuetranslations:** fix t not working as intended ([de55019](https://github.com/resourge/translations/commit/de55019da372f32811c97bb999b213e93c7fa8fc))
+
 # [@resourge/vue-translations-v1.2.7](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.6...@resourge/vue-translations-v1.2.7) (2024-11-15)
 
 
