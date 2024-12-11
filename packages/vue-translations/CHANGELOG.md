@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.2.10](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.9...@resourge/vue-translations-v1.2.10) (2024-12-11)
+
+
+### Bug Fixes
+
+* fix setupVueTranslations t not working ([164cf17](https://github.com/resourge/translations/commit/164cf1783ab685d1d070edd5866b7253c84f8970))
+
 # [@resourge/vue-translations-v1.2.9](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.8...@resourge/vue-translations-v1.2.9) (2024-12-11)
 
 
