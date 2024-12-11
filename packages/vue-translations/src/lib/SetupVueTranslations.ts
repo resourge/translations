@@ -85,7 +85,6 @@ export function SetupVueTranslations<
 			} = context
 
 			const newT = wrapProxy(T);
-			const newt = wrapProxy(t);
 
 			return Object.setPrototypeOf(
 				{
@@ -93,7 +92,7 @@ export function SetupVueTranslations<
 					languages: wrapProxy(languages),
 					T: newT,
 					language,
-					t: newt
+					t: (t as unknown as { value: typeof t }).value
 				},
 				SetupTranslationsInstance.prototype
 			);
