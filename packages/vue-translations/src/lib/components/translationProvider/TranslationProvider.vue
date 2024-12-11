@@ -1,53 +1,53 @@
 <script lang="ts" setup>
-import { BaseTranslationsType, TranslationsType } from '@resourge/translations';
-import { onMounted, onUnmounted, provide, reactive, toRefs } from 'vue'
-import { SetupVueTranslationInstance } from '../../SetupVueTranslations.js';
+import { BaseTranslationsType, TranslationsType } from "@resourge/translations";
+import { onMounted, onUnmounted, provide, reactive, toRefs } from "vue";
+import { SetupVueTranslationInstance } from "../../SetupVueTranslations.js";
 
 export type TranslationProviderProps = {
-    TranslationInstance: SetupVueTranslationInstance<
-		any, 
-		any
-	> | any
-}
+  TranslationInstance: SetupVueTranslationInstance<any, any> | any;
+};
 
-const props = defineProps<TranslationProviderProps>()
+const props = defineProps<TranslationProviderProps>();
 
 await props.TranslationInstance.promise;
 
 const state = reactive({
-	languages: props.TranslationInstance.languages,
-	language: props.TranslationInstance.language,
-	T: props.TranslationInstance.T,
-})
+  languages: props.TranslationInstance.languages,
+  language: props.TranslationInstance.language,
+  T: props.TranslationInstance.T,
+  t: props.TranslationInstance.t,
+});
 
-let missingRequestKeysRemove = () => {}
+let missingRequestKeysRemove = () => {};
 
-let languageChangeRemove = () => {}
+let languageChangeRemove = () => {};
 
 const updateState = () => {
-	state.languages = props.TranslationInstance.languages;
-	state.language = props.TranslationInstance.language;
-	state.T = props.TranslationInstance.T;
-}
+  state.languages = props.TranslationInstance.languages;
+  state.language = props.TranslationInstance.language;
+  state.T = props.TranslationInstance.T;
+  state.t = props.TranslationInstance.t;
+};
 
 onMounted(() => {
-	missingRequestKeysRemove = props.TranslationInstance.addEventListener('missingRequestKeys', updateState)
-	languageChangeRemove = props.TranslationInstance.addEventListener('languageChange', updateState)
-})
+  missingRequestKeysRemove = props.TranslationInstance.addEventListener(
+    "missingRequestKeys",
+    updateState
+  );
+  languageChangeRemove = props.TranslationInstance.addEventListener(
+    "languageChange",
+    updateState
+  );
+});
 
 onUnmounted(() => {
-	missingRequestKeysRemove()
-	languageChangeRemove()
-})
+  missingRequestKeysRemove();
+  languageChangeRemove();
+});
 
-provide(
-	props.TranslationInstance.TranslationsSymbol, 
-	toRefs(
-		state
-	)
-);
+provide(props.TranslationInstance.TranslationsSymbol, toRefs(state));
 </script>
 
 <template>
-	<slot />
+  <slot />
 </template>
