@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.2.11](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.10...@resourge/vue-translations-v1.2.11) (2025-02-19)
+
+
+### Bug Fixes
+
+* **translationprovider:** fix type ([f194674](https://github.com/resourge/translations/commit/f194674bc2687518d1422ee7d36851e686a5d1fc))
+
 # [@resourge/vue-translations-v1.2.10](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.9...@resourge/vue-translations-v1.2.10) (2024-12-11)
 
 
