@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.10.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.10.0...@resourge/react-translations-v1.10.1) (2025-02-19)
+
+
+### Bug Fixes
+
+* **translationprovider:** fix type ([f194674](https://github.com/resourge/translations/commit/f194674bc2687518d1422ee7d36851e686a5d1fc))
+
 # [@resourge/react-translations-v1.10.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.7...@resourge/react-translations-v1.10.0) (2025-02-19)
 
 
