@@ -2,18 +2,19 @@
 import { createContext, useContext } from 'react'
 
 import {
+	SetupTranslations,
 	type BaseTranslationsType,
-	type TranslationsType,
 	type SetupTranslationsConfig,
-	type SetupTranslationsConfigTranslations, 
-	type SetupTranslationsConfigLoad, 
-	SetupTranslations
+	type SetupTranslationsConfigLoad,
+	type SetupTranslationsConfigTranslations,
+	type TranslationsType
 } from '@resourge/translations'
 
 import { type SetupReactTranslationInstance } from './types/types'
 import { wrapPromise } from './utils/utils'
 
-export type SetupReactTranslationsReturn<Instance> = {
+export type SetupReactTranslationsReturn<Instance, B> = {
+	B: B
 	TranslationInstance: Instance
 	useTranslation: () => Instance
 }
@@ -23,13 +24,13 @@ export function SetupReactTranslations<
 	const Trans extends TranslationsType<Langs>
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigTranslations<Langs, Trans>
-): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>>
+): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>, Trans>
 export function SetupReactTranslations<
 	Langs extends string, 
 	const Trans extends BaseTranslationsType
 >(
 	config: SetupTranslationsConfig<Langs> & SetupTranslationsConfigLoad<Trans>
-): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>>
+): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>, undefined>
 export function SetupReactTranslations<
 	Langs extends string, 
 	const Trans extends TranslationsType<Langs> | BaseTranslationsType
@@ -37,7 +38,8 @@ export function SetupReactTranslations<
 	config: SetupTranslationsConfig<Langs> & (
 		Trans extends TranslationsType<Langs> ? SetupTranslationsConfigTranslations<Langs, Trans> : SetupTranslationsConfigLoad<Trans>
 	)
-): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>> {
+): SetupReactTranslationsReturn<SetupReactTranslationInstance<Langs, Trans>, Trans extends TranslationsType<Langs> ? Trans : undefined> {
+	const B = (config as unknown as SetupTranslationsConfigTranslations<Langs, TranslationsType<Langs>>).translations
 	const TranslationInstance = SetupTranslations<Langs, Trans>(
 		config as any
 	) as unknown as SetupReactTranslationInstance<
@@ -58,6 +60,7 @@ export function SetupReactTranslations<
 			}
 
 			return context.instance;
-		}
+		},
+		B: (process.env.NODE_ENV === 'development' ? B : undefined) as Trans extends TranslationsType<Langs> ? Trans : undefined
 	}
 }
