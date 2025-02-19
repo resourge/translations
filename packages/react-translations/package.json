@@ -7,7 +7,6 @@
 		"@types/react-dom": "^18.0.11",
 		"react": ">=17.0.0",
 		"react-dom": ">=17.0.0",
-		"type-fest": "^4.15.0",
 		"typescript": "^5.4.5"
 	},
 	"private": false,
@@ -56,7 +55,7 @@
 		"find-package-json": "^1.2.0",
 		"html-parse-stringify": "^3.0.1",
 		"import-sync": "^2.2.2",
-		"type-fest": ">= 4.15.0"
+		"type-fest": "4.35.0"
 	},
 	"peerDependencies": {
 		"typescript": ">= 5.3.3"

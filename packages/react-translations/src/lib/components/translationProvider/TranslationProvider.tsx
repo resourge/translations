@@ -1,4 +1,4 @@
-import React, { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 
 import { ComponentsContext, convertComponentsIntoObjectComponents, type ComponentsContextType } from '../../contexts/ComponentsContext';
 import { type SetupReactTranslationInstance } from '../../types/types';
@@ -11,9 +11,9 @@ export type TranslationProviderProps = {
 	>
 } & Partial<ComponentsContextType>
 
-function TranslationProvider({
+const TranslationProvider = ({
 	TranslationInstance, children, components = {}
-}: TranslationProviderProps) {
+}: TranslationProviderProps) => {
 	const _instance = TranslationInstance.wrapPromise.read();
 			
 	const [value, setValue] = useState({

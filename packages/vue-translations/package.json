@@ -51,7 +51,7 @@
 	"dependencies": {
 		"find-package-json": "^1.2.0",
 		"import-sync": "^2.2.2",
-		"type-fest": ">= 4.15.0",
+		"type-fest": "4.35.0",
 		"vite-plugin-dts": "4.3.0"
 	},
 	"peerDependencies": {

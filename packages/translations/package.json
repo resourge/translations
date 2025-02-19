@@ -47,7 +47,7 @@
 	"dependencies": {
 		"find-package-json": "^1.2.0",
 		"import-sync": "^2.2.2",
-		"type-fest": ">= 4.15.0"
+		"type-fest": "4.35.0"
 	},
 	"peerDependencies": {
 		"typescript": ">= 5.3.3"

@@ -44,7 +44,9 @@ const packages = getWorkspaces().map((workspace) =>
 )
 .flat();
 
-const packagesNames = packages.map((pack) => pack.name);
+const packagesNames = packages
+.map((pack) => pack.name)
+.filter(Boolean);
 
 const entryLib = './src/lib/index.ts';
 
