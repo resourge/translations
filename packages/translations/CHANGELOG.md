@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.10.10](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.9...@resourge/translations-v1.10.10) (2025-02-19)
+
+
+### Bug Fixes
+
+* **translationprovider:** fix type ([f194674](https://github.com/resourge/translations/commit/f194674bc2687518d1422ee7d36851e686a5d1fc))
+
 # [@resourge/translations-v1.10.9](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.8...@resourge/translations-v1.10.9) (2024-11-15)
 
 
