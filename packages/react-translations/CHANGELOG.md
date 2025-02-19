@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.10.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.7...@resourge/react-translations-v1.10.0) (2025-02-19)
+
+
+### Features
+
+* **setupreacttranslation:** include full translations as return of setupreacttranslations ([0521fea](https://github.com/resourge/translations/commit/0521fea6974c501c17d7e883b34a0b9019de73b7))
+
 # [@resourge/react-translations-v1.9.7](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.9.6...@resourge/react-translations-v1.9.7) (2024-11-15)
 
 
