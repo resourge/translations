@@ -82,27 +82,19 @@ export const defineLibConfig = (
 						'tsconfig-paths', 'typescript', 'path', 
 						'fs', 'vite', 'react', 'url',
 						'react/jsx-runtime',
-						'vue', 'find-package-json', 'import-sync'
+						'vue', 'find-package-json', 'import-sync',
 					]
 				}
 			},
 			resolve: {
-				preserveSymlinks: true,
-				alias: originalConfig.mode === 'development' ? packages.reduce((obj, { name, path }) => {
-					obj[name] = resolve(path, `../${entryLib}`)
-					return obj;
-				}, {}) : {}
+				preserveSymlinks: false
 			},
 			plugins: [
 				viteTsconfigPaths(),
 				dts({
-					insertTypesEntry: true,
 					rollupTypes: true,
+					insertTypesEntry: true,
 					bundledPackages: packagesNames,
-					compilerOptions: {
-						preserveSymlinks: true,
-						paths: {}
-					}
 				}),
 				afterBuild ? {
 					name: 'test',

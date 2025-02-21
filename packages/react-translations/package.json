@@ -54,7 +54,7 @@
 	"dependencies": {
 		"find-package-json": "^1.2.0",
 		"html-parse-stringify": "^3.0.1",
-		"import-sync": "^2.2.2",
+		"import-sync": "^2.2.3",
 		"type-fest": "4.35.0"
 	},
 	"peerDependencies": {

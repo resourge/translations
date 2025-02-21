@@ -61,6 +61,6 @@ export function SetupReactTranslations<
 
 			return context.instance;
 		},
-		B: (process.env.NODE_ENV === 'development' ? B : undefined) as Trans extends TranslationsType<Langs> ? Trans : undefined
+		B: B as Trans extends TranslationsType<Langs> ? Trans : undefined
 	}
 }
