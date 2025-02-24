@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.10.2](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.10.1...@resourge/react-translations-v1.10.2) (2025-02-24)
+
+
+### Bug Fixes
+
+* **setupreacttranslations:** fix B not working in production ([d93b9b9](https://github.com/resourge/translations/commit/d93b9b90c891804cd40d1d4b4c8fb87230962095))
+
 # [@resourge/react-translations-v1.10.1](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.10.0...@resourge/react-translations-v1.10.1) (2025-02-19)
 
 
