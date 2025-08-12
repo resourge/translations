@@ -9,7 +9,7 @@ import {
 import finder from 'find-package-json';
 import fs from 'fs';
 import importSync from 'import-sync';
-import path from 'path';
+import path, { dirname } from 'path';
 import { loadConfig, createMatchPath } from 'tsconfig-paths';
 import type { CompilerOptions } from 'typescript'
 import ts from 'typescript';
@@ -115,14 +115,17 @@ SetupTranslationsConfigLoad<BaseTranslationsType> & {
 	keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
 }
 
+export type WatchMainResultType = {
+	config: WatchMainReturnType
+	languageFiles: Array<{ filePath: string, language: string }>
+}
+
 export function watchMain(
 	fileNames: string[],
-	_loadConfig: LoadConfig,
 	newTranslationFile: string, 
-	localesFilePath: string,
 	options: CompilerOptions
 ) {
-	return new Promise<WatchMainReturnType | undefined>((resolve, reject) => {
+	return new Promise<WatchMainResultType | undefined>((resolve, reject) => {
 		const { outDir } = options;
 		if ( tsConfig.resultType === 'failed' ) {
 			reject(new Error());
@@ -165,18 +168,15 @@ export function watchMain(
 						fs.writeFileSync(filePath, file.replace(/"(.{1,}\/(.*))(?<!js)"/g, '"$1.js"'))
 					})
 
-					// TEMP
-					if ( !fs.existsSync(localesFilePath) ) {
-						await fs.promises.mkdir(localesFilePath, {
-							recursive: true 
-						})
-					}
+					const localesFilePath = dirname(newTranslationFile);
 
 					const { default: Translations, ...rest } = await importSync(`file://${newTranslationFile}?date=${new Date()
 					.toISOString()}`);
 					// TODO find config
-
-					const _translation = (rest.TRANSLATION || rest.TranslationInstance);
+					
+					const _translation = Object.values(rest).find(
+						(value) => value && typeof value === 'object' && 'config' in value
+					) as { config: WatchMainReturnType } | undefined;
 
 					if ( !_translation ) {
 						close();
@@ -187,7 +187,7 @@ export function watchMain(
 					}
 					
 					const { config } = _translation;
-
+					let languageFiles: WatchMainResultType['languageFiles'] = []
 					if ( config.translations ) {
 						const languages = createLanguages(config.langs, config.translations);
 						config.keyStructure = createTranslationKeyStructure(config.langs, config.translations);
@@ -196,7 +196,7 @@ export function watchMain(
 
 						const packagePath = packageJson?.name ?? '';
 
-						await Promise.all(
+						languageFiles = await Promise.all(
 							Array.from(languages.entries())
 							.map(async ([language, translations]) => {
 								/* if ( loadConfig.isJSON ) {
@@ -212,13 +212,21 @@ export function watchMain(
 									`export default ${stringify(translations)}`
 								].join(''));
 								// }
+
+								return {
+									language,
+									filePath
+								};
 							})
 						);
 					}
 
 					close();
 
-					resolve(config);
+					resolve({
+						config,
+						languageFiles
+					});
 				}
 			},
 			undefined,

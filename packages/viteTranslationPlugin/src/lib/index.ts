@@ -1,21 +1,17 @@
 /* eslint-disable no-useless-escape */
-import {
-	type BaseTranslationsType,
-	type SetupTranslationsConfig,
-	type SetupTranslationsConfigLoad,
-	type SetupTranslationsConfigTranslations,
-	type TranslationsType
-} from '@resourge/translations'
-import { existsSync, mkdirSync, rmSync } from 'fs'
+import { existsSync, mkdirSync, rmSync } from 'fs';
 import path from 'path';
 import { type ConfigLoaderSuccessResult } from 'tsconfig-paths';
-import ts from 'typescript'
+import ts from 'typescript';
 import { type PluginOption } from 'vite';
 
-import { type ConvertTransIntoKeyStructure } from '@resourge/translations/src/lib/types/types';
-
 import { find } from './utils/find';
-import { type LoadConfig, tsConfig, watchMain } from './utils/watchMain';
+import {
+	type LoadConfig,
+	tsConfig,
+	watchMain,
+	type WatchMainResultType
+} from './utils/watchMain';
 
 const {
 	ModuleKind,
@@ -37,13 +33,8 @@ const setupRegex = new RegExp(`(${setupTranslationsName}|${setupReactTranslation
 
 function addImportLanguages(
 	_loadConfig: LoadConfig, 
-	config: SetupTranslationsConfig<string> & 
-	SetupTranslationsConfigTranslations<string, TranslationsType<string>> & 
-	SetupTranslationsConfigLoad<BaseTranslationsType> & {
-		keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
-	}, 
+	result: WatchMainResultType,
 	content: string, 
-	localesFilePath: string,
 	addWatchFile: (id: string) => void
 ) {
 	/* if ( loadConfig.isJSON ) {
@@ -67,10 +58,8 @@ function addImportLanguages(
 	else { */
 	return [
 		'const importLanguages = {',
-		...config.langs
-		.map((language: string) => {
-			const filePath = path.join(localesFilePath, `${language}.ts`)
-
+		...result.languageFiles
+		.map(({ filePath, language }) => {
 			addWatchFile(filePath);
 
 			return `'${language}': () => import('${filePath.replace(/\\/g, '/')}'),`
@@ -88,8 +77,6 @@ export function viteTranslationPlugin(): PluginOption {
 	const projectPath = (tsConfig as ConfigLoaderSuccessResult).configFileAbsolutePath.replace('tsconfig.json', '');
 
 	const cacheOutDir = path.resolve(projectPath, '.cache');
-
-	const localesFilePath = path.resolve(cacheOutDir, 'locales');
 
 	return {
 		name: 'i18nLocalesLoad',
@@ -112,11 +99,9 @@ export function viteTranslationPlugin(): PluginOption {
 
 			if (!id.includes('node_modules') && setupRegex.test(content)) {
 				const newId = id.split('src');
-				const config = await watchMain(
+				const result = await watchMain(
 					[id],
-					loadConfig,
 					path.join(cacheOutDir, 'src', newId[newId.length - 1].replace('.ts', '.js')),
-					localesFilePath,
 					{
 						noEmitOnError: false,
 						noImplicitAny: true,
@@ -133,22 +118,21 @@ export function viteTranslationPlugin(): PluginOption {
 					}
 				);
 
-				if ( config?.translations ) {
+				if ( result?.config.translations ) {
 					content = addImportLanguages(
 						loadConfig,
-						config,
+						result,
 						content,
-						localesFilePath,
 						this.addWatchFile
 					);
 
-					const result = ts.createSourceFile(
+					const sourceFile = ts.createSourceFile(
 						id,
 						content, 
 						ts.ScriptTarget.ES2015
 					);
 
-					const setupTranslation = await find(result, (value) => value && value.expression && setupTranslations.includes(value.expression.escapedText))
+					const setupTranslation = await find(sourceFile, (value) => value && value.expression && setupTranslations.includes(value.expression.escapedText))
 
 					const translationFromSetup = await find(setupTranslation, (value) => value && value.name && value.name.escapedText === 'translations') as ts.Node | null
 	
@@ -157,7 +141,7 @@ export function viteTranslationPlugin(): PluginOption {
 							0, 
 							translationFromSetup.pos
 						) + 
-						`translations: async (language) => (await importLanguages[language]())${loadConfig.isJSON ? '' : '.default'}, keyStructure: ${JSON.stringify(config.keyStructure)}` + 
+						`translations: async (language) => (await importLanguages[language]())${loadConfig.isJSON ? '' : '.default'}, keyStructure: ${JSON.stringify(result.config.keyStructure)}` + 
 						content.substring(translationFromSetup.end);
 					}
 				}
