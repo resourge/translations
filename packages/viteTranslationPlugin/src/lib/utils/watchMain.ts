@@ -18,7 +18,11 @@ import { fileURLToPath } from 'url';
 import { type SetupTranslationsConfigTranslations, type SetupTranslationsConfig, type SetupTranslationsConfigLoad } from '@resourge/translations/src/lib/types/configTypes';
 import { type ConvertTransIntoKeyStructure } from '@resourge/translations/src/lib/types/types';
 
-const f = finder(path.dirname(fileURLToPath(import.meta.url)));
+const packageJson = finder(path.dirname(fileURLToPath(import.meta.url)))
+.next()
+.value;
+
+const packagePath = packageJson?.name ?? '';
 
 export type LoadConfig = {
 	/**
@@ -191,10 +195,6 @@ export function watchMain(
 					if ( config.translations ) {
 						const languages = createLanguages(config.langs, config.translations);
 						config.keyStructure = createTranslationKeyStructure(config.langs, config.translations);
-
-						const packageJson = f.next().value;
-
-						const packagePath = packageJson?.name ?? '';
 
 						languageFiles = await Promise.all(
 							Array.from(languages.entries())

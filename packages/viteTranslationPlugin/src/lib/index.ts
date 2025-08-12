@@ -32,7 +32,6 @@ const setupTranslations = [
 const setupRegex = new RegExp(`(${setupTranslationsName}|${setupReactTranslationsName}|${setupVueTranslationsName})\\(([\\s\\S]*?)\\)`, 'g')
 
 function addImportLanguages(
-	_loadConfig: LoadConfig, 
 	result: WatchMainResultType,
 	content: string, 
 	addWatchFile: (id: string) => void
@@ -120,7 +119,6 @@ export function viteTranslationPlugin(): PluginOption {
 
 				if ( result?.config.translations ) {
 					content = addImportLanguages(
-						loadConfig,
 						result,
 						content,
 						this.addWatchFile
