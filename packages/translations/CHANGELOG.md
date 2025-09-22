@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.11.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.11.0...@resourge/translations-v1.11.1) (2025-09-22)
+
+
+### Bug Fixes
+
+* **setuptranslations:** fix changeLanguage infinite cycle ([df81871](https://github.com/resourge/translations/commit/df81871d6946c8219f713c4cabde7edb09c32f46))
+
 # [@resourge/translations-v1.11.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.10...@resourge/translations-v1.11.0) (2025-09-22)
 
 
