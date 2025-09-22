@@ -89,7 +89,7 @@ export class SetupTranslationsInstance<
 
 		// #region Execute plugins config
 		configs.forEach((config) => {
-			const c = config(_config, (language) => this.changeLanguage(language));
+			const c = config(_config, (language) => this.baseChangeLanguage(language));
 			if ( c instanceof Promise ) {
 				promises.push(
 					c.then((_c) => {
@@ -175,7 +175,7 @@ export class SetupTranslationsInstance<
 		}
 	}
 
-	public changeLanguage = async (lang: LiteralUnion<Langs, string>) => {
+	public baseChangeLanguage = async (lang: LiteralUnion<Langs, string>) => {
 		if ( this.config.langs.length && !this.config.langs.includes(lang as any) ) {
 			return await Promise.reject(`Language ${lang}, is not included in the list of languages: ${this.config.langs.join(', ')}`)
 		}
@@ -187,11 +187,15 @@ export class SetupTranslationsInstance<
 			await langTranslations()
 		}
 
+		this.emit('languageChange', this.config.language);
+	}
+
+	public changeLanguage = async (lang: LiteralUnion<Langs, string>) => {
+		await this.baseChangeLanguage(lang);
+
 		this.onLanguageChanges.forEach((onLanguageChange) => {
 			onLanguageChange(lang)
-		})
-
-		this.emit('languageChange', this.config.language);
+		});
 	}
 }
 
