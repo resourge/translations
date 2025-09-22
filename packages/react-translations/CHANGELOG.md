@@ -1,3 +1,10 @@
+# [@resourge/react-translations-v1.11.0](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.10.2...@resourge/react-translations-v1.11.0) (2025-09-22)
+
+
+### Features
+
+* **translation plugins:** add onLanguageChange to config to the ability to update on plugin ([7f3dae8](https://github.com/resourge/translations/commit/7f3dae8d5ed1eb278474e1ea8556a2ccb2f7f811))
+
 # [@resourge/react-translations-v1.10.2](https://github.com/resourge/translations/compare/@resourge/react-translations-v1.10.1...@resourge/react-translations-v1.10.2) (2025-02-24)
 
 
