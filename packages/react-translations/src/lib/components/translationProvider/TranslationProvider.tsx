@@ -40,6 +40,7 @@ const TranslationProvider = ({
 		return () => {
 			missingRequestKeysRemove();
 			languageChangeRemove();
+			TranslationInstance.onDestroy();
 		}
 	}, [TranslationInstance])
 

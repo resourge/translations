@@ -132,11 +132,13 @@ export function separatePlugins<
 	
 	const onLanguageChanges: Array<NonNullable<TranslationPlugin['onLanguageChange']>> = [];
 	const configs: Array<OnTranslationConfig<Langs, Trans>> = [];
+	const onDestroys: Array<() => void> = [];
 	const onTranslationGets: Array<OnTranslationGet<Langs, Trans>> = [];
 	const onTranslationSets: Array<OnTranslationSet<Langs, Trans>> = [];
 
 	plugins.forEach(({
-		config, onLanguageChange, onTranslationGet, onTranslationSet 
+		config, onLanguageChange, onTranslationGet, onTranslationSet,
+		onDestroy
 	}) => {
 		if ( config ) {
 			configs.push(config as unknown as OnTranslationConfig<Langs, Trans>);
@@ -150,11 +152,15 @@ export function separatePlugins<
 		if ( onTranslationSet ) {
 			onTranslationSets.push(onTranslationSet as OnTranslationSet<Langs, Trans>);
 		}
+		if ( onDestroy ) {
+			onDestroys.push(onDestroy);
+		}
 	})
 
 	return {
 		onLanguageChanges,
 		configs,
+		onDestroys,
 		onTranslationGets,
 		onTranslationSets
 	}

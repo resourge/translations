@@ -13,7 +13,7 @@ export type TranslationObj<
 export type OnTranslationConfig<
 	Langs extends string, 
 	Trans extends TranslationsType<Langs> | BaseTranslationsType
-> = (config: SetupConfig<Langs, Trans>) => SetupConfig<Langs, Trans>
+> = (config: SetupConfig<Langs, Trans>, changeLanguage: (language: string) => Promise<any>) => SetupConfig<Langs, Trans>
 
 export type OnTranslationGet<
 	Langs extends string, 
@@ -33,6 +33,7 @@ export type OnTranslationSet<
 
 export type TranslationPlugin = {
 	config?: OnTranslationConfig<string, TranslationsType<string> | BaseTranslationsType>
+	onDestroy?: () => void
 	onLanguageChange?: (language: string) => void
 	onTranslationGet?: OnTranslationGet<string, TranslationsType<string> | BaseTranslationsType>
 	onTranslationSet?: OnTranslationSet<string, TranslationsType<string> | BaseTranslationsType>

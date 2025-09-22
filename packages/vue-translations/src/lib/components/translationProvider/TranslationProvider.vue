@@ -43,6 +43,7 @@ onMounted(() => {
 onUnmounted(() => {
   missingRequestKeysRemove();
   languageChangeRemove();
+  props.TranslationInstance.onDestroy();
 });
 
 provide(props.TranslationInstance.TranslationsSymbol, toRefs(state));

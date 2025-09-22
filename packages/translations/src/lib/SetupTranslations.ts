@@ -41,6 +41,7 @@ export class SetupTranslationsInstance<
 
 	private readonly translationsMap: MapTranslations<Langs, Trans>;
 	private readonly onLanguageChanges: Array<NonNullable<TranslationPlugin['onLanguageChange']>> = [];
+	private readonly onDestroys: Array<() => void> = [];
 	
 	public get language() {
 		return this.config.language
@@ -72,10 +73,11 @@ export class SetupTranslationsInstance<
 		)
 	) {
 		const {
-			configs, onLanguageChanges, onTranslationGets, onTranslationSets
+			configs, onLanguageChanges, onTranslationGets, onTranslationSets, onDestroys
 		} = separatePlugins<Langs, Trans>(config);
 
 		this.onLanguageChanges = onLanguageChanges;
+		this.onDestroys = onDestroys;
 
 		let _config: SetupConfig<Langs, Trans> = {
 			...config as any,
@@ -87,7 +89,7 @@ export class SetupTranslationsInstance<
 
 		// #region Execute plugins config
 		configs.forEach((config) => {
-			const c = config(_config);
+			const c = config(_config, (language) => this.changeLanguage(language));
 			if ( c instanceof Promise ) {
 				promises.push(
 					c.then((_c) => {
@@ -142,6 +144,13 @@ export class SetupTranslationsInstance<
 
 	public get t(): TFunction<Langs, Trans> {
 		return this.translationsMap.t;
+	}
+
+	public onDestroy() {
+		this.onDestroys
+		.forEach((onDestroy) => {
+			onDestroy();
+		})
 	}
 
 	private emit<K extends Exclude<EventType, 'all'>>(event: K, ...value: Parameters<EventsType<this>[K][number]>) {
