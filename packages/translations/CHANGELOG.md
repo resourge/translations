@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.11.0](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.10...@resourge/translations-v1.11.0) (2025-09-22)
+
+
+### Features
+
+* **translation plugins:** add onLanguageChange to config to the ability to update on plugin ([7f3dae8](https://github.com/resourge/translations/commit/7f3dae8d5ed1eb278474e1ea8556a2ccb2f7f811))
+
 # [@resourge/translations-v1.10.10](https://github.com/resourge/translations/compare/@resourge/translations-v1.10.9...@resourge/translations-v1.10.10) (2025-02-19)
 
 
