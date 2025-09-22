@@ -1,3 +1,10 @@
+# [@resourge/vue-translations-v1.3.0](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.11...@resourge/vue-translations-v1.3.0) (2025-09-22)
+
+
+### Features
+
+* **translation plugins:** add onLanguageChange to config to the ability to update on plugin ([7f3dae8](https://github.com/resourge/translations/commit/7f3dae8d5ed1eb278474e1ea8556a2ccb2f7f811))
+
 # [@resourge/vue-translations-v1.2.11](https://github.com/resourge/translations/compare/@resourge/vue-translations-v1.2.10...@resourge/vue-translations-v1.2.11) (2025-02-19)
 
 
