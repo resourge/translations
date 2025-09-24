@@ -179,13 +179,14 @@ export class SetupTranslationsInstance<
 		if ( this.config.langs.length && !this.config.langs.includes(lang as any) ) {
 			return await Promise.reject(`Language ${lang}, is not included in the list of languages: ${this.config.langs.join(', ')}`)
 		}
-		this.config.language = lang;
 
-		const langTranslations = this.translationsMap.get(this.config.language);
+		const langTranslations = this.translationsMap.get(lang);
 
 		if ( typeof langTranslations === 'function' ) {
 			await langTranslations()
 		}
+		
+		this.config.language = lang;
 
 		this.emit('languageChange', this.config.language);
 	}
