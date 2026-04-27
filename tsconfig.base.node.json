@@ -2,23 +2,20 @@
 	"compilerOptions": {
 		"composite": true,
 		"skipLibCheck": true,
-		"module": "ESNext",
-		"moduleResolution": "node",
+		"lib": [
+			"ESNext"
+		],
+		"module": "esnext",
+		"moduleResolution": "bundler",
 		"strict": true,
 		"strictNullChecks": true,
 		"allowSyntheticDefaultImports": true,
-		"resolveJsonModule": true,
-		"rootDir": "./",
-		"baseUrl": "./",
-		"paths": {
-			"@config/*": [
-				"./config/*"
-			]
-		}
+		"resolveJsonModule": true
 	},
 	"include": [
 		"**/vite.config.ts",
-		"./config/defineLibConfig.ts",
+		"**/eslint.config.ts",
+		"./config/**/*",
 		"package.json"
 	]
 }
