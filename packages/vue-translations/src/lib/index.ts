@@ -1,26 +1,6 @@
-import {
-	gender,
-	languageLocalStorage,
-	navigatorLanguageDetector,
-	type BaseTranslationsType,
-	htmlLanguage,
-	plural,
-	CustomMethods
-} from '@resourge/translations'
+export * from './components';
 
-import { type SetupVueTranslationReturn, SetupVueTranslations } from './SetupVueTranslations'
-
-export * from './components'
-export { 
-	gender,
-	navigatorLanguageDetector,
-	htmlLanguage,
-	languageLocalStorage,
-	plural,
-	SetupVueTranslations,
-	CustomMethods,
-
-	type BaseTranslationsType,
-
-	type SetupVueTranslationReturn
-}
+export { type SetupVueTranslationReturn, SetupVueTranslations } from './SetupVueTranslations';
+export {
+	type BaseTranslationsType, CustomMethods, gender, htmlLanguage, languageLocalStorage, navigatorLanguageDetector, plural 
+} from '@resourge/translations';

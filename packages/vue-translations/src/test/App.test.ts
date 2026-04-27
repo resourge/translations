@@ -1,13 +1,13 @@
-import { it, expect } from 'vitest'
-import { ref } from 'vue'
+import { expect, it } from 'vitest';
+import { ref } from 'vue';
 
 function useCounter() {
-	const count = ref(0)
+	const count = ref(0);
 
-	return count
+	return count;
 }
 
 it('App', () => {
-	const count = useCounter()
-	expect(count.value).toBe(0)
-})
+	const count = useCounter();
+	expect(count.value).toBe(0);
+});

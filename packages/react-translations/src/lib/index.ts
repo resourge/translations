@@ -1,28 +1,9 @@
-import {
-	gender,
-	navigatorLanguageDetector,
-	languageLocalStorage,
-	htmlLanguage,
-	plural,
-	type BaseTranslationsType,
-	CustomMethods
-} from '@resourge/translations'
+export * from './components';
+export * from './contexts';
+export { SetupReactTranslations, type SetupReactTranslationsReturn } from './SetupReactTranslations';
 
-import { type SetupReactTranslationsReturn, SetupReactTranslations } from './SetupReactTranslations'
+export * from './types';
 
-export * from './components'
-export * from './contexts'
-export * from './types'
-export { 
-	gender,
-	languageLocalStorage,
-	navigatorLanguageDetector,
-	htmlLanguage,
-	plural,
-	SetupReactTranslations,
-	CustomMethods,
-
-	type BaseTranslationsType,
-
-	type SetupReactTranslationsReturn 
-}
+export {
+	type BaseTranslationsType, CustomMethods, gender, htmlLanguage, languageLocalStorage, navigatorLanguageDetector, plural 
+} from '@resourge/translations';

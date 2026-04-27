@@ -1,16 +1,16 @@
-import { type Context } from 'react'
+import { type Context } from 'react';
 
-import { type BaseTranslationsType, type SetupTranslationsInstance, type TranslationsType } from '@resourge/translations'
+import { type BaseTranslationsType, type SetupTranslationsInstance, type TranslationsType } from '@resourge/translations';
 
-import { type WrapPromiseReturn } from '../utils/utils'
+import { type WrapPromiseReturn } from '../utils/utils';
 
 export type SetupReactTranslationInstance<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
+	Trans extends BaseTranslationsType | TranslationsType<Langs>
 > = Omit<SetupTranslationsInstance<Langs, Trans>, 'promise'> & {
 	Context: Context<{
 		instance: any // SetupReactTranslationInstance<Langs, Trans>
 	}>
 	promise: Promise<any>
 	wrapPromise: WrapPromiseReturn
-}
+};

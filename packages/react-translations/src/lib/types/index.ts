@@ -1,3 +1,1 @@
-import { type SetupReactTranslationInstance } from './types';
-
-export type { SetupReactTranslationInstance }
+export { type SetupReactTranslationInstance } from './types';

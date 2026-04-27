@@ -1,4 +1,4 @@
-import { Trans } from './lib'
+import { Trans } from './lib';
 
 function App() {
 	return (
@@ -8,7 +8,7 @@ function App() {
 			}}
 			message={'Uma experiência que <p>aumenta a aquisição</p> de doentes e filiação hospitalar'}
 		/>
-	)
+	);
 }
 
-export default App
+export default App;

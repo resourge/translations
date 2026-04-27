@@ -1,18 +1,9 @@
-import { type BaseTranslationsType, type TranslationsType, type TranslationsKeys } from './TranslationTypes'
-import {
-	type SetupConfig,
-	type SetupTranslationsConfig,
-	type SetupTranslationsConfigLoad,
-	type SetupTranslationsConfigTranslations
-} from './configTypes'
+export {
+	type SetupConfig, type SetupTranslationsConfig, type SetupTranslationsConfigLoad, type SetupTranslationsConfigTranslations 
+} from './configTypes';
 
-export type {
-	SetupTranslationsConfigLoad,
-	SetupTranslationsConfigTranslations,
-	SetupTranslationsConfig,
-	SetupConfig,
+export {
+	type BaseTranslationsType, type TranslationsKeys, type TranslationsType 
+} from './TranslationTypes';
 
-	BaseTranslationsType,
-	TranslationsType,
-	TranslationsKeys
-}
+export { type ConvertTransIntoKeyStructure } from './types';

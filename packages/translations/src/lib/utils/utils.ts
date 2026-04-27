@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-reduce-type-parameter */
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-
-import type { BaseTranslationsType, TranslationsType } from '../types/TranslationTypes';
 import type {
 	OnTranslationConfig,
 	OnTranslationGet,
@@ -12,7 +8,12 @@ import type {
 	TranslationPlugin
 } from '../types/configTypes';
 import { type CustomType } from '../types/customMethods';
+import type { BaseTranslationsType, TranslationsType } from '../types/TranslationTypes';
 import { type ConvertStringIntoType } from '../types/types';
+
+type TupleToString<T extends any[]> = T extends [infer First, ...infer Rest]
+	? `${First extends string ? First : ''}${Rest extends [] ? '' : ','}${TupleToString<Rest>}`
+	: '';
 
 type UnionToIntersection<U> = (
 	U extends never ? never : (arg: U) => never
@@ -26,12 +27,7 @@ type UnionToTuple<T> = UnionToIntersection<
 	? [...UnionToTuple<Exclude<T, W>>, W]
 	: [];
 
-type TupleToString<T extends any[]> = T extends [infer First, ...infer Rest]
-	? `${First extends string ? First : ''}${Rest extends [] ? '' : ','}${TupleToString<Rest>}`
-	: '';
-
 const DefaultUtils = {
-	customMethods: new Map(),
 	add<
 		Key extends string,
 		T extends Record<string, string>,
@@ -44,8 +40,8 @@ const DefaultUtils = {
 			return function (params: Record<Key, ConvertStringIntoType<Type>>) {
 				const langValue = cb(value, params);
 
-				return DefaultUtils.replaceParams(langValue, params)
-			}
+				return DefaultUtils.replaceParams(langValue, params);
+			};
 		});
 
 		// T1 makes sure autocomplete works
@@ -54,32 +50,33 @@ const DefaultUtils = {
 			T1 extends Record<string, Record<Langs, string>>
 		>(trans: T1) => ({
 			_custom: {
-				name: key,
-				key
+				key,
+				name: key
 			},
 			...trans
 		}) as unknown as CustomType<
 			Key,
 			Type,
 			keyof T1[keyof T1] extends string ? keyof T1[keyof T1] : Langs
-		>
+		>;
 	},
-	replaceParams: (langValue: string, params: any) => {
-		return langValue.replace(/\{{([^{}]+)\}}/g, (_: string, key: string) => {
-			const value: string | undefined = params[key]
-			return value !== null && value !== undefined ? value : '';
-		})
-	},
+	customMethods: new Map(),
 	get(name: string, value: any) {
 		const method = DefaultUtils.customMethods.get(name);
 		if ( method ) {
-			return method(value)
+			return method(value);
 		}
 		const defaultKey = Object.keys(value).find((key) => key !== '_custom');
 
-		return () => defaultKey
+		return () => defaultKey;
+	},
+	replaceParams: (langValue: string, params: any) => {
+		return langValue.replaceAll(/\{{([^{}]+)\}}/g, (_: string, key: string) => {
+			const value: string | undefined = params[key];
+			return value ?? '';
+		});
 	}
-} 
+}; 
 export const CustomMethods = DefaultUtils as {
 	add: <
 		Key extends string, 
@@ -98,7 +95,7 @@ export const CustomMethods = DefaultUtils as {
 	>
 	get: (name: string, value: any) => any
 	replaceParams: (langValue: string, params: any) => string
-}
+};
 
 /**
  * Convert string into function if it contains "params"
@@ -106,11 +103,11 @@ export const CustomMethods = DefaultUtils as {
 export const createKeyFunction = (langValue: string) => {
 	if ( /\{\{.*\}\}/g.test(langValue) ) {
 		return function (params: any) {
-			return CustomMethods.replaceParams(langValue, params)
-		}
+			return CustomMethods.replaceParams(langValue, params);
+		};
 	}
 	return langValue;
-}
+};
 
 export function isExpired(lastTime: number, threshold: number) {
 	const now = Date.now();
@@ -120,7 +117,7 @@ export function isExpired(lastTime: number, threshold: number) {
 
 export function separatePlugins<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
+	Trans extends BaseTranslationsType | TranslationsType<Langs>
 >(
 	config: SetupTranslationsConfig<Langs> & (
 		Trans extends TranslationsType<Langs> 
@@ -137,8 +134,8 @@ export function separatePlugins<
 	const onTranslationSets: Array<OnTranslationSet<Langs, Trans>> = [];
 
 	plugins.forEach(({
-		config, onLanguageChange, onTranslationGet, onTranslationSet,
-		onDestroy
+		config, onDestroy, onLanguageChange, onTranslationGet,
+		onTranslationSet
 	}) => {
 		if ( config ) {
 			configs.push(config as unknown as OnTranslationConfig<Langs, Trans>);
@@ -150,22 +147,24 @@ export function separatePlugins<
 			onTranslationGets.push(onTranslationGet as unknown as OnTranslationGet<Langs, Trans>);
 		}
 		if ( onTranslationSet ) {
-			onTranslationSets.push(onTranslationSet as OnTranslationSet<Langs, Trans>);
+			onTranslationSets.push(onTranslationSet);
 		}
 		if ( onDestroy ) {
 			onDestroys.push(onDestroy);
 		}
-	})
+	});
 
 	return {
-		onLanguageChanges,
 		configs,
 		onDestroys,
+		onLanguageChanges,
 		onTranslationGets,
 		onTranslationSets
-	}
+	};
 }
 
 export const deepValue = (o: Record<string, any>, p: string) => p
 .split('.')
-.reduce((a, v) => a === undefined ? undefined : a[v], o);
+.reduce((a, v) => (a === undefined
+	? undefined
+	: a[v]), o);

@@ -1,18 +1,9 @@
-import {
-	type EventsType,
-	SetupTranslationsInstance,
-	type EventType,
-	SetupTranslations
-} from './SetupTranslations'
-
-export * from './custom'
-export * from './plugins'
-export * from './types'
-export { createTranslationKeyStructure } from './utils/createTranslationKeyStructure'
-export { CustomMethods } from './utils/utils'
-
+export * from './custom';
+export * from './plugins';
 export {
-	type EventsType, type EventType, 
-	SetupTranslationsInstance, 
-	SetupTranslations
-}
+	type EventsType, type EventType, SetupTranslations, SetupTranslationsInstance 
+} from './SetupTranslations';
+export * from './types';
+export { createTranslationKeyStructure } from './utils/createTranslationKeyStructure';
+
+export { CustomMethods } from './utils/utils';

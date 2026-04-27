@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/prefer-reduce-type-parameter */
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { type TranslationsKeys } from '../types';
 
-import { CustomMethods, createKeyFunction } from './utils';
+import { createKeyFunction, CustomMethods } from './utils';
 
 const createCustomFunction = <T extends { _custom: { key: string } }>(value: T) => {
-	return CustomMethods.get(value._custom.key, value)
-}
+	return CustomMethods.get(value._custom.key, value);
+};
 
 export const createTranslationEntry = <Langs extends string, const T extends Record<any, any>>(
 	language: string,
@@ -14,7 +12,7 @@ export const createTranslationEntry = <Langs extends string, const T extends Rec
 ): TranslationsKeys<Langs, T> => {
 	return Object.keys(translations)
 	.reduce<TranslationsKeys<Langs, T>>((obj, key) => {
-		const value = (translations as any)[key]
+		const value = (translations as any)[key];
 		const keyValues = Object.keys(value);
 
 		if ( keyValues.includes(language) ) {
@@ -29,25 +27,22 @@ export const createTranslationEntry = <Langs extends string, const T extends Rec
 					const val = value[key];
 					if ( typeof val === 'object' ) {
 						const keyValues = Object.keys(val);
-						if ( keyValues.includes(language) ) {
-							(obj as any)[key] = val[language];
-						}
-						else {
-							obj[key] = removeLang(val);
-						}
+						(obj as any)[key] = keyValues.includes(language)
+							? val[language]
+							: removeLang(val);
 					}
 					else {
 						obj[key] = val;
 					}
 					return obj;
-				}, { } as Record<string, any> & { _custom: { key: string } })
-			}
-			(obj as any)[key] = createCustomFunction(removeLang(value))
+				}, { } as Record<string, any> & { _custom: { key: string } });
+			};
+			(obj as any)[key] = createCustomFunction(removeLang(value));
 		}
 		else {
-			(obj as any)[key] = createTranslationEntry(language, value)
+			(obj as any)[key] = createTranslationEntry(language, value);
 		}
 
 		return obj;
 	}, {} as TranslationsKeys<Langs, T>);
-}
+};

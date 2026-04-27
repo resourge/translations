@@ -1,13 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { type LiteralUnion, type Paths } from 'type-fest';
 
-import type {
-	BaseTranslationsKeys,
-	BaseTranslationsType,
-	TranslationsKeys,
-	TranslationsType
-} from '../types/TranslationTypes'
 import type {
 	OnTranslationGet,
 	OnTranslationSet,
@@ -15,97 +7,78 @@ import type {
 	SetupTranslationsConfigLoad,
 	SetupTranslationsConfigTranslations,
 	TranslationObj
-} from '../types/configTypes'
-import { type ConvertTransIntoKeyStructure } from '../types/types'
+} from '../types/configTypes';
+import type {
+	BaseTranslationsKeys,
+	BaseTranslationsType,
+	TranslationsKeys,
+	TranslationsType
+} from '../types/TranslationTypes';
+import { type ConvertTransIntoKeyStructure } from '../types/types';
 
 import { createProxy } from './createProxy';
 import { createTranslationEntry } from './createTranslationEntry';
 import { createTranslationKeyStructure } from './createTranslationKeyStructure';
 import { deepValue, isExpired } from './utils';
 
+export type LangMaps<Langs extends string,
+	Trans extends Record<string, any>
+> = Map<
+	'request', 
+	((language: string, date?: Date) => Promise<BaseTranslationsKeys<Trans>>)
+> & Map<
+	Langs, 
+	LangMapTranslationObj
+>;
+
+export type LangMapTranslationObj = {
+	lastTranslation: number
+	translations: Record<string, any>
+};
+
 function flattenObject<const B extends BaseTranslationsType>(structure: B, prefix: string = ''): Record<string, string> {
 	return Object.keys(structure)
 	.reduce<Record<string, string>>((acc, k) => {
-		const pre = prefix.length ? prefix + '.' : '';
+		const pre = prefix.length > 0
+			? prefix + '.'
+			: '';
 		const value = (structure as BaseTranslationsType)[k] as BaseTranslationsType;
 		if (typeof value === 'object') {
 			return {
 				...acc,
 				...flattenObject(value, pre + k)
-			}
+			};
 		}
 		else {
-			acc[pre + k] = value
+			acc[pre + k] = value;
 		};
 		return acc;
 	}, {});
 }
 
-export type LangMapTranslationObj = {
-	lastTranslation: number
-	translations: Record<string, any>
-}
-
-export type LangMaps< 
-	Langs extends string,
-	Trans extends Record<string, any>
-> = Map<
-	Langs, 
-	LangMapTranslationObj
-> & Map<
-	'request', 
-	((language: string, date?: Date) => Promise<BaseTranslationsKeys<Trans>>)
->
-
 const translationMethod = {
-	__translationsMethod__: <T extends Record<string, any>>(
-		langKey: string, 
-		translations: T | ((lang: string) => Promise<T>)
-	) => createTranslationEntry(langKey, translations as any),
 	__translationsKeyStructure__: <
 		Langs extends string, 
 		T extends Record<string, any>
 	>(
 		langs: Langs[],
 		translations: T
-	) => createTranslationKeyStructure(langs, translations)
-}
+	) => createTranslationKeyStructure(langs, translations),
+	__translationsMethod__: <T extends Record<string, any>>(
+		langKey: string, 
+		translations: ((lang: string) => Promise<T>) | T
+	) => createTranslationEntry(langKey, translations as any)
+};
 
-function createLanguages<
-	Langs extends string, 
-	const T extends Record<string, any>
->(
-	langs: Langs[],
-	translations: T | ((lang: string) => Promise<T>)
-) {
-	return langs
-	.reduce<
-		LangMaps<Langs, T>
-	>(
-		(obj: LangMaps<Langs, T>, langKey: string) => {
-			obj.set(
-				langKey as Langs, 
-				{
-					translations: translationMethod.__translationsMethod__(langKey, translations as any) as any,
-					lastTranslation: Date.now()
-				}
-			);
+type OmitArray<T, K extends number | string | symbol> = Array<OmitDeep<T, K>>;
 
-			return obj
-		}, 
-		new Map()
-	);
-}
-
-type OmitDeep<T, K extends string | number | symbol> = T extends object
+type OmitDeep<T, K extends number | string | symbol> = T extends object
 	? {
 		[P in keyof T as P extends K ? never : P]: T[P] extends Array<infer U>
 			? OmitArray<U, K>
 			: OmitDeep<T[P], K>;
 	}
 	: T;
-
-type OmitArray<T, K extends string | number | symbol> = Array<OmitDeep<T, K>>;
 
 type TransKeys<Langs extends string, Trans extends Record<string, any>> = LiteralUnion<
 	Paths<
@@ -115,24 +88,50 @@ type TransKeys<Langs extends string, Trans extends Record<string, any>> = Litera
 		>
 	>, 
 	string
->
+>;
 
 export type TFunction<
 	Langs extends string, 
 	Trans extends Record<string, any>
-> = (key: TransKeys<Langs, Trans>, values?: Record<string, any>) => string
+> = (key: TransKeys<Langs, Trans>, values?: Record<string, any>) => string;
+
+function createLanguages<
+	Langs extends string, 
+	const T extends Record<string, any>
+>(
+	langs: Langs[],
+	translations: ((lang: string) => Promise<T>) | T
+) {
+	return langs
+	.reduce<
+		LangMaps<Langs, T>
+	>(
+		(obj: LangMaps<Langs, T>, langKey: string) => {
+			obj.set(
+				langKey as Langs, 
+				{
+					lastTranslation: Date.now(),
+					translations: translationMethod.__translationsMethod__(langKey, translations as any)
+				}
+			);
+
+			return obj;
+		}, 
+		new Map()
+	);
+}
 
 export class MapTranslations<
 	Langs extends string, 
 	Trans extends Record<string, any>
 > {
-	public langMaps: LangMaps<Langs, Trans> = new Map();
 	public isLoad: boolean = false;
-
-	public structure: Trans & Record<string, string> = {} as Trans & Record<string, string>;
 	public keyStructure: ConvertTransIntoKeyStructure<Langs, Trans> = {} as ConvertTransIntoKeyStructure<Langs, Trans>;
 
-	public t!: TFunction<Langs, Trans>
+	public langMaps: LangMaps<Langs, Trans> = new Map();
+	public structure: Record<string, string> & Trans = {} as Record<string, string> & Trans;
+
+	public t!: TFunction<Langs, Trans>;
 
 	constructor(
 		public config: SetupConfig<Langs, Trans>,
@@ -140,10 +139,10 @@ export class MapTranslations<
 		public onTranslationSets: Array<OnTranslationSet<Langs, Trans>>,
 		onMissingKeyRequest: () => void
 	) {
-		const _translationConfig = (config as unknown as SetupTranslationsConfigTranslations<Langs, Record<string, any>>);
-		const _loadConfig = (config as unknown as SetupTranslationsConfigLoad<Trans extends BaseTranslationsType ? Trans : BaseTranslationsType>);
+		const _translationConfig = config as unknown as SetupTranslationsConfigTranslations<Langs, Record<string, any>>;
+		const _loadConfig = config as unknown as SetupTranslationsConfigLoad<Trans extends BaseTranslationsType ? Trans : BaseTranslationsType>;
 		if ( _translationConfig.translations ) {
-			this.keyStructure = (config as { keyStructure?: ConvertTransIntoKeyStructure<Langs, Trans> }).keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans> || translationMethod.__translationsKeyStructure__<Langs, Trans>(config.langs, _translationConfig.translations as any)
+			this.keyStructure = (config as { keyStructure?: ConvertTransIntoKeyStructure<Langs, Trans> }).keyStructure as unknown as ConvertTransIntoKeyStructure<Langs, Trans> || translationMethod.__translationsKeyStructure__<Langs, Trans>(config.langs, _translationConfig.translations as any);
 			this.langMaps = createLanguages<Langs, Record<string, any>>(
 				config.langs, 
 				_translationConfig.translations
@@ -156,18 +155,21 @@ export class MapTranslations<
 				try {
 					const translations = this.get(this.config.language) as any;
 
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					const keyValue = (key as string).includes('.') 
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 						? deepValue(translations, (key as string)) 
 						: translations[key];
 
 					const value = values && typeof keyValue === 'function' 
 						? ((keyValue as (params: any) => string)(values) as any)
-						: (keyValue )
+						: (keyValue );
 
-					return value || key
+					// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+					return value || key;
 				}
 				catch {
-					return key
+					return key;
 				}
 			};
 		}
@@ -180,19 +182,21 @@ export class MapTranslations<
 			) => {
 				const translations = this.get(this.config.language) as Record<string, any>;
 
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 				const keyValue = translations[key as string];
 
 				const value = values && typeof keyValue === 'function' 
 					? ((keyValue as (params: any) => string)(values) as any)
-					: keyValue
+					: keyValue;
 
-				return value || key
+				// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+				return value || key;
 			};
 
 			this.structure = {
 				...(_loadConfig.load.structure as Trans),
 				...flattenObject(_loadConfig.load.structure)
-			}
+			};
 
 			this.keyStructure = createTranslationKeyStructure<Langs, Trans>(
 				config.langs, 
@@ -209,31 +213,32 @@ export class MapTranslations<
 					this.structure,
 					(_loadConfig.load.isGoingToRequestOnMissingKeys ?? true) 
 						? () => {
-							if ( !isExpired(lastTranslation, ((this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.missingKeysThreshold ?? 3600000)) ) {
+							if ( !isExpired(lastTranslation, ((this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.missingKeysThreshold ?? 3_600_000)) ) {
 								return;
 							}
 							asyncRequest(language, new Date(lastTranslation))
 							.then((translations) => {
 								this.set(
 									language, 
-									translations as any
-								)
+									translations
+								);
 
 								onMissingKeyRequest();
 							});
-						} : () => {}
-				)
-			}
+						}
+						: () => {}
+				);
+			};
 
 			const asyncRequest = async (language: string, date: Date = new Date()) => {
 				const translations = await _loadConfig.load.request(language, date);
 
 				const _translations: TranslationObj<Langs, Trans> = {
-					translations,
-					lastTranslation: Date.now()
-				}
+					lastTranslation: Date.now(),
+					translations
+				};
 
-				if ( this.onTranslationSets.length ) {
+				if ( this.onTranslationSets.length > 0 ) {
 					await Promise.all(
 						this.onTranslationSets
 						.map((onTranslationSet) => Promise.resolve(
@@ -246,8 +251,8 @@ export class MapTranslations<
 					flattenObject(translations),
 					language,
 					_translations.lastTranslation
-				)
-			}
+				);
+			};
 
 			this.langMaps.set('request', asyncRequest);
 
@@ -270,43 +275,45 @@ export class MapTranslations<
 						lang,
 						translations,
 						trans.lastTranslation
-					)
+					);
 				}
-			})
+			});
 		}
 	}
 
-	public get(language: Langs | string): (
+	public get(language: Langs | string): (() => Promise<void>) | (
 		Trans extends TranslationsType<Langs> 
 			? TranslationsKeys<Langs, Trans> 
 			: BaseTranslationsKeys<Trans> 
-	) | (() => Promise<void>) {
+	) {
 		const trans = this.langMaps.get(language as Langs);
 		if ( 
-			!trans || 
-			(
-				(this.config as unknown as SetupTranslationsConfigLoad<Trans>).load && 
-				(this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.translationTimeout !== undefined && 
-				trans && 
-				isExpired(
+			!trans 
+			|| (
+				(this.config as unknown as SetupTranslationsConfigLoad<Trans>).load 
+				&& (this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.translationTimeout !== undefined 
+				&& trans 
+				&& isExpired(
 					trans.lastTranslation, 
 					(this.config as unknown as SetupTranslationsConfigLoad<Trans>).load.translationTimeout!
 				)
 			)
 		) {
 			return async () => {
-				const translations = await this.langMaps.get('request')!(language, trans ? new Date(trans.lastTranslation) : undefined) as any;
+				const translations = await this.langMaps.get('request')!(language, trans
+					? new Date(trans.lastTranslation)
+					: undefined) as any;
 			
 				this.set(language, translations);
-			}
+			};
 		}
 		if ( typeof trans.translations === 'function' ) {
 			return async () => {
 				this.set(language, await (trans.translations as unknown as () => Promise<any>)());
-			}
+			};
 		}
 
-		return trans.translations as unknown as any
+		return trans.translations as unknown as any;
 	}
 
 	private set(
@@ -317,9 +324,9 @@ export class MapTranslations<
 		return this.langMaps.set(
 			language as Langs, 
 			{
-				translations,
-				lastTranslation
+				lastTranslation,
+				translations
 			}
-		)
+		);
 	}
 }

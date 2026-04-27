@@ -1,50 +1,55 @@
-import type { BaseTranslationsType, TranslationsType } from './TranslationTypes'
+import type { BaseTranslationsType, TranslationsType } from './TranslationTypes';
 
 // TranslationsKeys<Langs, Trans extends undefined ? TranslationsType<Langs> : Trans, undefined>
 
-export type TranslationObj<
-	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
-> = {
-	lastTranslation: number
-	translations: Trans
-}
-
 export type OnTranslationConfig<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
-> = (config: SetupConfig<Langs, Trans>, changeLanguage: (language: string) => Promise<any>) => SetupConfig<Langs, Trans>
+	Trans extends BaseTranslationsType | TranslationsType<Langs>
+> = (config: SetupConfig<Langs, Trans>, changeLanguage: (language: string) => Promise<any>) => SetupConfig<Langs, Trans>;
 
 export type OnTranslationGet<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
+	Trans extends BaseTranslationsType | TranslationsType<Langs>
 > = (
 	language: string,
 	localTranslations?: Trans
-) => undefined | TranslationObj<Langs, Trans>
+) => TranslationObj<Langs, Trans> | undefined;
 
 export type OnTranslationSet<
 	Langs extends string, 
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
+	Trans extends BaseTranslationsType | TranslationsType<Langs>
 > = (
 	language: string, 
 	config: TranslationObj<Langs, Trans>
-) => void | Promise<void>
+) => Promise<void> | void;
 
-export type TranslationPlugin = {
-	config?: OnTranslationConfig<string, TranslationsType<string> | BaseTranslationsType>
-	onDestroy?: () => void
-	onLanguageChange?: (language: string) => void
-	onTranslationGet?: OnTranslationGet<string, TranslationsType<string> | BaseTranslationsType>
-	onTranslationSet?: OnTranslationSet<string, TranslationsType<string> | BaseTranslationsType>
-}
+export type SetupConfig<
+	Langs extends string,
+	Trans extends BaseTranslationsType | TranslationsType<Langs>
+> = Omit<SetupTranslationsConfig<Langs>, 'defaultLanguage'> & (
+	Trans extends TranslationsType<Langs> 
+		? SetupTranslationsConfigTranslations<Langs, Trans> 
+		: SetupTranslationsConfigLoad<Trans>
+) & {
+	defaultLanguage: Langs
+	language: string
+};
+
+export type SetupTranslationsConfig<
+	Langs extends string
+> = {
+	defaultLanguage?: Langs
+	/**
+	 * Array of permitted languages. In case of empty array, all languages will be permitted
+	 */
+	langs: Langs[]
+	plugins?: TranslationPlugin[]
+};
 
 export type SetupTranslationsConfigLoad<
 	B extends BaseTranslationsType
 > = {
 	load: {
-		request: (language: string, lastRequest: Date) => any
-		structure: B
 		/**
 		 * Request again on missingKey @default true
 		 */
@@ -53,39 +58,34 @@ export type SetupTranslationsConfigLoad<
 		 * Threshold for missingKey request again @default 3600000 (1 hour)
 		 */
 		missingKeysThreshold?: number
+		request: (language: string, lastRequest: Date) => any
+		structure: B
 		/**
 		 * Defines the logitivity of the translations
 		 */
 		translationTimeout?: number
 	}
-}
+};
 
 export type SetupTranslationsConfigTranslations<
 	Langs extends string, 
 	Trans extends TranslationsType<Langs>
 > = {
 	translations: Trans
-}
+};
 
-export type SetupTranslationsConfig<
-	Langs extends string
+export type TranslationObj<
+	Langs extends string, 
+	Trans extends BaseTranslationsType | TranslationsType<Langs>
 > = {
-	/**
-	 * Array of permitted languages. In case of empty array, all languages will be permitted
-	 */
-	langs: Langs[]
-	defaultLanguage?: Langs
-	plugins?: TranslationPlugin[]
-}
+	lastTranslation: number
+	translations: Trans
+};
 
-export type SetupConfig<
-	Langs extends string,
-	Trans extends TranslationsType<Langs> | BaseTranslationsType
-> = Omit<SetupTranslationsConfig<Langs>, 'defaultLanguage'> & (
-	Trans extends TranslationsType<Langs> 
-		? SetupTranslationsConfigTranslations<Langs, Trans> 
-		: SetupTranslationsConfigLoad<Trans>
-) & {
-	defaultLanguage: Langs
-	language: string
-}
+export type TranslationPlugin = {
+	config?: OnTranslationConfig<string, BaseTranslationsType | TranslationsType<string>>
+	onDestroy?: () => void
+	onLanguageChange?: (language: string) => void
+	onTranslationGet?: OnTranslationGet<string, BaseTranslationsType | TranslationsType<string>>
+	onTranslationSet?: OnTranslationSet<string, BaseTranslationsType | TranslationsType<string>>
+};

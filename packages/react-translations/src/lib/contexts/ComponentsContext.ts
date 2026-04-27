@@ -1,12 +1,12 @@
-import { type ReactElement, createContext, useContext } from 'react';
+import { createContext, type ReactElement, useContext } from 'react';
 
 export type ComponentsContextType = {
-	components: readonly ReactElement[] | Readonly<Record<string, ReactElement>>
-}
+	components: Readonly<Record<string, ReactElement>> | readonly ReactElement[]
+};
 
 export const ComponentsContext = createContext<ComponentsContextType>({
 	components: { }
-})
+});
 
 export const convertComponentsIntoObjectComponents = (components: ComponentsContextType['components']) => {
 	return components 
@@ -16,7 +16,7 @@ export const convertComponentsIntoObjectComponents = (components: ComponentsCont
 				return obj;
 			}, {})
 			: components
-		: {}
-}
+		: {};
+};
 
-export const useComponentsContext = () => useContext(ComponentsContext)
+export const useComponentsContext = () => useContext(ComponentsContext);

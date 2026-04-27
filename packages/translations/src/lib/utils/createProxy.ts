@@ -1,4 +1,4 @@
-import type { BaseTranslationsKeys, BaseTranslationsType } from '../types/TranslationTypes'
+import type { BaseTranslationsKeys, BaseTranslationsType } from '../types/TranslationTypes';
 
 import { createKeyFunction } from './utils';
 
@@ -15,28 +15,30 @@ export const createProxy = <T extends BaseTranslationsType>(
 			if ( _key.includes('.') ) {
 				return translations[_key] ?? _key;
 			}
-			const key = `${baseKey ? `${baseKey}.` : ''}${_key}`;
+			const key = `${baseKey
+				? `${baseKey}.`
+				: ''}${_key}`;
 			const structureValue = structure[_key];
 			const translation = translations[key];
 
 			if ( !translation && !structureValue ) {
 				onMissingKeyRequest();
-				return key
+				return key;
 			}
 
 			if ( translation ) {
-				return createKeyFunction(translation)
+				return createKeyFunction(translation);
 			}
 
 			if ( structureValue ) {
 				if ( /\{\{.*\}\}/g.test(structureValue) ) {
 					return () => {
 						onMissingKeyRequest();
-						return key
-					}
+						return key;
+					};
 				}
 				onMissingKeyRequest();
-				return key
+				return key;
 			}
 
 			return createProxy(
@@ -44,7 +46,7 @@ export const createProxy = <T extends BaseTranslationsType>(
 				structureValue, 
 				onMissingKeyRequest,
 				key
-			)
+			);
 		}
-	}) 
-}
+	}); 
+};

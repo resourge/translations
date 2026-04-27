@@ -1,16 +1,16 @@
-import react from '@vitejs/plugin-react-swc'
-import fs from 'fs'
-import { join } from 'path'
+import react from '@vitejs/plugin-react';
+import fs from 'node:fs';
+import path from 'node:path';
 
-import { defineLibConfig, getWorkspaces } from '../../config/defineLibConfig'
+import { defineLibConfig, getWorkspaces } from '../../config/defineLibConfig';
 
-import { name } from './package.json'
+import { name } from './package.json';
 
 const workspaces = getWorkspaces()
 .filter((workspace) => {
 	return !workspace.endsWith(name);
 })
-.map(workspace => join(workspace, 'dist'));
+.map((workspace) => path.join(workspace, 'dist'));
 
 // https://vitejs.dev/config/
 export default defineLibConfig(
@@ -20,11 +20,11 @@ export default defineLibConfig(
 	(oldFile: string) => {
 		workspaces.forEach((workspace) => {
 			if ( !fs.existsSync(workspace) ) {
-				fs.mkdirSync(workspace)
+				fs.mkdirSync(workspace);
 			}
-			const _oldFile = join(__dirname, 'dist', oldFile)
-			const newFile = oldFile.replace('index', name)
-			fs.copyFileSync(_oldFile, join(workspace, newFile));
-		})
+			const _oldFile = path.join(__dirname, 'dist', oldFile);
+			const newFile = oldFile.replace('index', name);
+			fs.copyFileSync(_oldFile, path.join(workspace, newFile));
+		});
 	}
-)
+);

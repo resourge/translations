@@ -1,3 +1,16 @@
+export function find(result: any, cb: (result: any) => boolean) {
+	return new Promise((resolve) => {
+		visit(result, (value) => {
+			const finish = cb(value);
+			if (finish) {
+				resolve(value);
+			}
+			return finish;
+		});
+
+		resolve(null);
+	});
+}
 
 function visit(result: any, cb: (result: any) => boolean): boolean {
 	const finish = cb(result);
@@ -11,25 +24,11 @@ function visit(result: any, cb: (result: any) => boolean): boolean {
 		const value = result[key];
 
 		if (Array.isArray(value)) {
-			return value.some((val) => visit(val, cb))
+			return value.some((val) => visit(val, cb));
 		}
 		else if (typeof value === 'object') {
-			return visit(value, cb)
+			return visit(value, cb);
 		}
 		return false;
-	})
-}
-
-export function find(result: any, cb: (result: any) => boolean) {
-	return new Promise((resolve) => {
-		visit(result, (value) => {
-			const finish = cb(value)
-			if (finish) {
-				resolve(value);
-			}
-			return finish;
-		});
-
-		resolve(null);
-	})
+	});
 }

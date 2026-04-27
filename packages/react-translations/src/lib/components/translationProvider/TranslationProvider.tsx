@@ -1,18 +1,18 @@
 import { type ReactNode, useEffect, useState } from 'react';
 
-import { ComponentsContext, convertComponentsIntoObjectComponents, type ComponentsContextType } from '../../contexts/ComponentsContext';
+import { ComponentsContext, type ComponentsContextType, convertComponentsIntoObjectComponents } from '../../contexts/ComponentsContext';
 import { type SetupReactTranslationInstance } from '../../types/types';
 
-export type TranslationProviderProps = {
+export type TranslationProviderProps = Partial<ComponentsContextType> & {
 	children: ReactNode
 	TranslationInstance: SetupReactTranslationInstance<
 		any,
 		any
 	>
-} & Partial<ComponentsContextType>
+};
 
 const TranslationProvider = ({
-	TranslationInstance, children, components = {}
+	children, components = {}, TranslationInstance
 }: TranslationProviderProps) => {
 	const _instance = TranslationInstance.wrapPromise.read();
 			
@@ -29,20 +29,20 @@ const TranslationProvider = ({
 			setValue({
 				instance: TranslationInstance 
 			});
-		})
+		});
 
 		const languageChangeRemove = TranslationInstance.addEventListener('languageChange', function () {
 			setValue({
 				instance: TranslationInstance
 			});
-		})
+		});
 
 		return () => {
 			missingRequestKeysRemove();
 			languageChangeRemove();
 			TranslationInstance.onDestroy();
-		}
-	}, [TranslationInstance])
+		};
+	}, [TranslationInstance]);
 
 	return (
 		<TranslationInstance.Context.Provider value={value}>

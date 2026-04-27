@@ -1,34 +1,36 @@
-import type { TranslationsType, BaseTranslationsType } from '../types/TranslationTypes';
 import type { TranslationObj, TranslationPlugin } from '../types/configTypes';
+import type { BaseTranslationsType, TranslationsType } from '../types/TranslationTypes';
 
-export const languageLocalStorage = globalThis.window ? (): TranslationPlugin => {
-	const languageKey = 'lng'
+export const languageLocalStorage = globalThis.window
+	? (): TranslationPlugin => {
+		const languageKey = 'lng';
 
-	return {
-		config(config) {
-			config.language = window.localStorage.getItem(languageKey) ?? config.language;
+		return {
+			config(config) {
+				config.language = globalThis.localStorage.getItem(languageKey) ?? config.language;
 
-			return config;
-		},
-		onTranslationSet(language: string, translations: TranslationObj<string, TranslationsType<string> | BaseTranslationsType>) {
-			window.localStorage.setItem(`${languageKey}_${language}`, JSON.stringify(translations));
-		},
-		onTranslationGet(
-			language: string,  
-			localTranslations?: TranslationsType<string> | BaseTranslationsType
-		) {
-			if ( !localTranslations ) {
-				const localTranslationsString = window.localStorage.getItem(`${languageKey}_${language}`);
+				return config;
+			},
+			onLanguageChange(language: string) {
+				globalThis.localStorage.setItem(languageKey, language);
+			},
+			onTranslationGet(
+				language: string,  
+				localTranslations?: BaseTranslationsType | TranslationsType<string>
+			) {
+				if ( !localTranslations ) {
+					const localTranslationsString = globalThis.localStorage.getItem(`${languageKey}_${language}`);
 
-				if ( localTranslationsString ) {
-					return JSON.parse(localTranslationsString);
+					if ( localTranslationsString ) {
+						return JSON.parse(localTranslationsString);
+					}
 				}
-			}
 
-			return localTranslations;
-		},
-		onLanguageChange(language: string) {
-			window.localStorage.setItem(languageKey, language)
-		}
+				return localTranslations;
+			},
+			onTranslationSet(language: string, translations: TranslationObj<string, BaseTranslationsType | TranslationsType<string>>) {
+				globalThis.localStorage.setItem(`${languageKey}_${language}`, JSON.stringify(translations));
+			}
+		};
 	}
-} : () => ({})
+	: () => ({});

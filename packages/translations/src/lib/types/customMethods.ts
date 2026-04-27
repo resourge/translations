@@ -13,7 +13,7 @@ type ConvertStringIntoType<T> =
 							? 'symbol' 
 							: T extends undefined 
 								? 'undefined' 
-								: ''
+								: '';
 
 export type CustomType<
 	Key extends string, 
@@ -24,4 +24,4 @@ export type CustomType<
 		langs: Langs
 		trans: `{{${Key}:${ConvertStringIntoType<Type>}}}`
 	}
-}
+};

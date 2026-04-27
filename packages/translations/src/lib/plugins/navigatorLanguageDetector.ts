@@ -13,7 +13,7 @@ const getNavigatorLanguage = (): string | undefined => {
 		}
 	}
 	return undefined;
-}
+};
 
 export const navigatorLanguageDetector = (options?: { onLanguage: (language: string) => string }): TranslationPlugin => {
 	return {
@@ -22,13 +22,17 @@ export const navigatorLanguageDetector = (options?: { onLanguage: (language: str
 				const _language = getNavigatorLanguage();
 
 				if ( _language ) {
-					const language = options?.onLanguage ? options?.onLanguage(_language) : _language;
+					const language = options?.onLanguage
+						? options?.onLanguage(_language)
+						: _language;
 
-					config.language = config.langs.includes(language) ? language : config.defaultLanguage;
+					config.language = config.langs.includes(language)
+						? language
+						: config.defaultLanguage;
 				}
 			}
 
 			return config;
 		}
-	}
-}
+	};
+};

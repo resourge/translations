@@ -1,13 +1,12 @@
 /// <reference types="vitest" />
 
-import deepmerge from '@fastify/deepmerge'
-import appRoot from 'app-root-path'
-import { readFileSync, readdirSync } from 'fs'
-import { globSync } from 'glob'
-import { join, resolve } from 'path'
-import { type UserConfigExport, defineConfig } from 'vite'
-import dts from 'vite-plugin-dts'
-import viteTsconfigPaths from 'vite-tsconfig-paths'
+import deepmerge from '@fastify/deepmerge';
+import appRoot from 'app-root-path';
+import { globSync } from 'glob';
+import { readdirSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { defineConfig, type UserConfigExport } from 'vite';
+import dts from 'vite-plugin-dts';
 
 import PackageJson from '../package.json';
 
@@ -16,8 +15,8 @@ const { workspaces } = PackageJson;
 export const getWorkspaces = () => {
 	return workspaces
 	.filter((workspace) => !workspace.startsWith('!'))
-	.map((workspace) => {
-		const root = join(appRoot.path, workspace.substring(1).replace(/\*/g, ''));
+	.flatMap((workspace) => {
+		const root = path.join(appRoot.path, workspace.slice(1).replaceAll('*', ''));
 
 		return readdirSync(
 			root, 
@@ -25,24 +24,23 @@ export const getWorkspaces = () => {
 				withFileTypes: true 
 			}
 		)
-		.filter(dirent => dirent.isDirectory())
-		.map(dirent => join(root, dirent.name))
-	}).flat();
-}
+		.filter((dirent) => dirent.isDirectory())
+		.map((dirent) => path.join(root, dirent.name));
+	});
+};
 
-const packages = getWorkspaces().map((workspace) => 
+const packages = getWorkspaces().flatMap((workspace) => 
 	globSync(
 		`${workspace}/**`
 	)
 	.filter((path) => path.includes('package.json'))
 	.map((path) => ({
 		...JSON.parse(
-			readFileSync(path, 'utf-8')
+			readFileSync(path, 'utf8')
 		),
 		path
 	}) as const)
-)
-.flat();
+);
 
 const packagesNames = packages
 .map((pack) => pack.name)
@@ -54,65 +52,72 @@ const deepMerge = deepmerge();
 
 export const defineLibConfig = (
 	config: UserConfigExport,
-	afterBuild?: ((fileName: string) => void | Promise<void>)
+	afterBuild?: ((fileName: string) => Promise<void> | void)
 ): UserConfigExport => {
 	const generatedFiles = new Set<string>();
 	return defineConfig((originalConfig) => deepMerge(
-		typeof config === 'function' ? config(originalConfig) : config,
+		typeof config === 'function'
+			? config(originalConfig)
+			: config,
 		{
-			test: {
-				globals: true,
-				environment: 'jsdom',
-				setupFiles: './src/setupTests.ts'
-			},
 			build: {
-				minify: false,
 				lib: {
 					entry: entryLib,
-					name: 'index',
 					fileName: 'index',
-					formats: ['cjs', 'es', 'umd']
+					formats: ['cjs', 'es', 'umd'],
+					name: 'index'
 				},
+				minify: false,
 				outDir: './dist',
 				rollupOptions: {
-					output: {
-						dir: './dist'
-					},
 					external: [
 						'tsconfig-paths', 'typescript', 'path', 
 						'fs', 'vite', 'react', 'url',
 						'react/jsx-runtime',
-						'vue', 'find-package-json', 'import-sync',
-					]
+						'vue', 'find-package-json', 'import-sync'
+					],
+					output: {
+						dir: './dist'
+					}
 				}
 			},
-			resolve: {
-				preserveSymlinks: false
-			},
 			plugins: [
-				viteTsconfigPaths(),
 				dts({
-					rollupTypes: true,
-					insertTypesEntry: true,
 					bundledPackages: packagesNames,
-				}),
-				afterBuild ? {
-					name: 'test',
-					apply: 'build',
-					generateBundle(_options, bundle, _isWriteFile) {
-						Object.keys(bundle)
-						.forEach((key) => {
-							generatedFiles.add(key)
-						})
+					compilerOptions: {
+						baseUrl: '.'
 					},
-					closeBundle() {
-						generatedFiles
-						.forEach((key) => {
-							afterBuild(key)
-						})
+					insertTypesEntry: true,
+					rollupTypes: true
+				}),
+				afterBuild
+					? {
+						apply: 'build',
+						closeBundle() {
+							generatedFiles
+							.forEach((key) => {
+								afterBuild(key);
+							});
+						},
+						generateBundle(_options, bundle) {
+							Object.keys(bundle)
+							.forEach((key) => {
+								generatedFiles.add(key);
+							});
+						},
+						name: 'test'
 					}
-				} : undefined
-			]
+					: undefined
+			],
+			resolve: {
+				preserveSymlinks: false,
+				tsconfigPaths: true
+			},
+			test: {
+				environment: 'jsdom',
+				globals: true,
+				setupFiles: './src/setupTests.ts'
+			}
 		}
-	))
+	));
 };

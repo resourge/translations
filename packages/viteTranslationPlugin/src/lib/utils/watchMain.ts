@@ -1,22 +1,18 @@
-/* eslint-disable @typescript-eslint/prefer-reduce-type-parameter */
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import {
 	type BaseTranslationsType,
+	createTranslationKeyStructure,
 	type TranslationsKeys,
-	type TranslationsType,
-	createTranslationKeyStructure
-} from '@resourge/translations'
+	type TranslationsType
+} from '@resourge/translations';
+import { type ConvertTransIntoKeyStructure, type SetupTranslationsConfig, type SetupTranslationsConfigLoad, type SetupTranslationsConfigTranslations } from '@resourge/translations';
 import finder from 'find-package-json';
-import fs from 'fs';
 import importSync from 'import-sync';
-import path, { dirname } from 'path';
-import { loadConfig, createMatchPath } from 'tsconfig-paths';
-import type { CompilerOptions } from 'typescript'
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createMatchPath, loadConfig } from 'tsconfig-paths';
+import type { CompilerOptions } from 'typescript';
 import ts from 'typescript';
-import { fileURLToPath } from 'url';
-
-import { type SetupTranslationsConfigTranslations, type SetupTranslationsConfig, type SetupTranslationsConfigLoad } from '@resourge/translations/src/lib/types/configTypes';
-import { type ConvertTransIntoKeyStructure } from '@resourge/translations/src/lib/types/types';
 
 const packageJson = finder(path.dirname(fileURLToPath(import.meta.url)))
 .next()
@@ -30,7 +26,7 @@ export type LoadConfig = {
 	 * @default false
 	 */
 	isJSON: boolean
-}
+};
 
 const createEntry = <Langs extends string, const T extends TranslationsType<Langs>>(
 	language: string,
@@ -38,36 +34,33 @@ const createEntry = <Langs extends string, const T extends TranslationsType<Lang
 ): TranslationsKeys<Langs, T> => {
 	return Object.keys(translations)
 	.reduce((obj, key) => {
-		const value = (translations as any)[key]
+		const value = (translations as any)[key];
 		const keyValues = Object.keys(value);
 
 		if ( keyValues.includes(language) ) {
 			const langValue: string = value[language];
 
-			if ( /\{\{.*\}\}/g.test(langValue) ) {
-				(obj as any)[key] = {
-					type: 'function',
-					test: `(params) => CustomMethods.replaceParams('${langValue}', params)`
+			(obj as any)[key] = /\{\{.*\}\}/g.test(langValue)
+				? {
+					test: `(params) => CustomMethods.replaceParams('${langValue}', params)`,
+					type: 'function'
 				}
-			}
-			else {
-				(obj as any)[key] = langValue;
-			}
+				: langValue;
 		}
 		else if ( value._custom ) {
 			const { _custom, ...rest } = value;
 			(obj as any)[key] = {
-				type: 'function',
-				test: `CustomMethods.get('${_custom.name as string}', ${stringify(createEntry(language, rest))})`
-			}
+				test: `CustomMethods.get('${_custom.name as string}', ${stringify(createEntry(language, rest))})`,
+				type: 'function'
+			};
 		}
 		else if ( value ) {
-			(obj as any)[key] = createEntry(language, value)
+			(obj as any)[key] = createEntry(language, value);
 		}
 
 		return obj;
 	}, {} as TranslationsKeys<Langs, T>);
-}
+};
 
 function createLanguages<
 	Langs extends string, 
@@ -77,12 +70,12 @@ function createLanguages<
 	translations: T
 ) {
 	return langs
-	.reduce<Map<string, TranslationsKeys<Langs, T, undefined> | (() => Promise<TranslationsKeys<Langs, T, undefined>>)>>(
+	.reduce<Map<string, (() => Promise<TranslationsKeys<Langs, T, undefined>>) | TranslationsKeys<Langs, T, undefined>>>(
 		(obj: Map<string, any>, langKey: string) => {
-			obj.set(langKey, createEntry(langKey, translations as any))
-			return obj
+			obj.set(langKey, createEntry(langKey, translations as any));
+			return obj;
 		}, 
-	new Map()
+		new Map()
 	);
 }
 
@@ -94,7 +87,9 @@ function stringify(obj: Record<string, any>) {
 		objString += `"${key}":`;
         
 		if (typeof value === 'object') {
-			objString += value.type === 'function' ? (value.test as string) : `${stringify(value)}`;
+			objString += value.type === 'function'
+				? (value.test as string)
+				: `${stringify(value)}`;
 		} 
 		else if (typeof value === 'string') {
 			objString += JSON.stringify(value);
@@ -113,25 +108,27 @@ function stringify(obj: Record<string, any>) {
 
 export const tsConfig = loadConfig();
 
-export type WatchMainReturnType = SetupTranslationsConfig<string> & 
-SetupTranslationsConfigTranslations<string, TranslationsType<string>> & 
-SetupTranslationsConfigLoad<BaseTranslationsType> & {
-	keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
-}
-
 export type WatchMainResultType = {
 	config: WatchMainReturnType
-	languageFiles: Array<{ filePath: string, language: string }>
-}
+	languageFiles: Array<{ filePath: string
+		language: string }>
+};
+
+export type WatchMainReturnType = SetupTranslationsConfig<string> 
+	& SetupTranslationsConfigLoad<BaseTranslationsType> 
+	& SetupTranslationsConfigTranslations<string, TranslationsType<string>> & {
+		keyStructure: ConvertTransIntoKeyStructure<string, TranslationsType<string>>
+	};
 
 export function watchMain(
 	fileNames: string[],
 	newTranslationFile: string, 
 	options: CompilerOptions
 ) {
-	return new Promise<WatchMainResultType | undefined>((resolve, reject) => {
+	return new Promise<void | WatchMainResultType>((resolve, reject) => {
 		const { outDir } = options;
 		if ( tsConfig.resultType === 'failed' ) {
+			// eslint-disable-next-line unicorn/error-message
 			reject(new Error());
 			return;
 		}
@@ -145,10 +142,11 @@ export function watchMain(
 		);
 
 		function ThroughDirectory(Directory: string, Files: string[] = []) {
-			fs.readdirSync(Directory).forEach(File => {
+			fs.readdirSync(Directory).forEach((File) => {
 				const Absolute = path.join(Directory, File);
-				if (fs.statSync(Absolute).isDirectory()) return ThroughDirectory(Absolute, Files);
-				else return Files.push(Absolute);
+				return fs.statSync(Absolute).isDirectory()
+					? ThroughDirectory(Absolute, Files)
+					: Files.push(Absolute);
 			});
 
 			return Files;
@@ -160,38 +158,38 @@ export function watchMain(
 			ts.sys,
 			ts.createSemanticDiagnosticsBuilderProgram,
 			undefined,
-			// eslint-disable-next-line @typescript-eslint/no-misused-promises
 			async (diagnostics) => {
 				if (diagnostics.code !== 6031) {
 					// TEMP
 					const files = ThroughDirectory(outDirPath);
 
 					files.forEach((filePath) => {
-						const file = fs.readFileSync(filePath, 'utf-8');
+						const file = fs.readFileSync(filePath, 'utf8');
 
-						fs.writeFileSync(filePath, file.replace(/"(.{1,}\/(.*))(?<!js)"/g, '"$1.js"'))
-					})
+						fs.writeFileSync(filePath, file.replaceAll(/"(.{1,}\/(.*))(?<!js)"/g, '"$1.js"'));
+					});
 
-					const localesFilePath = dirname(newTranslationFile);
+					const localesFilePath = path.dirname(newTranslationFile);
 
+					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					const { default: Translations, ...rest } = await importSync(`file://${newTranslationFile}?date=${new Date()
 					.toISOString()}`);
 					// TODO find config
 					
 					const _translation = Object.values(rest).find(
 						(value) => value && typeof value === 'object' && 'config' in value
-					) as { config: WatchMainReturnType } | undefined;
+					) as undefined | { config: WatchMainReturnType };
 
 					if ( !_translation ) {
 						close();
 
-						resolve(undefined);
+						resolve();
 
 						return;
 					}
 					
 					const { config } = _translation;
-					let languageFiles: WatchMainResultType['languageFiles'] = []
+					let languageFiles: WatchMainResultType['languageFiles'] = [];
 					if ( config.translations ) {
 						const languages = createLanguages(config.langs, config.translations);
 						config.keyStructure = createTranslationKeyStructure(config.langs, config.translations);
@@ -214,8 +212,8 @@ export function watchMain(
 								// }
 
 								return {
-									language,
-									filePath
+									filePath,
+									language
 								};
 							})
 						);
@@ -235,14 +233,15 @@ export function watchMain(
 			}
 		);
 
-		const originalAfterProgramCreate = host.afterProgramCreate
-		host.afterProgramCreate = builderProgram => {
-			const originalEmit = builderProgram.emit
+		const originalAfterProgramCreate = host.afterProgramCreate;
+		host.afterProgramCreate = (builderProgram) => {
+			const originalEmit = builderProgram.emit;
+			// eslint-disable-next-line max-params
 			builderProgram.emit = (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers): ts.EmitResult => {
 				const transformers = customTransformers ?? {
 					before: [] 
-				}
-				if (!transformers.before) transformers.before = []
+				};
+				transformers.before ??= [];
 				transformers.before.push(
 					(context) => {
 						const { factory } = context;
@@ -250,31 +249,31 @@ export function watchMain(
 							return factory.updateSourceFile(
 								rootNode,
 								rootNode.statements.map((node: any) => {
-									if (node.moduleSpecifier) {
-										if (node.moduleSpecifier.text.includes('src')) {
-											return factory.updateImportDeclaration(
-												node,
-												node.modifiers,
-												node.importClause,
-												factory.createStringLiteral(
-													resolvePath(`${node.moduleSpecifier.text as string}.js`) ?? ''
-												),
-												node.assertClause
-											)
-										}
+									if (node.moduleSpecifier && node.moduleSpecifier.text.includes('src')) {
+										return factory.updateImportDeclaration(
+											node,
+											node.modifiers,
+											node.importClause,
+											factory.createStringLiteral(
+												resolvePath(`${node.moduleSpecifier.text as string}.js`) ?? ''
+											),
+											node.assertClause
+										);
 									}
 									return node;
 								})
 							);
-						}
+						};
 					}
-				)
+				);
 
-				return originalEmit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, transformers)
+				return originalEmit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, transformers);
+			};
+			if (originalAfterProgramCreate) {
+				originalAfterProgramCreate(builderProgram); 
 			}
-			if (originalAfterProgramCreate) originalAfterProgramCreate(builderProgram)
-		}
+		};
 
 		const { close } = ts.createWatchProgram(host);
-	})
+	});
 }

@@ -1,26 +1,31 @@
 import {
-	type ReactElement,
-	type ReactNode,
 	cloneElement,
 	createElement,
-	type FC
-} from 'react'
+	type FC,
+	type ReactElement,
+	type ReactNode
+} from 'react';
 
 import HTML from 'html-parse-stringify';
 
 import { convertComponentsIntoObjectComponents, useComponentsContext } from '../../contexts/ComponentsContext';
 
+export type TransProps = {
+	components?: Readonly<Record<string, ReactElement>> | readonly ReactElement[]
+	message: string
+};
+
 function mapAst(ast: HTMLAstNode[], components: Record<string, ReactElement>) {
 	return ast
 	.map((node, index): ReactNode => {
 		if ( node.type === 'text' ) {
-			return node.content
+			return node.content;
 		}
 		if ( node.type === 'tag' ) {
 			if ( node.name === 'firstComponent' ) {
-				return mapAst(node.children, components)
+				return mapAst(node.children, components);
 			}
-			const component = components[node.name]
+			const component = components[node.name];
 
 			if ( component ) {
 				return cloneElement(
@@ -30,7 +35,7 @@ function mapAst(ast: HTMLAstNode[], components: Record<string, ReactElement>) {
 						...node.attrs
 					},
 					...mapAst(node.children, components)
-				)
+				);
 			}
 
 			return createElement(
@@ -43,16 +48,11 @@ function mapAst(ast: HTMLAstNode[], components: Record<string, ReactElement>) {
 			);
 		}
 
-		return null
-	})
+		return null;
+	});
 }
 
-export type TransProps = {
-	message: string
-	components?: readonly ReactElement[] | Readonly<Record<string, ReactElement>>
-}
-
-const Trans: FC<TransProps> = ({ message, components = {} }) => {
+const Trans: FC<TransProps> = ({ components = {}, message }) => {
 	const { components: defaultComponents } = useComponentsContext();
 
 	const _components: Record<string, ReactElement> = {

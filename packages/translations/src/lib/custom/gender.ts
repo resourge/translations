@@ -1,4 +1,4 @@
-import { CustomMethods } from '../utils/utils'
+import { CustomMethods } from '../utils/utils';
 
 export const gender = CustomMethods.add<
 	'gender',
@@ -8,5 +8,7 @@ export const gender = CustomMethods.add<
 	}
 >(
 	'gender', 
-	(value, params) => params.gender === 'female' ? value.female : value.male
-)
+	(value, params) => (params.gender === 'female'
+		? value.female
+		: value.male)
+);

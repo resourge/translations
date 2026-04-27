@@ -1,6 +1,6 @@
-import { createApp } from 'vue'
+import { createApp } from 'vue';
 
 // @ts-expect-error TEst
-import App from './App'
+import App from './App';
 
-createApp(App).mount('#app')
+createApp(App).mount('#app');

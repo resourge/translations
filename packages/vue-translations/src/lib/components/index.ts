@@ -1,3 +1,1 @@
-import TranslationProvider, { type TranslationProviderProps } from './translationProvider/TranslationProvider.vue';
-
-export { TranslationProvider, TranslationProviderProps }
+export { default as TranslationProvider, type TranslationProviderProps } from './translationProvider/TranslationProvider.vue';

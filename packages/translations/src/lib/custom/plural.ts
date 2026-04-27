@@ -1,4 +1,4 @@
-import { CustomMethods } from '../utils/utils'
+import { CustomMethods } from '../utils/utils';
 
 export const plural = CustomMethods.add<
 	'count',
@@ -14,16 +14,25 @@ export const plural = CustomMethods.add<
 	(value, params) => {
 		const count = params.count;
 		let langValue;
-		if ( count === 0 ) {
-			langValue = value.zero;
-		}
-		else if ( count === 1 ) {
-			langValue = value.one;
-		}
-		else if ( count === 2 ) {
-			langValue = value.two;
+		switch (count) {
+			case 0: {
+				langValue = value.zero;
+		
+				break;
+			}
+			case 1: {
+				langValue = value.one;
+		
+				break;
+			}
+			case 2: {
+				langValue = value.two;
+		
+				break;
+			}
+		// No default
 		}
 
 		return langValue ?? value.other;
 	}
-)
+);
