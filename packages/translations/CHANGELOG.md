@@ -1,3 +1,10 @@
+# [@resourge/translations-v1.11.2](https://github.com/resourge/translations/compare/@resourge/translations-v1.11.1...@resourge/translations-v1.11.2) (2026-04-28)
+
+
+### Bug Fixes
+
+* **setuptranslations:** fix changing language before receiving new language translations ([bc5ea40](https://github.com/resourge/translations/commit/bc5ea407eb3e7c1d9114d1b3390c7089c816c273))
+
 # [@resourge/translations-v1.11.1](https://github.com/resourge/translations/compare/@resourge/translations-v1.11.0...@resourge/translations-v1.11.1) (2025-09-22)
 
 
