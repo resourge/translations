@@ -84,7 +84,7 @@ export function viteTranslationPlugin(): PluginOption {
 					content = addImportLanguages(
 						result,
 						content,
-						this.addWatchFile
+						(id) => this.addWatchFile(id)
 					);
 
 					const sourceFile = ts.createSourceFile(
